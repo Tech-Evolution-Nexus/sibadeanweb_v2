@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SuratModel;
+use App\Models\LampiranSuratModel;
 use Illuminate\Http\Request;
 
-class SuratModelController extends Controller
+class LampiranSuratController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class SuratModelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(SuratModel $suratModel)
+    public function show(LampiranSuratModel $lampiranSuratModel)
     {
         //
     }
@@ -42,7 +42,7 @@ class SuratModelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SuratModel $suratModel)
+    public function edit(LampiranSuratModel $lampiranSuratModel)
     {
         //
     }
@@ -50,7 +50,7 @@ class SuratModelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SuratModel $suratModel)
+    public function update(Request $request, LampiranSuratModel $lampiranSuratModel)
     {
         //
     }
@@ -58,7 +58,7 @@ class SuratModelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SuratModel $suratModel)
+    public function destroy(LampiranSuratModel $lampiranSuratModel)
     {
         //
     }

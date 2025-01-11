@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('fcm_token')->unique()->nullable();
             $table->boolean("status")->default(0);
             $table->string("avatar")->default("default.png");
+            $table->enum("role", ["rt", "rw", "masyarakat", "admin", "lurah"])->default("masyarakat");
             $table->rememberToken();
             $table->timestamps();
         });

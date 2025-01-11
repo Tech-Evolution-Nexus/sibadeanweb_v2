@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MasyarakatModel;
+use App\Models\SuratModel;
 use Illuminate\Http\Request;
 
-class MasyarakatModelController extends Controller
+class SuratController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class MasyarakatModelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(MasyarakatModel $masyarakatModel)
+    public function show(SuratModel $suratModel)
     {
         //
     }
@@ -42,7 +42,7 @@ class MasyarakatModelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(MasyarakatModel $masyarakatModel)
+    public function edit(SuratModel $suratModel)
     {
         //
     }
@@ -50,7 +50,7 @@ class MasyarakatModelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MasyarakatModel $masyarakatModel)
+    public function update(Request $request, SuratModel $suratModel)
     {
         //
     }
@@ -58,7 +58,7 @@ class MasyarakatModelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MasyarakatModel $masyarakatModel)
+    public function destroy(SuratModel $suratModel)
     {
         //
     }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BeritaModel;
+use App\Models\MasyarakatModel;
 use Illuminate\Http\Request;
 
-class BeritaModelController extends Controller
+class MasyarakatController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class BeritaModelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(BeritaModel $beritaModel)
+    public function show(MasyarakatModel $masyarakatModel)
     {
         //
     }
@@ -42,7 +42,7 @@ class BeritaModelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(BeritaModel $beritaModel)
+    public function edit(MasyarakatModel $masyarakatModel)
     {
         //
     }
@@ -50,7 +50,7 @@ class BeritaModelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, BeritaModel $beritaModel)
+    public function update(Request $request, MasyarakatModel $masyarakatModel)
     {
         //
     }
@@ -58,7 +58,7 @@ class BeritaModelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BeritaModel $beritaModel)
+    public function destroy(MasyarakatModel $masyarakatModel)
     {
         //
     }

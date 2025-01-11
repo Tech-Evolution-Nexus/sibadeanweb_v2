@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LampiranPengajuanModel;
+use App\Models\PengajuanSuratModel;
 use Illuminate\Http\Request;
 
-class LampiranPengajuanModelController extends Controller
+class PengajuanSuratController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class LampiranPengajuanModelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LampiranPengajuanModel $lampiranPengajuanModel)
+    public function show(PengajuanSuratModel $pengajuanSuratModel)
     {
         //
     }
@@ -42,7 +42,7 @@ class LampiranPengajuanModelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LampiranPengajuanModel $lampiranPengajuanModel)
+    public function edit(PengajuanSuratModel $pengajuanSuratModel)
     {
         //
     }
@@ -50,7 +50,7 @@ class LampiranPengajuanModelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, LampiranPengajuanModel $lampiranPengajuanModel)
+    public function update(Request $request, PengajuanSuratModel $pengajuanSuratModel)
     {
         //
     }
@@ -58,7 +58,7 @@ class LampiranPengajuanModelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LampiranPengajuanModel $lampiranPengajuanModel)
+    public function destroy(PengajuanSuratModel $pengajuanSuratModel)
     {
         //
     }
