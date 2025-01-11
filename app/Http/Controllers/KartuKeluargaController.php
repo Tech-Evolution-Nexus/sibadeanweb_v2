@@ -32,7 +32,27 @@ class KartuKeluargaController extends Controller
      */
     public function create()
     {
-        //
+        $pengaturan = auth()->user()->pengaturan();
+        $params["data"] = (object)[
+            "title" => "Tambah Kartu Keluarga",
+            "action_form" => route("kartu-keluarga.store"),
+            "data" => (object)[
+                "no_kk" => "",
+                "tanggal_kk" => "",
+                "nik" => "",
+                "nama" => "",
+                "alamat" => "",
+                "rt" => "",
+                "rw" => "",
+                "foto_kartu_keluarga" => "",
+                "kode_pos" => $pengaturan->kode_pos,
+                "kelurahan" => $pengaturan->kelurahan,
+                "kecamatan" => $pengaturan->kecamatan,
+                "kabupaten" => $pengaturan->kabupaten,
+                "provinsi" => $pengaturan->provinsi,
+            ]
+        ];
+        return view("admin.kartu-keluarga.form", $params);
     }
 
     /**
