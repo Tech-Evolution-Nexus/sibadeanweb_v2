@@ -9,13 +9,16 @@
                 <a href="{{route("kartu-keluarga.create")}}" class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah KK</a>
             </div>
         </div>
-        <table id="kartuKeluarga">
+        <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
+        <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
+
+        <table id="kartuKeluarga" class="w-full">
             <thead>
                 <th>No</th>
                 <th>No KK</th>
+                <th>Kepala Keluarga</th>
                 <th>RT</th>
                 <th>RW</th>
-                <th>Kepala Keluarga</th>
                 <th>Aksi</th>
             </thead>
         </table>
@@ -28,13 +31,21 @@
                     processing: true,
                     serverSide: true,
                     ajax: "{{ route('kartu-keluarga.index') }}",
+                    columnDefs: [{
+                        width: 200,
+                        targets: 5
+                    }],
                     columns: [{
-                            data: 'id',
-                            name: 'No'
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
                         },
                         {
                             data: 'no_kk',
                             name: 'No KK'
+                        },
+                        {
+                            data: 'kepala_keluarga',
+                            name: 'Kepala Keluarga'
                         },
                         {
                             data: 'rt',
@@ -44,10 +55,7 @@
                             data: 'rw',
                             name: 'RW'
                         },
-                        {
-                            data: 'nama_lengkap',
-                            name: 'Kepala Keluarga'
-                        },
+
                         {
                             data: 'action',
                             name: 'action',

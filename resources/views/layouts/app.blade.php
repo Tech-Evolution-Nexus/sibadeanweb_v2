@@ -21,7 +21,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased">
+<body class=" antialiased">
     <div class="min-h-screen  flex" x-data="{sidebarOpen : false}">
         @include('layouts.sidebar')
         <!-- Page Content -->

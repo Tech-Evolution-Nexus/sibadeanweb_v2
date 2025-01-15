@@ -10,7 +10,7 @@ class PengajuanSuratModel extends Model
     protected $fillable = ["nik", "id_surat", "keterangan", "keterangan_ditolak", "status", "nomor_surat"];
     public function masyarakat()
     {
-        return $this->belongsTo(MasyarakatModel::class, "nik");
+        return $this->belongsTo(MasyarakatModel::class, "nik", "nik");
     }
     public function surat()
     {

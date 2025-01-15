@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('masyarakat', function (Blueprint $table) {
             $table->string("nik", 16)->primary();
-            $table->foreignId("id_user")->references("id")->on("users")->cascadeOnDelete();
+            $table->foreignId("id_user")->nullable()->references("id")->on("users")->cascadeOnDelete();
             $table->string("no_kk", 16);
             $table->foreign("no_kk")->references("no_kk")->on("kartu_keluarga")->cascadeOnDelete()->cascadeOnUpdate();
             $table->string("nama_lengkap", 50);

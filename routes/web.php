@@ -9,9 +9,14 @@ use App\Http\Controllers\SuratController;
 use App\Http\Controllers\UserController;
 use App\Models\PengaturanModel;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     return view('welcome');
+});
+Route::get('/c/private-image', function () {
+    $pathToFile = Storage::disk('private')->path(request()->path);
+    return file_exists($pathToFile) ? response()->file($pathToFile) : false;
 });
 
 

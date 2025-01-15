@@ -1,5 +1,5 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");
-
+@import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Figtree:ital,wght@0,300..900;1,300..900&family=Great+Vibes&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,7 +7,19 @@
 :root {
     --primary: #052158;
 }
+body {
+    font-family: "Figtree", serif;
+}
+.btn-show {
+    @apply rounded-md rounded-r-none bg-green-500 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-green-400 focus:shadow-none active:bg-slate-400 hover:bg-green-400 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none;
+}
+.btn-edit {
+    @apply rounded-none bg-yellow-500 py-2 px-4 border-l border-r border-yellow-400 text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-yellow-400 focus:shadow-none active:bg-yellow-400 hover:bg-yellow-400 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none;
+}
 
+.btn-delete {
+    @apply rounded-md rounded-l-none bg-red-500 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-red-400 focus:shadow-none active:bg-red-400 hover:bg-red-400 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none;
+}
 input[type="color" i] {
     -webkit-appearance: none;
     -moz-appearance: none;

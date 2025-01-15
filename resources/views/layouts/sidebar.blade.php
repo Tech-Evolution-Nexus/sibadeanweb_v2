@@ -12,7 +12,7 @@
     </div>
 
     <div class=" px-4 ">
-        <div class="flex gap-2 bg-gray-200 w-full p-2 rounded-md">
+        <div class="flex gap-2 items-center bg-gray-200 w-full p-2 rounded-md">
             <img src="{{asset("assets/image/".auth()->user()->avatar)}}" alt="profile image" class="w-[50px] h-[50px] rounded-full bg-gray-200">
             <div class="">
                 <span class="text-base block">{{auth()->user()->name}}</span>

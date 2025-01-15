@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class MasyarakatModel extends Model
 {
     protected $table = "masyarakat";
+    protected $primaryKey = 'nik';
     protected $fillable = [
         'nik',
         'id_user',
