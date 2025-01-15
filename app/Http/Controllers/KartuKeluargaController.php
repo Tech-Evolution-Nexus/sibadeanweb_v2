@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helpers;
 use App\Models\KartuKeluargaModel;
 use App\Models\MasyarakatModel;
 use Illuminate\Http\Request;
@@ -16,10 +17,10 @@ class KartuKeluargaController extends Controller
     {
 
         $kartuKeluarga = KartuKeluargaModel::orderBy("created_at", "desc")->get();
+
         $params["data"] = (object)[
             "kartu_keluarga" => $kartuKeluarga
         ];
-
 
 
         if (request()->ajax()) {
@@ -67,7 +68,7 @@ class KartuKeluargaController extends Controller
             "no_kk" => "required|unique:kartu_keluarga,no_kk",
             // "tanggal_kk" => "required|date",
             "nama" => "required|min:3|max:50",
-            "nik" => "required|numeric|unique:masyarakat,nik|min:16",
+            "nik" => "required|digits:16|unique:masyarakat,nik",
             "alamat" => "required|max:255",
             "rt" => "required|numeric",
             "rw" => "required|numeric",
@@ -76,7 +77,7 @@ class KartuKeluargaController extends Controller
             "kabupaten" => "required|max:100",
             "provinsi" => "required|max:100",
             "kecamatan" => "required|max:100",
-            "foto_kartu_keluarga" => "nullable|file|image|max:1024", // Validasi foto (optional)
+            "foto_kartu_keluarga" => "nullable|file|image|max:2024", // Validasi foto (optional)
         ], [
             'no_kk.required' => 'Nomor KK wajib diisi.',
             'no_kk.unique' => 'Nomor KK sudah terdaftar.',
@@ -107,7 +108,7 @@ class KartuKeluargaController extends Controller
             'kecamatan.max' => 'Kecamatan maksimal 100 karakter.',
             'foto_kartu_keluarga.file' => 'File foto kartu keluarga harus berupa file.',
             'foto_kartu_keluarga.image' => 'File foto kartu keluarga harus berupa gambar.',
-            'foto_kartu_keluarga.max' => 'Ukuran file foto kartu keluarga maksimal 1MB.',
+            'foto_kartu_keluarga.max' => 'Ukuran file foto kartu keluarga maksimal 2MB.',
         ]);
 
         // Menyimpan data kartu keluarga
@@ -116,7 +117,7 @@ class KartuKeluargaController extends Controller
             'alamat' => $validated['alamat'],
             'rt' => $validated['rt'],
             'rw' => $validated['rw'],
-            'kk_tgl' => $validated['tanggal_kk'],
+            // 'kk_tgl' => $validated['tanggal_kk'],
         ];
 
         // Jika ada file foto kartu keluarga
@@ -193,7 +194,7 @@ class KartuKeluargaController extends Controller
             "no_kk" => "required|unique:kartu_keluarga,no_kk," . $id . ",no_kk",
             // "tanggal_kk" => "required|date",
             "nama" => "required|min:3|max:50",
-            "nik" => "required|numeric|unique:masyarakat,nik," . $masyarakat->nik . ",nik" . "|min:16",
+            "nik" => "required|string|unique:masyarakat,nik," . $masyarakat->nik . ",nik" . "|min:16",
             "alamat" => "required|max:255",
             "rt" => "required|numeric",
             "rw" => "required|numeric",
@@ -202,7 +203,7 @@ class KartuKeluargaController extends Controller
             "kabupaten" => "required|max:100",
             "provinsi" => "required|max:100",
             "kecamatan" => "required|max:100",
-            "foto_kartu_keluarga" => "nullable|file|image|max:1024", // Validasi foto (optional)
+            "foto_kartu_keluarga" => "nullable|file|image|max:2024", // Validasi foto (optional)
         ], [
             'no_kk.required' => 'Nomor KK wajib diisi.',
             'no_kk.unique' => 'Nomor KK sudah terdaftar.',
@@ -233,7 +234,7 @@ class KartuKeluargaController extends Controller
             'kecamatan.max' => 'Kecamatan maksimal 100 karakter.',
             'foto_kartu_keluarga.file' => 'File foto kartu keluarga harus berupa file.',
             'foto_kartu_keluarga.image' => 'File foto kartu keluarga harus berupa gambar.',
-            'foto_kartu_keluarga.max' => 'Ukuran file foto kartu keluarga maksimal 1MB.',
+            'foto_kartu_keluarga.max' => 'Ukuran file foto kartu keluarga maksimal 2MB.',
         ]);
 
         // Cari data kartu keluarga berdasarkan ID

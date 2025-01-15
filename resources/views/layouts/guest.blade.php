@@ -17,14 +17,19 @@
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
+    <x-loading />
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-        <div>
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
+        <div class="w-full sm:max-w-md ">
         </div>
 
         <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <div class="mb-2">
+                <a href="/" class="flex justify-center">
+                    <img src="{{asset("assets/logos/".$pengaturan->logo_horizontal)}}" class="w-[150px]" alt="">
+                </a>
+                <h2 class="text-2xl font-medium">Login</h2>
+                <p class="text-slate-600">Masukkan informasi akun untuk melanjutkan</p>
+            </div>
             {{ $slot }}
         </div>
     </div>

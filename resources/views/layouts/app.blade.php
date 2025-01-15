@@ -22,6 +22,7 @@
 </head>
 
 <body class=" antialiased">
+    <x-loading />
     <div class="min-h-screen  flex" x-data="{sidebarOpen : false}">
         @include('layouts.sidebar')
         <!-- Page Content -->
