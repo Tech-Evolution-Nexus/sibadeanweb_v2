@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class MasyarakatModel extends Model
@@ -29,6 +30,18 @@ class MasyarakatModel extends Model
         'nama_ibu',
     ];
 
+    protected function noKk(): Attribute
+    {
+        return Attribute::make(
+            get: fn(string $value) => (string)$value,
+        );
+    }
+    protected function nik(): Attribute
+    {
+        return Attribute::make(
+            get: fn(string $value) => (string)$value,
+        );
+    }
 
     public function kartuKeluarga()
     {

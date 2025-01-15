@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('masyarakat', function (Blueprint $table) {
-            $table->string("nik", 16)->primary();
+            $table->char("nik", 16)->primary();
             $table->foreignId("id_user")->nullable()->references("id")->on("users")->cascadeOnDelete();
-            $table->string("no_kk", 16);
+            $table->char("no_kk", 16);
             $table->foreign("no_kk")->references("no_kk")->on("kartu_keluarga")->cascadeOnDelete()->cascadeOnUpdate();
             $table->string("nama_lengkap", 50);
             $table->enum("jenis_kelamin", ["laki-laki", "perempuan"])->nullable();

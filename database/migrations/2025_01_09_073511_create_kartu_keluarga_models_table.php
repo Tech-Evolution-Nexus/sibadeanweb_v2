@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kartu_keluarga', function (Blueprint $table) {
-            $table->string("no_kk", 16)->primary();
+            $table->char("no_kk", 16)->primary();
             $table->string("alamat", 70);
             $table->tinyInteger("rt"); // Tidak perlu ukuran 2
             $table->tinyInteger("rw"); // Tidak perlu ukuran 2

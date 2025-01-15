@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class KartuKeluargaModel extends Model
@@ -10,6 +11,13 @@ class KartuKeluargaModel extends Model
     protected $primaryKey = "no_kk";
     protected $fillable = ["no_kk", "alamat", "rt", "rw", "kk_gambar"];
 
+
+    protected function noKk(): Attribute
+    {
+        return Attribute::make(
+            get: fn(string $value) => (string)$value,
+        );
+    }
 
     public function masyarakat()
     {

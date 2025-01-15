@@ -1,4 +1,4 @@
-<aside class="rounded-e-3xl md:min-w-[300px] md:sticky md:left-0 min-w-full h-screen  fixed top-0   z-10 md:bg-gray-100 transition-all flex flex-col bg-slate-200" :class="{'left-[-100%]': ! sidebarOpen, 'left-0': sidebarOpen }">
+<aside class=" md:min-w-[300px] md:sticky md:left-0 min-w-full h-screen  fixed top-0   z-10 md:bg-gray-100 transition-all flex flex-col bg-slate-200" :class="{'left-[-100%]': ! sidebarOpen, 'left-0': sidebarOpen }">
     <div class="logo p-4 flex justify-between">
         <a href="{{ route('dashboard') }}">
             <img src="{{asset(auth()->user()->pengaturan()->logo_horizontal? "assets/logos/".auth()->user()->pengaturan()->logo_horizontal:"image/default-2.png" )}}" alt="" class="h-[40px]">
