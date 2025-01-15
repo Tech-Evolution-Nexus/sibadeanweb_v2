@@ -5,7 +5,7 @@
     x-transition:leave-end="opacity-0"
     class="bg-white flex items-center h-full w-full flex-col justify-center fixed z-[999]">
     <!-- Logo -->
-    <img src="{{ asset('assets/logos/'.Helpers::pengaturan()->logo_horizontal) }}" alt="Logo" class="mb-4">
+    <img src="{{ asset('assets/logos/'.Helpers::pengaturan()->logo_horizontal) }}" alt="Logo" class="mb-4 w-[150px]">
 
     <!-- Spinner menggunakan Tailwind CSS -->
     <div class="loading flex items-center gap-4">
