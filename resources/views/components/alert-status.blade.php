@@ -5,6 +5,9 @@
     x-data="{ show: true }"
     x-init="setTimeout(() => show = false, 5000)"
     x-show="show"
+    x-transition:leave="transition-opacity duration-500 ease-out"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
     {{ $attributes->merge(['class' => 'rounded-md font-normal bg-green-500 p-4 text-white text-sm']) }}>
     {{ $message }}
 </div>

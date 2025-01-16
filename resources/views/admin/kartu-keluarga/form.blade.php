@@ -1,8 +1,8 @@
-<x-app-layout>
+<x-app-layout :title="$data->title">
 
     <div class="md:px-12 px-6 md:py-10 py-5">
         <div class="mb-10">
-            <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("kartu-keluarga.index")}}">Kartu keluarga</a> / Tambah</div>
+            <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("kartu-keluarga.index")}}">Kartu keluarga</a> / {{$data->title}}</div>
             <div class="flex">
                 <h1 class="text-2xl font-bold">{{$data->title}}</h1>
             </div>
@@ -13,8 +13,8 @@
         <form action="<?= $data->action_form ?>" method="POST" class="" enctype="multipart/form-data">
             @csrf
             @method($data->method)
-            <div class="grid md:grid-cols-2 grid-cols-1 gap-4">
-                <h6 class="font-medium md:col-span-2 text-lg ">Informasi Kartu Keluarga</h6>
+            <div class="grid md:grid-cols-2 grid-cols-1 gap-2 gap-x-4">
+                <h6 class="font-bold  md:col-span-2 text-lg ">Informasi Kartu Keluarga</h6>
                 <input type="hidden" name="id_masyarakat">
 
                 <div class=" ms-md-3">
@@ -57,7 +57,7 @@
                     <x-input-error :messages="$errors->get('foto_kartu_keluarga')" class="mt-2 text-red-500 text-xs" />
                 </div>
 
-                <h6 class="font-medium md:col-span-2  text-lg">Informasi Kepala Keluarga</h6>
+                <h6 class="font-bold mt-4 md:col-span-2  text-lg">Informasi Kepala Keluarga</h6>
 
                 <div class="">
                     <div class=" mb-2 ms-md-3">
@@ -75,7 +75,7 @@
 
 
 
-                <h6 class="font-medium mb-2  text-lg md:col-span-2">Informasi Wilayah</h6>
+                <h6 class="font-bold mt-4 mb-2  text-lg md:col-span-2">Informasi Wilayah</h6>
 
                 <div class=" mb-2 ms-md-3">
                     <x-input-label for="kelurahan" :value="__('Kelurahan')" />

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\KartuKeluargaController;
 use App\Http\Controllers\PengajuanSuratController;
@@ -27,6 +28,7 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     })->middleware(['auth', 'verified'])->name('dashboard');
     Route::resource("/surat", SuratController::class);
     Route::resource("/kartu-keluarga", KartuKeluargaController::class);
+    Route::resource("/kartu-keluarga/{no_kk}/anggota-keluarga", AnggotaKeluargaController::class);
     Route::resource("/berita", BeritaController::class);
     Route::resource("/users", UserController::class);
     Route::resource("/pengajuan-surat", PengajuanSuratController::class);

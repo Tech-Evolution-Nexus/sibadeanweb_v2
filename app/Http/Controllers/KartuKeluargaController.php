@@ -78,37 +78,6 @@ class KartuKeluargaController extends Controller
             "provinsi" => "required|max:100",
             "kecamatan" => "required|max:100",
             "foto_kartu_keluarga" => "nullable|file|image|max:2024", // Validasi foto (optional)
-        ], [
-            'no_kk.required' => 'Nomor KK wajib diisi.',
-            'no_kk.unique' => 'Nomor KK sudah terdaftar.',
-            // 'tanggal_kk.required' => 'Tanggal KK wajib diisi.',
-            // 'tanggal_kk.date' => 'Tanggal KK harus dalam format tanggal yang valid.',
-            'nama.required' => 'Nama wajib diisi.',
-            'nama.min' => 'Nama harus memiliki minimal 3 karakter.',
-            'nama.max' => 'Nama maksimal 50 karakter.',
-            'nik.required' => 'NIK wajib diisi.',
-            'nik.numeric' => 'NIK harus berupa angka.',
-            'nik.unique' => 'NIK sudah terdaftar.',
-            'nik.min' => 'NIK harus terdiri dari minimal 16 karakter.',
-            'alamat.required' => 'Alamat wajib diisi.',
-            'alamat.max' => 'Alamat maksimal 255 karakter.',
-            'rt.required' => 'RT wajib diisi.',
-            'rt.numeric' => 'RT harus berupa angka.',
-            'rw.required' => 'RW wajib diisi.',
-            'rw.numeric' => 'RW harus berupa angka.',
-            'kelurahan.required' => 'Kelurahan wajib diisi.',
-            'kelurahan.max' => 'Kelurahan maksimal 100 karakter.',
-            'kode_pos.required' => 'Kode pos wajib diisi.',
-            'kode_pos.numeric' => 'Kode pos harus berupa angka.',
-            'kabupaten.required' => 'Kabupaten wajib diisi.',
-            'kabupaten.max' => 'Kabupaten maksimal 100 karakter.',
-            'provinsi.required' => 'Provinsi wajib diisi.',
-            'provinsi.max' => 'Provinsi maksimal 100 karakter.',
-            'kecamatan.required' => 'Kecamatan wajib diisi.',
-            'kecamatan.max' => 'Kecamatan maksimal 100 karakter.',
-            'foto_kartu_keluarga.file' => 'File foto kartu keluarga harus berupa file.',
-            'foto_kartu_keluarga.image' => 'File foto kartu keluarga harus berupa gambar.',
-            'foto_kartu_keluarga.max' => 'Ukuran file foto kartu keluarga maksimal 2MB.',
         ]);
 
         // Menyimpan data kartu keluarga
@@ -190,91 +159,66 @@ class KartuKeluargaController extends Controller
     {
         $masyarakat = KartuKeluargaModel::findOrFail($id)->kepalaKeluarga;
         // Validasi data menggunakan request()
-        $validated = request()->validate([
-            "no_kk" => "required|unique:kartu_keluarga,no_kk," . $id . ",no_kk",
-            // "tanggal_kk" => "required|date",
-            "nama" => "required|min:3|max:50",
-            "nik" => "required|string|unique:masyarakat,nik," . $masyarakat->nik . ",nik" . "|min:16",
-            "alamat" => "required|max:255",
-            "rt" => "required|numeric",
-            "rw" => "required|numeric",
-            "kelurahan" => "required|max:100",
-            "kode_pos" => "required|numeric",
-            "kabupaten" => "required|max:100",
-            "provinsi" => "required|max:100",
-            "kecamatan" => "required|max:100",
-            "foto_kartu_keluarga" => "nullable|file|image|max:2024", // Validasi foto (optional)
-        ], [
-            'no_kk.required' => 'Nomor KK wajib diisi.',
-            'no_kk.unique' => 'Nomor KK sudah terdaftar.',
-            // 'tanggal_kk.required' => 'Tanggal KK wajib diisi.',
-            // 'tanggal_kk.date' => 'Tanggal KK harus dalam format tanggal yang valid.',
-            'nama.required' => 'Nama wajib diisi.',
-            'nama.min' => 'Nama harus memiliki minimal 3 karakter.',
-            'nama.max' => 'Nama maksimal 50 karakter.',
-            'nik.required' => 'NIK wajib diisi.',
-            'nik.numeric' => 'NIK harus berupa angka.',
-            'nik.unique' => 'NIK sudah terdaftar.',
-            'nik.min' => 'NIK harus terdiri dari minimal 16 karakter.',
-            'alamat.required' => 'Alamat wajib diisi.',
-            'alamat.max' => 'Alamat maksimal 255 karakter.',
-            'rt.required' => 'RT wajib diisi.',
-            'rt.numeric' => 'RT harus berupa angka.',
-            'rw.required' => 'RW wajib diisi.',
-            'rw.numeric' => 'RW harus berupa angka.',
-            'kelurahan.required' => 'Kelurahan wajib diisi.',
-            'kelurahan.max' => 'Kelurahan maksimal 100 karakter.',
-            'kode_pos.required' => 'Kode pos wajib diisi.',
-            'kode_pos.numeric' => 'Kode pos harus berupa angka.',
-            'kabupaten.required' => 'Kabupaten wajib diisi.',
-            'kabupaten.max' => 'Kabupaten maksimal 100 karakter.',
-            'provinsi.required' => 'Provinsi wajib diisi.',
-            'provinsi.max' => 'Provinsi maksimal 100 karakter.',
-            'kecamatan.required' => 'Kecamatan wajib diisi.',
-            'kecamatan.max' => 'Kecamatan maksimal 100 karakter.',
-            'foto_kartu_keluarga.file' => 'File foto kartu keluarga harus berupa file.',
-            'foto_kartu_keluarga.image' => 'File foto kartu keluarga harus berupa gambar.',
-            'foto_kartu_keluarga.max' => 'Ukuran file foto kartu keluarga maksimal 2MB.',
-        ]);
+        $validated = request()->validate(
+            [
+                "no_kk" => "required|unique:kartu_keluarga,no_kk," . $id . ",no_kk",
+                // "tanggal_kk" => "required|date",
+                "nama" => "required|min:3|max:50",
+                "nik" => "required|string|unique:masyarakat,nik," . $masyarakat->nik . ",nik" . "|min:16",
+                "alamat" => "required|max:255",
+                "rt" => "required|numeric",
+                "rw" => "required|numeric",
+                "kelurahan" => "required|max:100",
+                "kode_pos" => "required|numeric",
+                "kabupaten" => "required|max:100",
+                "provinsi" => "required|max:100",
+                "kecamatan" => "required|max:100",
+                "foto_kartu_keluarga" => "nullable|file|image|max:2024", // Validasi foto (optional)
+            ]
+        );
 
-        // Cari data kartu keluarga berdasarkan ID
-        $dataKK = KartuKeluargaModel::findOrFail($id);
-        // Menyimpan data kartu keluarga yang telah diperbarui
-        $dataKK->no_kk = $validated['no_kk'];
-        $dataKK->alamat = $validated['alamat'];
-        $dataKK->rt = $validated['rt'];
-        $dataKK->rw = $validated['rw'];
-        // $dataKK->kk_tgl = $validated['tanggal_kk'];
-        $oldImagePath = storage_path('app/private/kartu_keluarga/' . $dataKK->kk_gambar);
-        // Jika ada file foto kartu keluarga baru
-        if (request()->hasFile('foto_kartu_keluarga')) {
-            // Menghapus gambar lama jika ada
-            if ($dataKK->kk_gambar) {
-                $oldImagePath = storage_path('app/private/kartu_keluarga/' . $dataKK->kk_gambar);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath); // Menghapus file gambar lama
+        try {
+            // Cari data kartu keluarga berdasarkan ID
+            $dataKK = KartuKeluargaModel::findOrFail($id);
+            // Menyimpan data kartu keluarga yang telah diperbarui
+            $dataKK->no_kk = $validated['no_kk'];
+            $dataKK->alamat = $validated['alamat'];
+            $dataKK->rt = $validated['rt'];
+            $dataKK->rw = $validated['rw'];
+            // $dataKK->kk_tgl = $validated['tanggal_kk'];
+            $oldImagePath = storage_path('app/private/kartu_keluarga/' . $dataKK->kk_gambar);
+            // Jika ada file foto kartu keluarga baru
+            if (request()->hasFile('foto_kartu_keluarga')) {
+                // Menghapus gambar lama jika ada
+                if ($dataKK->kk_gambar) {
+                    $oldImagePath = storage_path('app/private/kartu_keluarga/' . $dataKK->kk_gambar);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath); // Menghapus file gambar lama
+                    }
                 }
+
+                // Menyimpan gambar yang baru
+                $file = request()->file('foto_kartu_keluarga');
+                $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('kartu_keluarga', $randomName, ['disk' => 'private']);
+                $dataKK->kk_gambar = $randomName;
             }
 
-            // Menyimpan gambar yang baru
-            $file = request()->file('foto_kartu_keluarga');
-            $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('kartu_keluarga', $randomName, ['disk' => 'private']);
-            $dataKK->kk_gambar = $randomName;
+            // Menyimpan data kartu keluarga yang telah diperbarui
+            $dataKK->save();
+
+            // Menyimpan data masyarakat yang diperbarui
+            $masyarakat = MasyarakatModel::where('no_kk', $validated['no_kk'])->first();
+            if ($masyarakat) {
+                $masyarakat->nik = $validated['nik'];
+                $masyarakat->nama_lengkap = $validated['nama'];
+                $masyarakat->save();
+            }
+
+            return redirect()->route('kartu-keluarga.index')->with('success', 'Kartu keluarga berhasil diperbarui');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Kartu keluarga gagal diperbarui');
         }
-
-        // Menyimpan data kartu keluarga yang telah diperbarui
-        $dataKK->save();
-
-        // Menyimpan data masyarakat yang diperbarui
-        $masyarakat = MasyarakatModel::where('no_kk', $validated['no_kk'])->first();
-        if ($masyarakat) {
-            $masyarakat->nik = $validated['nik'];
-            $masyarakat->nama_lengkap = $validated['nama'];
-            $masyarakat->save();
-        }
-
-        return redirect()->route('kartu-keluarga.index')->with('success', 'Kartu keluarga berhasil diperbarui');
     }
 
 
@@ -294,17 +238,15 @@ class KartuKeluargaController extends Controller
             ->addIndexColumn()
 
             ->addColumn('kepala_keluarga', function ($row) {
-                return $row->masyarakat()->where("status_keluarga", "=", "kk ")->pluck('nama_lengkap')->first();
+                return $row->kepalaKeluarga->nama_lengkap;
             })
             ->addColumn('action', function ($row) {
                 $btn = '<div class="row flex">';
 
-                $btn .= '<a href="' . route('kartu-keluarga.show', $row->no_kk) . '" class="btn-show"><i class="fa fa-info"></i></a>';
+                $btn .= '<a href="' . route('anggota-keluarga.index', $row->no_kk) . '" class="btn-show"><i class="fa fa-info"></i></a>';
                 $btn .= ' <a href="' . route('kartu-keluarga.edit', $row->no_kk) . '" class="btn-edit"><i class="fa fa-pencil"></i></a>';
-                $btn .= ' <form action="' . route('kartu-keluarga.destroy', $row->no_kk) . '" method="POST" style="display: inline;">';
-                $btn .= csrf_field() . method_field('DELETE');
-                $btn .= '<button type="submit" class="btn-delete" onclick="return confirm(\'Are you sure?\')"><i class="fa fa-trash"></i></button>';
-                $btn .= '</form>';
+                $message = "Apakah anda yakin menghapus data {$row->kepalaKeluarga->nama_lengkap}?";
+                $btn .= "<button class='btn-delete' x-data x-on:click=\"\$dispatch('open-modal', {name: 'delete'}), message= '$message', url= '" . route("kartu-keluarga.destroy", $row->no_kk) . "'\"><i class='fa fa-trash'></i></button>";
                 $btn .= '</div>';
                 return $btn;
             })
