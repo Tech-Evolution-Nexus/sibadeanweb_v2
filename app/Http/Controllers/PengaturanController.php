@@ -11,7 +11,7 @@ class PengaturanController extends Controller
     public function index()
     {
         $pengaturan = PengaturanModel::first();
-        return view("admin.pengaturan.index", ["pengaturan" => $pengaturan]);
+        return view("admin.pengaturan.pengaturan", ["pengaturan" => $pengaturan]);
     }
 
 

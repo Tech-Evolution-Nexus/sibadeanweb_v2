@@ -24,7 +24,7 @@ class AnggotaKeluargaController extends Controller
         if (request()->ajax()) {
             return $this->dataTable($anggotaKeluarga);
         }
-        return view("admin.kartu-keluarga.anggota-keluarga.index", $params);
+        return view("admin.kartu-keluarga.anggota-keluarga.anggota-keluarga", $params);
     }
 
     /**
