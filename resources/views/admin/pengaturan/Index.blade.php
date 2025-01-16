@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :title="'Pengaturan'">
     <div class="md:px-12 px-6 md:py-4 py-2">
         <div class="mb-10">
             <div class="text-sm">Dashboard / Pengaturan</div>
@@ -19,7 +19,7 @@
                         <div class="grid md:grid-cols-2 grid-cols-1 gap-10">
                             <div class="flex flex-col mb-4">
                                 <x-input-label for="logo" :value="'Logo'" />
-                                <label class="w-full md:w-[100px] aspect-video preview-image mt-1">
+                                <label class="w-full md:w-[100px] aspect-video preview-image cursor-pointer mt-1">
                                     <input type="file" accept="image/*" name="logo" class="hidden">
                                     <img class="rounded-md" src="{{ asset('assets/'.($pengaturan->logo?"/logos/$pengaturan->logo":"image/default-2.png")) }}" alt="">
                                 </label>
@@ -27,7 +27,7 @@
                             </div>
                             <div class="flex flex-col mb-4 ">
                                 <x-input-label for="logo_horizontal" :value="__('Logo Horizontal')" />
-                                <label class="w-full md:w-[100px] aspect-video preview-image mt-1">
+                                <label class="w-full md:w-[100px] aspect-video preview-image cursor-pointer mt-1">
                                     <input type="file" accept="image/*" name="logo_horizontal" class="hidden">
                                     <img class="rounded-md" src="{{ asset('assets/'.($pengaturan->logo?"/logos/$pengaturan->logo_horizontal":"image/default-2.png")) }}" alt="">
                                 </label>

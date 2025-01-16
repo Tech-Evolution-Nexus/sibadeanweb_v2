@@ -1,12 +1,12 @@
-<x-app-layout :title="'Kartu Keluarga'">
+<x-app-layout :title="'Anggota Keluarga'">
 
 
     <div class="md:px-12 px-6 md:py-4 py-2">
         <div class="mb-10">
-            <div class="text-sm">Dashboard / Kartu keluarga</div>
+            <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("kartu-keluarga.index")}}">Kartu keluarga</a> / Anggota Keluarga</div>
             <div class="flex">
-                <h1 class="text-2xl font-bold">Kartu Keluarga</h1>
-                <a href="{{route("kartu-keluarga.create")}}" class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah KK</a>
+                <h1 class="text-2xl font-bold">Anggota Keluarga</h1>
+                <a href="{{route("anggota-keluarga.create",$data->no_kk)}}" class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah </a>
             </div>
         </div>
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
@@ -15,13 +15,14 @@
         <table id="kartuKeluarga" class="w-full">
             <thead>
                 <th>No</th>
-                <th>No KK</th>
-                <th>Kepala Keluarga</th>
-                <th>RT</th>
-                <th>RW</th>
+                <th>NIK</th>
+                <th>Nama Lengkap</th>
+                <th>Jenis Kelamin</th>
+                <th>Status Keluarga</th>
                 <th>Aksi</th>
             </thead>
         </table>
+
     </div>
 
     <x-slot name="script">
@@ -30,32 +31,31 @@
                 $('#kartuKeluarga').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('kartu-keluarga.index') }}",
+                    ajax: "{{ route('anggota-keluarga.index',$data->no_kk) }}",
                     columnDefs: [{
                         width: 200,
-                        targets: 5
+                        targets: 4
                     }],
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex'
                         },
                         {
-                            data: 'no_kk',
-                            name: 'No KK'
+                            data: 'nik',
+                            name: 'Nik'
                         },
                         {
-                            data: 'kepala_keluarga',
-                            name: 'Kepala Keluarga'
+                            data: 'nama_lengkap',
+                            name: 'Nama Lengkap'
                         },
                         {
-                            data: 'rt',
-                            name: 'RT'
+                            data: 'jenis_kelamin',
+                            name: 'Jenis Kelamin'
                         },
                         {
-                            data: 'rw',
-                            name: 'RW'
+                            data: 'status_keluarga',
+                            name: 'Status Keluarga'
                         },
-
                         {
                             data: 'action',
                             name: 'action',
