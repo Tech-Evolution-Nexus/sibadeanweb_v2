@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("alamat", 70);
             $table->tinyInteger("rt"); // Tidak perlu ukuran 2
             $table->tinyInteger("rw"); // Tidak perlu ukuran 2
-            $table->string("kk_gambar");
+            $table->string("kk_gambar")->nullable();
             $table->timestamps();
         });
     }
