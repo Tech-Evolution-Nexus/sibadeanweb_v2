@@ -16,8 +16,7 @@ class KartuKeluargaController extends Controller
     public function index()
     {
 
-        $kartuKeluarga = KartuKeluargaModel::orderBy("created_at", "desc")->get();
-
+        $kartuKeluarga = KartuKeluargaModel::with("masyarakat")->orderBy("created_at", "desc")->get();
         $params["data"] = (object)[
             "kartu_keluarga" => $kartuKeluarga
         ];
@@ -192,7 +191,7 @@ class KartuKeluargaController extends Controller
                 // Menghapus gambar lama jika ada
                 if ($dataKK->kk_gambar) {
                     $oldImagePath = storage_path('app/private/kartu_keluarga/' . $dataKK->kk_gambar);
-                    if (file_exists($oldImagePath)) {
+                    if (file_exists($oldImagePath) && $dataKK->kk_gambar != "default-2.png") {
                         unlink($oldImagePath); // Menghapus file gambar lama
                     }
                 }

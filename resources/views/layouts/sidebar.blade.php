@@ -32,7 +32,7 @@
                 <span class="text-lg text-gray-600 block mb-2">Master Data</span>
                 <ul>
                     <li>
-                        <a href="" class="block  px-4 py-2 {{request()->is('c/*/rw*') ? 'bg-[var(--primary)] text-white' : 'text-slate-700 md:hover:bg-white/80'}} transition-all  rounded-md text-base flex items-center gap-2 "><i class="fa w-[30px] fa-users text-lg"></i> RT & RW</a>
+                        <a href="{{route("rw.index")}}" class="block  px-4 py-2 {{request()->is('c/*/rw*') ? 'bg-[var(--primary)] text-white' : 'text-slate-700 md:hover:bg-white/80'}} transition-all  rounded-md text-base flex items-center gap-2 "><i class="fa w-[30px] fa-users text-lg"></i> RT & RW</a>
                     </li>
                     <li>
                         <a href="{{route("kartu-keluarga.index")}}" class="block  px-4 py-2 {{request()->is('c/*/kartu-keluarga*') ? 'bg-[var(--primary)] text-white' : 'text-slate-700 md:hover:bg-white/80'}} transition-all  rounded-md text-base flex items-center gap-2 "><i class="fa w-[30px] fa-list text-lg"></i> Kartu Keluarga</a>
