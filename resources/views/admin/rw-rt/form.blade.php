@@ -2,7 +2,7 @@
 
     <div class="md:px-12 px-6 md:py-10 py-5">
         <div class="mb-10">
-            <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("kartu-keluarga.index")}}">Kartu keluarga</a> / {{$data->title}}</div>
+            <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("kartu-keluarga.index")}}">RW</a> / {{$data->title}}</div>
             <div class="flex">
                 <h1 class="text-2xl font-bold">{{$data->title}}</h1>
             </div>
@@ -23,7 +23,7 @@
             <div class="grid md:grid-cols-2 grid-cols-1 gap-x-4 gap-y-2">
                 <div class=" md:col-span-2">
                     <x-input-label for="nik" :value="__('NIK')" />
-                    <x-select data-placeholder="Cari berdasarkan nama atau NIK" data-allow-clear="true" :options="$options" class=" select2 block mt-1 w-full" name="nik" />
+                    <x-select :disabled="$data->method == 'PUT'" data-placeholder="Cari berdasarkan nama atau NIK" data-allow-clear="true" :options="$options" class=" select2 block mt-1 w-full" name="nik" />
                     <x-input-error :messages="$errors->get('nik')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class=" ">
@@ -47,14 +47,14 @@
                     <x-input-error :messages="$errors->get('rt')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class=" ">
-                    <x-input-label for="masa_jabatan_awal" :value="__('Masa Jabatan Awal')" />
-                    <x-text-input type="date" class="block mt-1 w-full " placeholder="-" name="masa_jabatan_awal" id="masa_jabatan_awal" required />
-                    <x-input-error :messages="$errors->get('masa_jabatan_awal')" class="mt-2 text-red-500 text-xs" />
+                    <x-input-label for="masa_jabatan_mulai" :value="__('Masa Jabatan Mulai')" />
+                    <x-text-input type="date" :value="old('masa_jabatan_mulai',$data->data->masa_jabatan_mulai)" class="block mt-1 w-full " placeholder="-" name="masa_jabatan_mulai" id="masa_jabatan_mulai" required />
+                    <x-input-error :messages="$errors->get('masa_jabatan_mulai')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class=" ">
-                    <x-input-label for="masa_jabatan_akhir" :value="__('Masa Jabatan Akhir')" />
-                    <x-text-input type="date" class="block mt-1 w-full " placeholder="masa_jabatan_akhir" name="masa_jabatan_akhir" id="masa_jabatan_akhir" required />
-                    <x-input-error :messages="$errors->get('masa_jabatan_akhir')" class="mt-2 text-red-500 text-xs" />
+                    <x-input-label for="masa_jabatan_selesai" :value="__('Masa Jabatan Selesai')" />
+                    <x-text-input type="date" :value="old('masa_jabatan_selesai',$data->data->masa_jabatan_selesai)" class="block mt-1 w-full " placeholder="masa_jabatan_selesai" name="masa_jabatan_selesai" id="masa_jabatan_selesai" required />
+                    <x-input-error :messages="$errors->get('masa_jabatan_selesai')" class="mt-2 text-red-500 text-xs" />
                 </div>
             </div>
             <div class="flex md:justify-end md:flex-row flex-col-reverse mt-8 gap-4">

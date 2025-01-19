@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date("tanggal_lahir")->nullable();
             $table->enum("agama", ["islam", "kristen_protestan", "kristen_katolik",  "hindu", "buddha", "konghucu", "lainnya"])->nullable();
             $table->string("pendidikan", 30)->nullable();
-            $table->string("pekerjaan", 30)->nullable();
+            $table->string("pekerjaan", 50)->nullable();
             $table->enum("golongan_darah", ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"])->nullable();
             $table->enum("status_perkawinan", ["belum_menikah", "menikah", "cerai_hidup", "cerai_mati", "duda", "janda"])->nullable();
             $table->date("tanggal_perkawinan")->nullable();

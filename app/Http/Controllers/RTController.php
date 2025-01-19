@@ -8,34 +8,38 @@ use Helpers;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class RWController extends Controller
+class RTController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($rw)
     {
 
-        $rw = MasyarakatModel::whereHas("user", function ($qr) {
-            $qr->where("role", "rw");
+        $rt = MasyarakatModel::whereHas("user", function ($qr) {
+            $qr->where("role", "rt");
             $qr->where("status", "1");
-        })->orderBy("created_at", "desc")
+        })->whereHas("kartuKeluarga", function ($qr) use ($rw) {
+            $qr->where("rw", $rw);
+        })
+            ->orderBy("created_at", "desc")
             ->get();
         $params["data"] = (object)[
+            "rt" => $rt,
             "rw" => $rw
         ];
 
 
         if (request()->ajax()) {
-            return $this->dataTable($rw);
+            return $this->dataTable($rt);
         }
-        return view("admin.rw-rt.rw", $params);
+        return view("admin.rw-rt.rt", $params);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($rw)
     {
         $masyarakat = MasyarakatModel::with(["user", "kartuKeluarga"])
             ->whereHas("user", function ($qr) {
@@ -45,12 +49,15 @@ class RWController extends Controller
                     "1"
                 );
             })
+            ->whereHas("kartuKeluarga", function ($qr) use ($rw) {
+                $qr->where("rw", $rw);
+            })
             ->orderBy("nama_lengkap")
             ->get();
         // dd($masyarakat);
         $params["data"] = (object)[
-            "title" => "Tambah RW",
-            "action_form" => route("rw.store"),
+            "title" => "Tambah RT",
+            "action_form" => route("rt.store", $rw),
             "method" => "POST",
             "masyarakat" => $masyarakat,
             "data" => (object)[
@@ -66,7 +73,7 @@ class RWController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store($rw, Request $request)
     {
         request()->validate([
             "nik" => "required|digits:16",
@@ -76,25 +83,26 @@ class RWController extends Controller
 
 
         $masyarakat = MasyarakatModel::find(request()->nik);
-        $hasRw = MasyarakatModel::whereHas("kartuKeluarga", function ($qr) use ($masyarakat) {
-            $qr->where("rw", $masyarakat->kartuKeluarga->rw);
+        $hasRw = MasyarakatModel::whereHas("kartuKeluarga", function ($qr) use ($masyarakat, $rw) {
+            $qr->where("rw", $rw);
+            $qr->where("rt", $masyarakat->kartuKeluarga->rt);
         })->whereHas("user", function ($qr) {
-            $qr->where("role", "rw");
+            $qr->where("role", "rt");
         })->count();
         if ($hasRw) {
-            return redirect()->back()->withInput(request()->all())->with("error", "Ketua rw {$masyarakat->kartuKeluarga->rw} sudah ada");
+            return redirect()->back()->withInput(request()->all())->with("error", "Ketua rt {$masyarakat->kartuKeluarga->rt} sudah ada");
         }
 
         $s = User::whereHas("masyarakat", function ($qr) {
             $qr->where("nik", request()->nik);
         })->first();
         $s->update([
-            "role" => "rw",
+            "role" => "rt",
             "masa_jabatan_mulai" => request()->masa_jabatan_mulai,
             "masa_jabatan_selesai" => request()->masa_jabatan_selesai
         ]);
 
-        return redirect(route("rw.index"))->with("success", "RW berhasil ditambahkan");
+        return redirect(route("rt.index", $rw))->with("success", "RT berhasil ditambahkan");
     }
 
     /**
@@ -108,28 +116,31 @@ class RWController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($rw, $id)
     {
         $masyarakat = MasyarakatModel::with(["user", "kartuKeluarga"])
             ->whereHas("user", function ($qr) {
-                $qr->where("role", "rw");
+                $qr->where("role", "rt");
                 $qr->where(
                     "status",
                     "1"
                 );
             })
+            ->whereHas("kartuKeluarga", function ($qr) use ($rw) {
+                $qr->where("rw", $rw);
+            })
             ->orderBy("nama_lengkap")
             ->get();
-        $rw = MasyarakatModel::find($id);
+        $rt = MasyarakatModel::find($id);
         $params["data"] = (object)[
-            "title" => "Ubah RW",
-            "action_form" => route("rw.update", $id),
+            "title" => "Ubah RT",
+            "action_form" => route("rt.update", [$rw, $id]),
             "method" => "PUT",
             "masyarakat" => $masyarakat,
             "data" => (object)[
                 "nik" => $id,
-                "masa_jabatan_mulai" => $rw->user->masa_jabatan_mulai,
-                "masa_jabatan_selesai" => $rw->user->masa_jabatan_selesai,
+                "masa_jabatan_mulai" => $rt->user->masa_jabatan_mulai,
+                "masa_jabatan_selesai" => $rt->user->masa_jabatan_selesai,
             ]
 
         ];
@@ -139,7 +150,7 @@ class RWController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $nik)
+    public function update($rw, Request $request, $nik)
     {
         request()->validate([
             "masa_jabatan_mulai" => "required|date",
@@ -148,14 +159,15 @@ class RWController extends Controller
 
 
         $masyarakat = MasyarakatModel::find($nik);
-        $hasRw = MasyarakatModel::whereHas("kartuKeluarga", function ($qr) use ($masyarakat) {
-            $qr->where("rw", $masyarakat->kartuKeluarga->rw);
+        $hasRw = MasyarakatModel::whereHas("kartuKeluarga", function ($qr) use ($masyarakat, $rw) {
+            $qr->where("rw", $rw);
+            $qr->where("rt", $masyarakat->kartuKeluarga->rt);
         })->whereHas("user", function ($qr) {
-            $qr->where("role", "rw");
+            $qr->where("role", "rt");
         })
             ->whereNot("nik", $nik)->count();
         if ($hasRw) {
-            return redirect()->back()->withInput(request()->all())->with("error", "Ketua rw {$masyarakat->kartuKeluarga->rw} sudah ada");
+            return redirect()->back()->withInput(request()->all())->with("error", "Ketua rT {$masyarakat->kartuKeluarga->rt} sudah ada");
         }
 
         $s = User::whereHas("masyarakat", function ($qr) use ($nik) {
@@ -166,7 +178,7 @@ class RWController extends Controller
             "masa_jabatan_selesai" => request()->masa_jabatan_selesai
         ]);
 
-        return redirect(route("rw.index"))->with("success", "RW berhasil diubah");
+        return redirect(route("rt.index", $rw))->with("success", "RT berhasil diubah");
     }
 
     /**
@@ -182,7 +194,7 @@ class RWController extends Controller
             "masa_jabatan_mulai" => null,
             "masa_jabatan_selesai" => null
         ]);
-        return redirect(route("rw.index"))->with("success", "Status RW berhasil diubah");
+        return redirect(route("rt.index", $nik))->with("success", "Status RT berhasil diubah");
     }
 
 
@@ -192,6 +204,9 @@ class RWController extends Controller
             ->addIndexColumn()
             ->addColumn("rw", function ($row) {
                 return $row->kartuKeluarga->rw;
+            })
+            ->addColumn("rt", function ($row) {
+                return $row->kartuKeluarga->rt;
             })
             ->addColumn("masa_jabatan", function ($row) {
                 content:
@@ -203,10 +218,9 @@ class RWController extends Controller
 
             ->addColumn('action', function ($row) {
                 $btn = '<div class="row flex">';
-                $btn .= ' <a href="' . route('rt.index', $row->kartuKeluarga->rw) . '" class="btn-show"><i class="fa fa-info"></i></a>';
-                $btn .= ' <a href="' . route('rw.edit', $row->nik) . '" class="btn-edit"><i class="fa fa-pencil"></i></a>';
-                $message = "Apakah anda yakin mengubah status ketua rw {$row->nama_lengkap} menjadi masyarakat?";
-                $btn .= "<button class='btn-delete' x-data x-on:click=\"\$dispatch('open-modal', {name: 'updateStatus'}), message= '$message', url= '" . route("rw.destroy", $row->nik) . "'\"><i class='fa fa-trash'></i></button>";
+                $btn .= ' <a href="' . route('rt.edit', [$row->kartuKeluarga->rw, $row->nik]) . '" class="btn-edit"><i class="fa fa-pencil"></i></a>';
+                $message = "Apakah anda yakin mengubah status ketua rt {$row->nama_lengkap} menjadi masyarakat?";
+                $btn .= "<button class='btn-delete' x-data x-on:click=\"\$dispatch('open-modal', {name: 'updateStatus'}), message= '$message', url= '" . route("rt.destroy", [$row->kartuKeluarga, $row->nik]) . "'\"><i class='fa fa-trash'></i></button>";
                 $btn .= '</div>';
                 return $btn;
             })

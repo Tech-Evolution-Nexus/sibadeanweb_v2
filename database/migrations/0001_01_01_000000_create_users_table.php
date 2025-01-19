@@ -21,6 +21,8 @@ return new class extends Migration
             $table->boolean("status")->default(0);
             $table->string("avatar")->default("default.png");
             $table->enum("role", ["rt", "rw", "masyarakat", "admin", "lurah"])->default("masyarakat");
+            $table->date("masa_jabatan_mulai")->nullable();
+            $table->date("masa_jabatan_selesai")->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

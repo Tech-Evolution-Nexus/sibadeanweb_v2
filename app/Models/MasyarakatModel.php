@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class MasyarakatModel extends Model
 {
+    use HasFactory;
     protected $table = "masyarakat";
     protected $primaryKey = 'nik';
+    public $incrementing = false;
+
     protected $fillable = [
         'nik',
         'id_user',

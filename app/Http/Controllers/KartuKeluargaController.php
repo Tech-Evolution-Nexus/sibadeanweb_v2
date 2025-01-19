@@ -16,7 +16,11 @@ class KartuKeluargaController extends Controller
     public function index()
     {
 
-        $kartuKeluarga = KartuKeluargaModel::with("masyarakat")->orderBy("created_at", "desc")->get();
+        $kartuKeluarga = KartuKeluargaModel::with("masyarakat")
+            ->whereHas("masyarakat", function ($qr) {
+                $qr->where("status_keluarga", "kk");
+            })
+            ->orderBy("created_at", "desc")->get();
         $params["data"] = (object)[
             "kartu_keluarga" => $kartuKeluarga
         ];
@@ -127,7 +131,7 @@ class KartuKeluargaController extends Controller
         $pengaturan = auth()->user()->pengaturan();
         $kartuKeluarga = KartuKeluargaModel::find($id);
         $masyarakat = $kartuKeluarga->kepalaKeluarga;
-
+        $fotoKK = $kartuKeluarga->kk_gambar ? url("/c/private-image?path=kartu_keluarga/$kartuKeluarga->kk_gambar") : asset("assets/image/default-2.png");
         $params["data"] = (object)[
             "title" => "Tambah Kartu Keluarga",
             "action_form" => route("kartu-keluarga.update", $id),
@@ -140,7 +144,7 @@ class KartuKeluargaController extends Controller
                 "alamat" => $kartuKeluarga->alamat,
                 "rt" => $kartuKeluarga->rt,
                 "rw" => $kartuKeluarga->rw,
-                "foto_kartu_keluarga" => url("/c/private-image?path=kartu_keluarga/$kartuKeluarga->kk_gambar"),
+                "foto_kartu_keluarga" => $fotoKK,
                 "kode_pos" => $pengaturan->kode_pos,
                 "kelurahan" => $pengaturan->kelurahan,
                 "kecamatan" => $pengaturan->kecamatan,
