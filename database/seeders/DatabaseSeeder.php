@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     {
 
         // $result =   MasyarakatModel::factory()->count(10)->create();
-        KartuKeluargaModel::factory(10)->create()->each(function ($kartuKeluarga) {
+        KartuKeluargaModel::factory(20)->create()->each(function ($kartuKeluarga) {
             MasyarakatModel::factory()->create([
                 'no_kk' => $kartuKeluarga->no_kk,
                 "status_keluarga" => "kk"
