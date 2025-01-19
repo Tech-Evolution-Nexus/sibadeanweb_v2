@@ -133,7 +133,7 @@ class KartuKeluargaController extends Controller
         $masyarakat = $kartuKeluarga->kepalaKeluarga;
         $fotoKK = $kartuKeluarga->kk_gambar ? url("/c/private-image?path=kartu_keluarga/$kartuKeluarga->kk_gambar") : asset("assets/image/default-2.png");
         $params["data"] = (object)[
-            "title" => "Tambah Kartu Keluarga",
+            "title" => "Ubah Kartu Keluarga",
             "action_form" => route("kartu-keluarga.update", $id),
             "method" => "PUT",
             "data" => (object)[
