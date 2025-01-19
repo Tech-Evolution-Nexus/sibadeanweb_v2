@@ -22,6 +22,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        "masa_jabatan_mulai",
+        "masa_jabatan_selesai",
+        "role",
+        "status",
+        "fcm_token"
     ];
 
     /**
@@ -47,6 +52,10 @@ class User extends Authenticatable
         ];
     }
 
+    public function masyarakat()
+    {
+        return $this->hasOne(MasyarakatModel::class, "id_user");
+    }
     public function pengaturan()
     {
         return PengaturanModel::first();

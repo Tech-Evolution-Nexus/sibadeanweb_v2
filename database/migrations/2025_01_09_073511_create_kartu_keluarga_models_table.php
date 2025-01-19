@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('kartu_keluarga', function (Blueprint $table) {
             $table->char("no_kk", 16)->primary();
-            $table->string("alamat", 70);
+            $table->string("alamat", 100);
             $table->tinyInteger("rt"); // Tidak perlu ukuran 2
             $table->tinyInteger("rw"); // Tidak perlu ukuran 2
             $table->string("kk_gambar")->nullable();
