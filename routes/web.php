@@ -34,7 +34,8 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::resource("/pengajuan-surat", PengajuanSuratController::class);
     Route::resource("/setting", PengaturanController::class);
     Route::resource("/rw", RWController::class);
-    Route::resource("/rw/{rw}/rt", RTController::class);
+    Route::resource("/rw/{rw}/
+    rt", RTController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
