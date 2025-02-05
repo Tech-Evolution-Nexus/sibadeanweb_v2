@@ -12,54 +12,63 @@ class PengajuanSuratController extends Controller
      */
     public function index()
     {
-        //
+        $anggotaKeluarga = PengajuanSuratModel::where("status", "diterima RW")->orderBy("created_at", "desc")->get();
+
+        $params["data"] = (object)[
+            "anggota_keluarga" => $anggotaKeluarga
+        ];
+
+
+        if (request()->ajax()) {
+            return $this->dataTable($anggotaKeluarga);
+        }
+        return view("admin.pengajuan-surat.pengajuan", $params);
+
+    }
+public function updateStatus($id){
+$pengajuan =     PengajuanSuratModel::find($id);
+
+        if(!$pengajuan){
+        return redirect()->back()->with("error","data tidak ditemukan");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    $pengajuan->update(["status"=>"selesai"]);
+    return redirect()->back()->with("success","Pengajuan berhasil disetujui");
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(PengajuanSuratModel $pengajuanSuratModel)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PengajuanSuratModel $pengajuanSuratModel)
-    {
-        //
-    }
+}
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, PengajuanSuratModel $pengajuanSuratModel)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PengajuanSuratModel $pengajuanSuratModel)
-    {
-        //
-    }
+
+   public function dataTable($data)
+   {
+       return DataTables::of($data)
+           ->addIndexColumn()
+           ->addColumn('action', function ($row) {
+               $btn = '<div class="row flex">';
+            //    $btn .= '<a href="' . route('pengajuan-surat.edit.show', [$row->no_kk, $row->nik]) . '" class="btn-show"><i class="fa fa-info"></i></a>';
+            //    $btn .= ' <a href="' . route('anggota-keluarga.edit', [$row->no_kk, $row->nik]) . '" class="btn-edit"><i class="fa fa-pencil"></i></a>';
+            //    $message = "Apakah anda yakin menghapus data $row->nama_lengkap?";
+            //    $btn .= "<button class='btn-delete' x-data x-on:click=\"\$dispatch('open-modal', {name: 'delete'}), message= '$message', url= '" . route("anggota-keluarga.destroy", [$row->no_kk, $row->nik]) . "'\"><i class='fa fa-trash'></i></button>";
+            //    $btn .= '</div>';
+               return $btn;
+           })
+
+           ->addColumn("nama_surat", function ($row) {
+               return $row->surat->nama_surat;
+           })
+       
+        ->addColumn("nama_masyarakat", function ($row) {
+            return $row->masyarakat->nama_lengkap;
+        })
+           ->addColumn("rw", function ($row) {
+            return $row->masyarakat->kartuKeluarga->rw;
+        })
+        ->addColumn("rt", function ($row) {
+            return $row->masyarakat->kartuKeluarga->rt;
+        })
+           ->rawColumns(['action'])
+           ->make(true);
+   }
 }

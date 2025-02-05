@@ -29,6 +29,11 @@
             </li>
             <hr class="block mt-6 mb-2 border-slate-300">
             <li>
+                <!-- <span class="text-lg text-gray-600 block mb-2">Dashboard</span> -->
+                <a href="{{route("pengajuan-surat.index")}}" class="block   px-4 py-2 {{request()->is('c/*/dashboard') ? 'bg-[var(--primary)] text-white' : 'text-slate-700 md:hover:bg-white/80'}} transition-all  rounded-md text-base flex items-center gap-2"><i class="fa w-[30px] fa-border-all text-lg"></i> Dashboard</a>
+            </li>
+            <hr class="block mt-6 mb-2 border-slate-300">
+            <li>
                 <span class="text-lg text-gray-600 block mb-2">Master Data</span>
                 <ul>
                     <li>

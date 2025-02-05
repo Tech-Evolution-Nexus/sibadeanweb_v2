@@ -31,7 +31,9 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::resource("/kartu-keluarga/{no_kk}/anggota-keluarga", AnggotaKeluargaController::class);
     Route::resource("/berita", BeritaController::class);
     Route::resource("/users", UserController::class);
-    Route::resource("/pengajuan-surat", PengajuanSuratController::class);
+    Route::get("/pengajuan-surat", [PengajuanSuratController::class,"index"])->name("pengajuan-surat.index");
+    Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class,"updateStatus"])->name("pengajuan-surat.update");
+
     Route::resource("/setting", PengaturanController::class);
     Route::resource("/rw", RWController::class);
     Route::resource("/rw/{rw}/
