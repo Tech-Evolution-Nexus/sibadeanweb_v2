@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
             ]);
         });
 
+        
+
         User::factory()->create([
             'name' => 'Muhammad Nor Kholit',
             'email' => 'badean@gmail.com',

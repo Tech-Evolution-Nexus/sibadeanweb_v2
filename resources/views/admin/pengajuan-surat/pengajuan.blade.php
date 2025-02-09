@@ -3,9 +3,9 @@
 
     <div class="md:px-12 px-6 md:py-4 py-2">
         <div class="mb-10">
-            <div class="text-sm">Dashboard / pengajuan-surat</div>
+            <div class="text-sm">Dashboard / Pengajuan Surat</div>
             <div class="flex">
-                <h1 class="text-2xl font-bold">pengajuan-surat</h1>
+                <h1 class="text-2xl font-bold">Pengajuan Surat</h1>
             </div>
         </div>
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
@@ -61,7 +61,7 @@
                             name: 'created_at'
                         },
 
-                        {    
+                        {
                             data: 'action',
                             name: 'action',
                             orderable: false,

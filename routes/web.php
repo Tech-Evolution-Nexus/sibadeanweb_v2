@@ -25,14 +25,14 @@ Route::get('/c/private-image', function () {
 
 
 Route::prefix("/c/admin")->middleware("auth")->group(function () {
-    Route::get('/dashboard', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, "index"])->name('dashboard');
     Route::resource("/surat", SuratController::class);
     Route::resource("/kartu-keluarga", KartuKeluargaController::class);
     Route::resource("/kartu-keluarga/{no_kk}/anggota-keluarga", AnggotaKeluargaController::class);
     Route::resource("/berita", BeritaController::class);
     Route::resource("/users", UserController::class);
-    Route::get("/pengajuan-surat", [PengajuanSuratController::class,"index"])->name("pengajuan-surat.index");
-    Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class,"updateStatus"])->name("pengajuan-surat.update");
+    Route::get("/pengajuan-surat", [PengajuanSuratController::class, "index"])->name("pengajuan-surat.index");
+    Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class, "updateStatus"])->name("pengajuan-surat.update");
 
     Route::resource("/setting", PengaturanController::class);
     Route::resource("/rw", RWController::class);
