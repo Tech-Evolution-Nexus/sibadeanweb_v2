@@ -18,7 +18,7 @@
 <body>
     @include("layouts.frontend.navbar")
     @yield("content")
-
+    @include("layouts.frontend.footer")
 </body>
 
 </html>
