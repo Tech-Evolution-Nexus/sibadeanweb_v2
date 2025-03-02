@@ -11,11 +11,13 @@ use App\Http\Controllers\RTController;
 use App\Http\Controllers\RWController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\UserController;
+use App\Models\PengaturanModel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
-    return view('welcome');
+    $pengaturan = PengaturanModel::first();
+    return view('welcome', compact("pengaturan"));
 });
 Route::get('/c/private-image', function () {
     $pathToFile = Storage::disk('private')->path(request()->path);

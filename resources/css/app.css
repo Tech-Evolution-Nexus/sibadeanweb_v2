@@ -11,6 +11,12 @@
 body {
     font-family: "Figtree", serif;
 }
+section{
+    @apply md:py-20 py-10;
+}
+.container{
+    @apply max-w-7xl mx-auto w-full px-4;
+}
 .btn-show {
     @apply rounded-md rounded-r-none bg-green-500 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-green-400 focus:shadow-none active:bg-slate-400 hover:bg-green-400 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none;
 }
