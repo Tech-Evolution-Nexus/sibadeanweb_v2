@@ -11,34 +11,15 @@ use App\Http\Controllers\RTController;
 use App\Http\Controllers\RWController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\UserController;
+use App\Models\Landing;
 use App\Models\PengaturanModel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     $pengaturan = PengaturanModel::first();
-    $fitur = [
-        (object)[
-            "nama" => "Kecepatan Penyetujuan Surat",
-            "deskripsi" => "Proses persetujuan surat lebih cepat dengan sistem otomatis yang efisien.",
-            "icon" => "approval.webp"
-        ],
-        (object)[
-            "nama" => "Lacak Surat Secara Real-Time",
-            "deskripsi" => "Pantau status surat Anda dari pengajuan hingga diterima dengan transparansi penuh.",
-            "icon" => "letter-animate.webp"
-        ],
-        (object)[
-            "nama" => "Keamanan Data Terjamin",
-            "deskripsi" => "Setiap surat terenkripsi dengan standar keamanan tinggi untuk menjaga kerahasiaan dokumen.",
-            "icon" => "secure.webp"
-        ],
-        (object)[
-            "nama" => "Akses dari Mana Saja",
-            "deskripsi" => "Kelola dan akses surat kapan saja, di perangkat apa pun dengan sistem berbasis cloud.",
-            "icon" => "cloud.webp"
-        ],
-    ];
+    $landing = Landing::first();
+    $fitur = $landing->fiturUtama()->select("title as judul", "description as deskripsi", "icon")->get();
     $testimoni = [
         (object)[
             "pesan" => "Aplikasi ini sangat membantu pekerjaan saya! Proses pembuatan dan pengiriman surat jadi jauh lebih cepat dan praktis.",
@@ -65,7 +46,7 @@ Route::get('/', function () {
             "jawaban" => "Waktu persetujuan bergantung pada jenis surat. Biasanya proses memakan waktu 1-2 hari kerja."
         ],
     ];
-    return view('welcome', compact("pengaturan", "fitur", "testimoni", "faq"));
+    return view('welcome', compact("pengaturan", "fitur", "testimoni", "faq", "landing"));
 });
 Route::get('/c/private-image', function () {
     $pathToFile = Storage::disk('private')->path(request()->path);
