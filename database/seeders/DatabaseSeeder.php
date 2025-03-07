@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\FiturUtama;
 use App\Models\KartuKeluargaModel;
+use App\Models\Landing;
 use App\Models\MasyarakatModel;
 use App\Models\PengaturanModel;
 use App\Models\User;
@@ -33,7 +35,44 @@ class DatabaseSeeder extends Seeder
             ]);
         });
 
-        
+        $landing = Landing::create([
+            "hero_title" => "Bikin Surat Lebih Mudah dan Cepat",
+            "hero_description" => "Aplikasi pengelolaan surat kelurahan yang memudahkan warga dalam pembuatan dan pengajuan surat secara digital. Hemat waktu, efisien, dan tanpa ribet!",
+            "hero_img" => "assets/image/hero.png",
+            "about_title" => "Tentang Desa Badean",
+            "about_description" => "Desa Badean adalah desa yang terletak di wilayah strategis dengan berbagai potensi sumber daya alam dan budaya. Dengan adanya sistem digitalisasi surat, Desa Badean kini lebih modern dan efisien dalam pelayanan administrasi kepada masyarakat.",
+            "about_img" => "assets/image/badean.jpg",
+            "demo_url" => "https://www.youtube.com/embed/video_id",
+            "mobile_link" => ""
+        ]);
+
+        FiturUtama::insert([
+            [
+                "title" => "Kecepatan Penyetujuan Surat",
+                "description" => "Proses persetujuan surat lebih cepat dengan sistem otomatis yang efisien.",
+                "icon" => "assets/image/approval.webp",
+                "landing_id" => $landing->id
+            ],
+            [
+                "title" => "Lacak Surat Secara Real-Time",
+                "description" => "Pantau status surat Anda dari pengajuan hingga diterima dengan transparansi penuh.",
+                "icon" => "assets/image/letter-animate.webp",
+                "landing_id" => $landing->id
+            ],
+            [
+                "title" => "Keamanan Data Terjamin",
+                "description" => "Setiap surat terenkripsi dengan standar keamanan tinggi untuk menjaga kerahasiaan dokumen.",
+                "icon" => "assets/image/secure.webp",
+                "landing_id" => $landing->id
+            ],
+            [
+                "title" => "Akses dari Mana Saja",
+                "description" => "Kelola dan akses surat kapan saja, di perangkat apa pun dengan sistem berbasis cloud.",
+                "icon" => "assets/image/cloud.webp",
+                "landing_id" => $landing->id
+            ],
+        ]);
+
 
         User::factory()->create([
             'name' => 'Muhammad Nor Kholit',

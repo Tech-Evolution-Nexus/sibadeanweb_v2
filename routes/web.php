@@ -11,19 +11,48 @@ use App\Http\Controllers\RTController;
 use App\Http\Controllers\RWController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\UserController;
+use App\Models\Landing;
 use App\Models\PengaturanModel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     $pengaturan = PengaturanModel::first();
-    return view('welcome', compact("pengaturan"));
+    $landing = Landing::first();
+    $fitur = $landing->fiturUtama()->select("title as judul", "description as deskripsi", "icon")->get();
+    $testimoni = [
+        (object)[
+            "pesan" => "Aplikasi ini sangat membantu pekerjaan saya! Proses pembuatan dan pengiriman surat jadi jauh lebih cepat dan praktis.",
+            "nama" => "- Budi, HR Manager"
+        ],
+        (object)[
+            "pesan" => "Saya tidak perlu lagi bolak-balik ke kantor kelurahan.
+                    Semua bisa dilakukan dari rumah!",
+            "nama" => "- Siti, Warga"
+        ],
+        (object)[
+            "pesan" => "Proses surat menyurat jadi lebih efisien.
+                    Aplikasi ini sangat membantu!",
+            "nama" => "- Pak Rahmat, Petugas Kelurahan"
+        ],
+    ];
+    $faq = [
+        (object)[
+            "pertanyaan" => "Bagaimana cara mengajukan surat?",
+            "jawaban" => "Anda dapat mengajukan surat secara online melalui aplikasi ini dengan mengisi formulir dan mengunggah dokumen yang diperlukan."
+        ],
+        (object)[
+            "pertanyaan" => "Berapa lama proses persetujuan?",
+            "jawaban" => "Waktu persetujuan bergantung pada jenis surat. Biasanya proses memakan waktu 1-2 hari kerja."
+        ],
+    ];
+    return view('welcome', compact("pengaturan", "fitur", "testimoni", "faq", "landing"));
 });
 Route::get('/c/private-image', function () {
     $pathToFile = Storage::disk('private')->path(request()->path);
     return file_exists($pathToFile) ? response()->file($pathToFile) : false;
 });
-
+Route::post("testimoni/store", function () {})->name("testimoni.store");
 
 
 Route::prefix("/c/admin")->middleware("auth")->group(function () {
@@ -38,8 +67,7 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
 
     Route::resource("/setting", PengaturanController::class);
     Route::resource("/rw", RWController::class);
-    Route::resource("/rw/{rw}/
-    rt", RTController::class);
+    Route::resource("/rw/{rw}/rt", RTController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

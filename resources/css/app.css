@@ -5,11 +5,14 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 :root {
     --primary: #052158;
 }
 body {
     font-family: "Figtree", serif;
+    scroll-behavior: smooth;
 }
 section{
     @apply md:py-20 py-10;
