@@ -2,7 +2,7 @@
     <div class="container py-10">
         <div class="grid md:grid-cols-2 grid-cols-1 items-end gap-4">
             <div class="">
-                <h6 class="text-2xl"><img class="rounded-md w-24" src="{{ asset('assets/'.($pengaturan->logo_horizontal?"/logos/$pengaturan->logo_horizontal":"image/default-2.png")) }}" alt="Logo"></h6>
+                <h6 class="text-2xl"><img class="rounded-md w-24" src="{{ asset('assets/'.(Helpers::pengaturan()->logo_horizontal?"/logos/".Helpers::pengaturan()->logo_horizontal:"image/default-2.png")) }}" alt="Logo"></h6>
                 <p class="text-sm mt-2">Aplikasi pengelolaan surat kelurahan yang memudahkan warga dalam pembuatan dan pengajuan surat secara digital. Hemat waktu, efisien, dan tanpa ribet!
 
                 </p>

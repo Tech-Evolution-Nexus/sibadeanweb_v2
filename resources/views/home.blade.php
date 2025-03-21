@@ -97,7 +97,7 @@
     </div>
 </section>
 <script>
-    const primary = "{{$pengaturan->primary_color }}";
+    const primary = "{{Helpers::pengaturan()->primary_color }}";
     document.documentElement.style.setProperty('--primary', primary);
 </script>
 @endsection
