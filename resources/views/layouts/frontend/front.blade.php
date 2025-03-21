@@ -16,9 +16,11 @@
 </head>
 
 <body>
-    @include("layouts.frontend.navbar")
-    @yield("content")
-    @include("layouts.frontend.footer")
+    <div class="flex flex-col min-h-screen justify-between">
+        @include("layouts.frontend.navbar")
+        @yield("content")
+        @include("layouts.frontend.footer")
+    </div>
 </body>
 
 </html>

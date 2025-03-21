@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\BeritaModel;
+use App\Models\Faq;
 use App\Models\FiturUtama;
 use App\Models\KartuKeluargaModel;
 use App\Models\Landing;
@@ -94,5 +96,18 @@ class DatabaseSeeder extends Seeder
             "kecamatan" => "Badean",
             "provinsi" => "Jawa Timur"
         ]);
+
+        Faq::insert([
+            [
+                "question" => "Bagaimana cara mengajukan surat?",
+                "answer" => "Anda dapat mengajukan surat secara online melalui aplikasi ini dengan mengisi formulir dan mengunggah dokumen yang diperlukan."
+            ],
+            [
+                "question" => "Berapa lama proses persetujuan?",
+                "answer" => "Waktu persetujuan bergantung pada jenis surat. Biasanya proses memakan waktu 1-2 hari kerja."
+            ],
+        ]);
+
+        BeritaModel::factory(10)->create();
     }
 }

@@ -8,7 +8,6 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
-
     theme: {
         extend: {
             fontFamily: {
@@ -17,5 +16,5 @@ export default {
         },
     },
 
-    plugins: [forms],
+    plugins: [forms,require('@tailwindcss/typography')],
 };
