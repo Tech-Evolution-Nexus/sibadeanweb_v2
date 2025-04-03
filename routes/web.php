@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FormatSuratController;
 use App\Http\Controllers\KartuKeluargaController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PengajuanSuratController;
@@ -22,7 +23,7 @@ Route::get('/c/private-image', function () {
     $pathToFile = Storage::disk('private')->path(request()->path);
     return file_exists($pathToFile) ? response()->file($pathToFile) : false;
 });
-Route::post("testimoni/store", function () {})->name("testimoni.store");
+Route::post("testimoni/store", function () { })->name("testimoni.store");
 
 
 Route::prefix("/c/admin")->middleware("auth")->group(function () {
@@ -35,6 +36,10 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get('/admin/users/create', [UserController::class, 'create'])->name('users.create');
     Route::get("/pengajuan-surat", [PengajuanSuratController::class, "index"])->name("pengajuan-surat.index");
     Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class, "updateStatus"])->name("pengajuan-surat.update");
+
+    Route::get("/format-surat", [FormatSuratController::class, "index"])->name("format-surat.index");
+    Route::get("/format-surat/{id}/edit", [FormatSuratController::class, "edit"])->name("format-surat.edit");
+    Route::put("/format-surat/{id}", [FormatSuratController::class, "update"])->name("format-surat.update");
 
     Route::resource("/setting", PengaturanController::class);
     Route::resource("/rw", RWController::class);
