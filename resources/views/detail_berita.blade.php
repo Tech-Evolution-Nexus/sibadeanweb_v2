@@ -11,7 +11,7 @@
                     </div>
                     <img src="{{ asset($berita->gambar) }}" alt="{{ $berita->judul }}"
                         class="w-full mx-auto object-cover aspect-video rounded-md my-6">
-                    <p class="prose lg:prose-base">{!! $berita->konten !!}</p>
+                    <p class="prose lg:prose-base max-w-full">{!! $berita->konten !!}</p>
 
                 </div>
                 <div class="md:col-span-2 ">

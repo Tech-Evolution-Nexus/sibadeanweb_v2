@@ -6,11 +6,13 @@
 @tailwind utilities;
 
 
+
 :root {
     --primary: #052158;
 }
 body {
-    font-family: "Figtree", serif;
+    /* font-family: "Figtree", serif; */
+    font-family: "Inter", serif;
     scroll-behavior: smooth;
 }
 section{
