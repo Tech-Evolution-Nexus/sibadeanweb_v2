@@ -1,5 +1,9 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <aside class=" md:min-w-[300px] md:sticky md:left-0 min-w-full h-screen  fixed top-0   z-10 md:bg-gray-100 transition-all flex flex-col bg-slate-200" :class="{'left-[-100%]': ! sidebarOpen, 'left-0': sidebarOpen }">
+=======
+<aside class=" md:min-w-[300px] md:sticky md:left-0 min-w-full h-screen overflow-auto  fixed top-0 shadow-lg  z-10  transition-all  flex flex-col bg-white" :class="{'left-[-100%]': ! sidebarOpen, 'left-0': sidebarOpen }">
+>>>>>>> Stashed changes
 =======
 <aside class=" md:min-w-[300px] md:sticky md:left-0 min-w-full h-screen overflow-auto  fixed top-0 shadow-lg  z-10  transition-all  flex flex-col bg-white" :class="{'left-[-100%]': ! sidebarOpen, 'left-0': sidebarOpen }">
 >>>>>>> Stashed changes
@@ -25,6 +29,7 @@
         </div>
     </div> --}}
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     <div class="flex px-4 py-4  flex-col flex-grow justify-between">
         <ul class=" ">
@@ -72,6 +77,12 @@
         <ul class="">
             <li class="fi-sidebar-item-label flex-1 my-2 truncate text-sm font-medium text-primary-600 dark:text-primary-400">
                 <!-- <span class="text-lg text-gray-600 block mb-2">Dashboard</span> -->
+=======
+    <div class="flex px-4 py-4 gap-2  flex-col flex-grow justify-between">
+        <ul class="">
+            <li class="fi-sidebar-item-label flex-1 my-2 truncate text-sm font-medium text-primary-600 dark:text-primary-400">
+                <!-- <span class="text-lg text-gray-600 block mb-2">Dashboard</span> -->
+>>>>>>> Stashed changes
                 <a href="{{route("dashboard")}}" class="block   px-2 py-1 {{request()->is('c/*/dashboard') ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}} transition-all   rounded-md text-sm flex items-center gap-2"><i class="fa w-[30px] fa-border-all text-lg"></i> Dashboard</a>
             </li>
             {{-- <hr class="block mt-6 mb-2 border-slate-300"> --}}
