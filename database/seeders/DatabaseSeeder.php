@@ -9,6 +9,7 @@ use App\Models\KartuKeluargaModel;
 use App\Models\Landing;
 use App\Models\MasyarakatModel;
 use App\Models\PengaturanModel;
+use App\Models\SuratModel;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
+        SuratModel::factory(10)->create();
         // $result =   MasyarakatModel::factory()->count(10)->create();
         KartuKeluargaModel::factory(20)->create()->each(function ($kartuKeluarga) {
             MasyarakatModel::factory()->create([
