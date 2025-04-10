@@ -1,0 +1,80 @@
+<x-app-layout :title="'Berita'">
+
+
+    <div class="md:px-12 px-6 md:py-4 py-2">
+        <div class="mb-10">
+            <div class="text-sm">Dashboard / Berita</div>
+            <div class="flex">
+                <h1 class="text-2xl font-bold">Berita</h1>
+                <a href="{{route("berita.create")}}" class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah Berita</a>
+            </div>
+        </div>
+        <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
+        <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
+
+        <div class="overflow-x-auto">
+  <table id="berita" class="min-w-full divide-y divide-gray-200 text-sm text-left text-gray-700">
+    <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+      <tr>
+        <th class="px-4 py-2">No</th>
+        <th class="px-4 py-2">Gambar</th>
+        <th class="px-4 py-2">Judul</th>
+        <th class="px-4 py-2">Slug</th>
+        <th class="px-4 py-2">Keterangan</th>
+        <th class="px-4 py-2">Konten</th>
+        <th class="px-4 py-2">Aksi</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <!-- Data rows go here -->
+    </tbody>
+  </table>
+    </div>
+
+    <x-slot name="script">
+        <script>
+            $(document).ready(function() {
+                $('#berita').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: "{{ route('berita.index') }}",
+                    columnDefs: [{
+                        width: 200,
+                        targets: 6
+                    }],
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'gambar',
+                            name: 'Gambar'
+                        },
+                        {
+                            data: 'judul',
+                            name: 'Judul'
+                        },
+                        {
+                            data: 'slug',
+                            name: 'Slug'
+                        },
+                        {
+                            data: 'keterangan',
+                            name: 'Keterangan'
+                        },
+                        {
+                            data: 'konten',
+                            name: 'Konten'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ]
+                });
+            });
+        </script>
+    </x-slot>
+</x-app-layout>
