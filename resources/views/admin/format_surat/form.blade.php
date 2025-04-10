@@ -118,7 +118,7 @@
                 }
             });
         </script>
-        @endslot
+        
 
 
 </x-app-layout>
