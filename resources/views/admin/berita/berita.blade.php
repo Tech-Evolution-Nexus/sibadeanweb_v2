@@ -19,9 +19,7 @@
         <th class="px-4 py-2">No</th>
         <th class="px-4 py-2">Gambar</th>
         <th class="px-4 py-2">Judul</th>
-        <th class="px-4 py-2">Slug</th>
         <th class="px-4 py-2">Keterangan</th>
-        <th class="px-4 py-2">Konten</th>
         <th class="px-4 py-2">Aksi</th>
       </tr>
     </thead>
@@ -40,7 +38,7 @@
                     ajax: "{{ route('berita.index') }}",
                     columnDefs: [{
                         width: 200,
-                        targets: 6
+                        targets: 4
                     }],
                     columns: [{
                             data: 'DT_RowIndex',
@@ -54,18 +52,12 @@
                             data: 'judul',
                             name: 'Judul'
                         },
-                        {
-                            data: 'slug',
-                            name: 'Slug'
-                        },
+                        
                         {
                             data: 'keterangan',
                             name: 'Keterangan'
                         },
-                        {
-                            data: 'konten',
-                            name: 'Konten'
-                        },
+                        
                         {
                             data: 'action',
                             name: 'action',

@@ -192,7 +192,16 @@ class SuratController extends Controller
     {
         return DataTables::of($data)
             ->addIndexColumn()
+            ->addColumn('gambar', function ($surat) {
+                $gambarUrl = $surat->gambar
+                    ? url("/c/private-image?path=surat/$surat->gambar")
+                    : asset("assets/image/default-2.png");
+            
+                    return '<img src="' . $gambarUrl . '" alt="Gambar Surat" width="50">';
 
+            })
+            
+            
             // ->addColumn('kepala_keluarga', function ($row) {
             //     return $row->kepalaKeluarga->nama_lengkap;
             // })
@@ -204,7 +213,7 @@ class SuratController extends Controller
                 $btn .= '</div>';
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['gambar','action'])
             ->make(true);
     }
 }

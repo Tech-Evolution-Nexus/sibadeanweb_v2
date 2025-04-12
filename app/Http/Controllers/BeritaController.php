@@ -121,7 +121,7 @@ class BeritaController extends Controller
      */
     public function update($id)
     {
-      
+
         $validated = request()->validate(
             [
                 "judul" => "required|min:3",
@@ -188,7 +188,13 @@ class BeritaController extends Controller
     {
         return DataTables::of($data)
             ->addIndexColumn()
+            ->addColumn('gambar', function ($surat) {
+                $gambarUrl = $surat->gambar
+                    ? url("/c/private-image?path=berita/$surat->gambar")
+                    : asset("assets/image/default-2.png");
 
+                return '<img src="' . $gambarUrl . '" alt="Gambar Surat" width="50">';
+            })
             ->addColumn('action', function ($row) {
                 $btn = '<div class="row flex">';
                 $btn .= ' <a href="' . route('berita.edit', $row->id) . '" class="btn-edit"><i class="fa fa-pencil"></i></a>';
@@ -197,7 +203,7 @@ class BeritaController extends Controller
                 $btn .= '</div>';
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['gambar', 'action'])
             ->make(true);
     }
 }
