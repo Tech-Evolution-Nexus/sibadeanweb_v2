@@ -103,15 +103,23 @@ public function register(Request $request) {
         "phone" => "required|numeric",
         "email" => "required|email|unique:users,email",
         "password" => "required|min:6",
+        "kk_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048" // Validasi gambar KK
     ]);
 
     if ($validator->fails()) {
         return response()->json(['error' => $validator->errors()], 422);
     }
 
+    // Proses unggah file KK
+    $kkGambarPath = 'default.jpg'; // Default jika tidak ada file yang diunggah
+    if ($request->hasFile('kk_gambar')) {
+        $kkGambarPath = $request->file('kk_gambar')->store('kk', 'public');
+    }
+
+    // Cek apakah no_kk sudah ada, jika belum, buat baru
     $kk = KartuKeluargaModel::firstOrCreate(
         ['no_kk' => $request->no_kk],
-        ['alamat' => $request->alamat, 'rt' => 1, 'rw' => 1, 'kk_gambar' => 'default.jpg']
+        ['alamat' => $request->alamat, 'rt' => 1, 'rw' => 1, 'kk_gambar' => $kkGambarPath]
     );
 
     // Buat user baru
@@ -140,6 +148,7 @@ public function register(Request $request) {
         'message' => 'Registrasi berhasil',
         'user' => $user,
         'masyarakat' => $masyarakat,
+        'kk' => $kk
     ], 201);
 }
 

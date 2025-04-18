@@ -36,6 +36,7 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::resource("/users", UserController::class);
     Route::get('/admin/users/create', [UserController::class, 'create'])->name('users.create');
     Route::get("/pengajuan-surat", [PengajuanSuratController::class, "index"])->name("pengajuan-surat.index");
+    Route::get("/pengajuan-surat/{id}", [PengajuanSuratController::class, "show"])->name("pengajuan-surat.show");
     Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class, "updateStatus"])->name("pengajuan-surat.update");
 
     // Route::get("/surat-keluar", [SuraKeluarController::class, "index"])->name("surat-keluar.index");

@@ -12,16 +12,31 @@ class PengajuanSuratController extends Controller
      */
     public function index()
     {
-        $anggotaKeluarga = PengajuanSuratModel::where("status", "diterima RW")->orderBy("created_at", "desc")->get();
+        $anggotaKeluarga = PengajuanSuratModel::where("status", "di_terima_rw")->orderBy("created_at", "desc")->get();
 
         $params["data"] = (object)[
             "anggota_keluarga" => $anggotaKeluarga
         ];
-
+        
         if (request()->ajax()) {
             return $this->dataTable($anggotaKeluarga);
         }
         return view("admin.pengajuan-surat.pengajuan", $params);
+    }
+    public function show($id)
+    {
+        $anggotaKeluarga = PengajuanSuratModel::where("status", "di_terima_rw")->where("id", $id)->first();
+        if (!$anggotaKeluarga) {
+            return abort(404);
+            # code...
+        }
+
+        $params["data"] = (object)[
+            "title" => "Pengajuan Surat","action_form"=> route("pengajuan-surat.update",$id),
+            "pengajuan" => $anggotaKeluarga
+        ];
+       
+        return view("admin.pengajuan-surat.form", $params);
     }
     public function updateStatus($id)
     {
@@ -32,7 +47,7 @@ class PengajuanSuratController extends Controller
         }
 
         $pengajuan->update(["status" => "selesai"]);
-        return redirect()->back()->with("success", "Pengajuan berhasil disetujui");
+        return redirect()->route("pengajuan-surat.index")->with("success", "Pengajuan berhasil disetujui");
     }
 
 
@@ -43,9 +58,9 @@ class PengajuanSuratController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 $btn = '<div class="row flex">';
-                //    $btn .= '<a href="' . route('pengajuan-surat.edit.show', [$row->no_kk, $row->nik]) . '" class="btn-show"><i class="fa fa-info"></i></a>';
-                //    $btn .= ' <a href="' . route('anggota-keluarga.edit', [$row->no_kk, $row->nik]) . '" class="btn-edit"><i class="fa fa-pencil"></i></a>';
-                //    $message = "Apakah anda yakin menghapus data $row->nama_lengkap?";
+                   $btn .= '<a href="' . route('pengajuan-surat.show', $row->id) . '" class="btn-show"><i class="fa fa-info"></i></a>';
+                  // $btn .= ' <a href="' . route('anggota-keluarga.edit', [$row->no_kk, $row->nik]) . '" class="btn-edit"><i class="fa fa-pencil"></i></a>';
+                   $message = "Apakah anda yakin menghapus data $row->nama_lengkap?";
                 //    $btn .= "<button class='btn-delete' x-data x-on:click=\"\$dispatch('open-modal', {name: 'delete'}), message= '$message', url= '" . route("anggota-keluarga.destroy", [$row->no_kk, $row->nik]) . "'\"><i class='fa fa-trash'></i></button>";
                 $btn .= '</div>';
                 return $btn;
