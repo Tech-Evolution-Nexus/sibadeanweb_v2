@@ -32,13 +32,13 @@
 
             <div class="mb-2 ms-md-3">
                 <x-input-label for="judul" :value="__('judul')" />
-                <textarea name="judul" id="judul" class="block mt-1 w-full">{{ old('judul', $data->data->judul) }}</textarea>
+                <input name="judul" id="judul" class="block mt-1 w-full">{{ old('judul', $data->data->judul) }}</input>
                 <x-input-error :messages="$errors->get('judul')" class="mt-2 text-red-500 text-xs" />
             </div>
 
             <div class="mb-2 ms-md-3">
                 <x-input-label for="slug" :value="__('slug')" />
-                <textarea name="slug" id="slug" class="block mt-1 w-full">{{ old('slug', $data->data->slug) }}</textarea>
+                <input name="slug" id="slug" class="block mt-1 w-full">{{ old('slug', $data->data->slug) }}</input>
                 <x-input-error :messages="$errors->get('slug')" class="mt-2 text-red-500 text-xs" />
             </div>
 

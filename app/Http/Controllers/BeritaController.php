@@ -124,8 +124,8 @@ class BeritaController extends Controller
 
         $validated = request()->validate(
             [
-                "judul" => "required|min:3",
-                "slug" => "required|min:3",
+                "judul" => "required|min:3|unique:berita,judul,$id",
+                "slug" => "required|min:3unique:berita,slug,$id",
                 "keterangan" => "required|min:3",
                 "konten" => "required|min:3",
                 "gambar" => "file|image|max:2024", // Validasi foto (optional)
@@ -172,9 +172,11 @@ class BeritaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BeritaModel $BeritaModel)
+    public function destroy($id)
     {
+        $BeritaModel = BeritaModel::findOrFail($id);
         $oldImagePath = storage_path('app/private/berita/' . $BeritaModel->gambar);
+        // dd($oldImagePath);
         if (file_exists($oldImagePath)) {
             unlink($oldImagePath); // Menghapus file gambar lama
         }

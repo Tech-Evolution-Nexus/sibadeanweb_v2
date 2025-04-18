@@ -11,6 +11,7 @@ use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RTController;
 use App\Http\Controllers\RWController;
+use App\Http\Controllers\SuraKeluarController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -38,9 +39,14 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get("/pengajuan-surat/{id}", [PengajuanSuratController::class, "show"])->name("pengajuan-surat.show");
     Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class, "updateStatus"])->name("pengajuan-surat.update");
 
+    // Route::get("/surat-keluar", [SuraKeluarController::class, "index"])->name("surat-keluar.index");
+    Route::get('/surat-keluar/download/{filename}', [SuraKeluarController::class, 'download'])->name('surat-keluar.download');
+
     Route::get("/format-surat", [FormatSuratController::class, "index"])->name("format-surat.index");
     Route::get("/format-surat/{id}/edit", [FormatSuratController::class, "edit"])->name("format-surat.edit");
     Route::put("/format-surat/{id}", [FormatSuratController::class, "update"])->name("format-surat.update");
+
+    Route::resource("/surat-keluar", SuraKeluarController::class);
 
     Route::resource("/setting", PengaturanController::class);
     Route::resource("/rw", RWController::class);

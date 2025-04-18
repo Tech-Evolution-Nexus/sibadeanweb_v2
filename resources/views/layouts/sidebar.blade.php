@@ -38,7 +38,7 @@
             </li>
             <li class="fi-sidebar-item-label flex-1 my-2 truncate text-sm font-medium text-primary-600 dark:text-primary-400">
                 <!-- <span class="text-lg text-gray-600 block mb-2">Dashboard</span> -->
-                <a href="{{route("pengajuan-surat.index")}}" class="block   px-2 py-1 {{request()->is('c/*/pengajuan-surat') ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}} transition-all   rounded-md text-sm flex items-center gap-2"><i class="fa w-[30px] fa-envelope text-lg"></i> Surat Keluar</a>
+                <a href="{{route("surat-keluar.index")}}" class="block   px-2 py-1 {{request()->is('c/*/pengajuan-surat') ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}} transition-all   rounded-md text-sm flex items-center gap-2"><i class="fa w-[30px] fa-envelope text-lg"></i> Surat Keluar</a>
             </li>
 
             {{-- <hr class="block mt-6 mb-2 border-slate-300"> --}}
