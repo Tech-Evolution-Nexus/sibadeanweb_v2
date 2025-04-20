@@ -187,31 +187,44 @@ class AuthController extends Controller
     public function activateAccount(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            "nik" => "required|exists:masyarakat,nik",
+            'nik' => 'required|exists:masyarakat,nik',
+            'email' => 'required|email',
+            'password' => 'required|min:6',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => 'NIK tidak ditemukan'], 404);
+            return ResponseHelper::error($validator->errors()->first(), 422);
         }
 
+        // Cari data masyarakat berdasarkan NIK
         $masyarakat = MasyarakatModel::where('nik', $request->nik)->first();
 
         if (!$masyarakat) {
-            return response()->json(['error' => 'NIK tidak ditemukan'], 404);
+            return ResponseHelper::error('NIK tidak ditemukan', 404);
         }
 
-        // Pastikan user ada sebelum update
-        $user = User::where('id', $masyarakat->id_user)->first();
+        // Cari user berdasarkan id_user dari masyarakat
+        $user = User::find($masyarakat->id_user);
 
         if (!$user) {
-            return response()->json(['error' => 'Akun tidak ditemukan'], 404);
+            return ResponseHelper::error('User tidak ditemukan', 404);
         }
 
-        $user->update(['status' => 1]); // Langsung update status
-
+        $user->update([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'status' => 1,
+        ]);
+        $user->makeHidden(['password']);
         return response()->json([
             'message' => 'Akun berhasil diaktifkan!',
             'user' => $user,
         ], 200);
+    }
+    public function logout(Request $request)
+    {
+        // Hapus token dari user yang sedang login
+        $request->user()->currentAccessToken()->delete();
+        return ResponseHelper::success(null, 'Berhasil logout', 200);
     }
 }

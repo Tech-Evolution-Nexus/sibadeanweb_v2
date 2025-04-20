@@ -26,3 +26,6 @@ Route::post('/aktivasi', [AuthController::class, 'activateAccount']);
 // Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUserData']);
 Route::get('/user', [AuthController::class, 'getUserData']);
 Route::get('/dash', [DashboardControllerApi::class, 'index']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
