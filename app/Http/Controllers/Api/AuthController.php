@@ -200,7 +200,7 @@ class AuthController extends Controller
         $masyarakat = MasyarakatModel::where('nik', $request->nik)->first();
 
         if (!$masyarakat) {
-            return ResponseHelper::error('NIK tidak ditemukan', 404);
+            return ResponseHelper::error('NIK tidakd ditemukan', 404);
         }
 
         // Cari user berdasarkan id_user dari masyarakat
