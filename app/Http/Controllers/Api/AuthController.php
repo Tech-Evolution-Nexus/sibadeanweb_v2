@@ -19,17 +19,18 @@ class AuthController extends Controller
         $nik = request()->nik;
         $user = User::all();
         return response()->json($user);
-    }
-    return response()->json($user);
-}
-public function login(Request $request) {
-    Log::info('Login Request Data', $request->all());
 
-    // Validasi input
-    $validator = Validator::make($request->all(), [
-        "nik" => "required|numeric|digits:16",
-        "password" => "required|min:6",
-    ]);
+        return response()->json($user);
+    }
+    public function login(Request $request)
+    {
+        Log::info('Login Request Data', $request->all());
+
+        // Validasi input
+        $validator = Validator::make($request->all(), [
+            "nik" => "required|numeric|digits:16",
+            "password" => "required|min:6",
+        ]);
 
         // Jika validasi gagal, kembalikan pesan error
         if ($validator->fails()) {
