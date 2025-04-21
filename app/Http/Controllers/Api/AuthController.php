@@ -22,8 +22,6 @@ class AuthController extends Controller
     if (!$user) {
         return response()->json(['error' => 'User tidak ditemukan atau belum login'], 401);
     }
-
-
     return response()->json($user);
 }
 public function login(Request $request) {
