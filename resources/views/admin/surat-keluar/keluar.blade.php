@@ -6,7 +6,8 @@
             <div class="text-sm">Dashboard / Surat Keluar</div>
             <div class="flex">
                 <h1 class="text-2xl font-bold">Surat Keluar</h1>
-                <a href="{{route("surat-keluar.create")}}" class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah Surat Keluar</a>
+                <a href="{{route("surat-keluar.create")}}"
+                    class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah Surat Keluar</a>
             </div>
         </div>
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
@@ -15,9 +16,9 @@
         <table id="pengajuan-surat" class="w-full">
             <thead>
                 <th>No</th>
-                <th>Title</th>
+                <th>Judul</th>
                 <th>File</th>
-                <th>Exp Date</th>
+                <th>Tanggal Acara</th>
                 <th>Aksi</th>
             </thead>
         </table>
@@ -25,7 +26,7 @@
 
     <x-slot name="script">
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#pengajuan-surat').DataTable({
                     processing: true,
                     serverSide: true,
@@ -35,27 +36,27 @@
                         targets: 4
                     }],
                     columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'title',
-                            name: 'title'
-                        },
-                        {
-                            data: 'nama_file',
-                            name: 'nama_file'
-                        },
-                        {
-                            data: 'exp_date',
-                            name: 'exp_date'
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        },
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'title',
+                        name: 'title'
+                    },
+                    {
+                        data: 'nama_file',
+                        name: 'nama_file'
+                    },
+                    {
+                        data: 'exp_date',
+                        name: 'exp_date'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                     ]
                 });
             });

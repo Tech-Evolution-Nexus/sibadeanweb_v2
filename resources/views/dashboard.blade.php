@@ -14,7 +14,7 @@
                     <span class="font-semibold text-lg">Surat Masuk</span>
                     <i class="text-2xl fa fa-envelope text-blue-500"></i>
                 </div>
-                <span class="text-4xl font-bold text-blue-500">20</span>
+                <span class="text-4xl font-bold text-blue-500">{{$suratMasuk}}</span>
                 <p class="text-slate-500 mt-2">Surat diterima hari ini</p>
             </article>
 
@@ -24,7 +24,7 @@
                     <span class="font-semibold text-lg">Surat Keluar</span>
                     <i class="text-2xl fa fa-envelope text-green-500"></i>
                 </div>
-                <span class="text-4xl font-bold text-green-500">12</span>
+                <span class="text-4xl font-bold text-green-500">{{$suratKeluar}}</span>
                 <p class="text-slate-500 mt-2">Surat dikirim hari ini</p>
             </article>
 
@@ -34,7 +34,7 @@
                     <span class="font-semibold text-lg">Persetujuan Tertunda</span>
                     <i class="text-2xl fa fa-circle-info text-yellow-500"></i>
                 </div>
-                <span class="text-4xl font-bold text-yellow-500">8</span>
+                <span class="text-4xl font-bold text-yellow-500">{{$suratTertunda}}</span>
                 <p class="text-slate-500 mt-2">Surat menunggu persetujuan</p>
             </article>
         </div>

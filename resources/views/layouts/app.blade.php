@@ -25,13 +25,13 @@
 
 </head>
 
-<body class=" antialiased">
+<body class=" antialiased ">
     <x-loading />
     <div class="min-h-screen flex" x-data="{ sidebarOpen: false,  message: '-',url:'-' }">
         @include('layouts.sidebar')
 
         <!-- Page Content -->
-        <main class="w-full bg-white">
+        <main class="w-full bg-[#f9fafb]">
             @include('layouts.navigation')
             {{ $slot }}
         </main>
@@ -67,15 +67,13 @@
     <script type="importmap">
         {
                     "imports": {
-                        "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.js",
+                        "ckeditor5": "{{asset("assets/js/ckeditor/ckeditor5.js")}}",
                         "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/43.3.1/"
                     }
                 }
             </script>
 
 
-            
-    {{--
     <script type="module">
         import {
             ClassicEditor,
@@ -99,8 +97,8 @@
         } from 'ckeditor5';
 
         document.addEventListener("DOMContentLoaded", function () {
-            if (document.querySelector('.konten')) {
-                const kontenEditor = document.querySelector("#konten");
+            if (document.querySelector('.ckeditor')) {
+                const kontenEditor = document.querySelector(".ckeditor");
 
                 if (kontenEditor) {
                     ClassicEditor.create(kontenEditor, {
@@ -113,86 +111,13 @@
                             'heading', 'indent', 'outdent', '|',
                             'removeFormat', 'horizontalLine'
                         ],
-                        mention: {
-                            feeds: [
-                                {
-                                    marker: "{",
-                                    feed: [
-                                        "{no_surat}", "{nama}", "{nik}", "{tempat_lahir}", "{tanggal_lahir}",
-                                        "{jenis_kelamin}", "{pekerjaan}", "{agama}", "{status_perkawinan}",
-                                        "{kewarganegaraan}", "{pendidikan}", "{alamat}", "{rw}", "{nama_bapak}",
-                                        "{nik_bapak}", "{tempat_lahir_bapak}", "{tanggal_lahir_bapak}", "{jenis_kelamin_bapak}",
-                                        "{pekerjaan_bapak}", "{agama_bapak}", "{status_perkawinan_bapak}", "{kewarganegaraan_bapak}",
-                                        "{pendidikan_bapak}", "{alamat_bapak}", "{nama_ibu}", "{nik_ibu}", "{tempat_lahir_ibu}",
-                                        "{tanggal_lahir_ibu}", "{jenis_kelamin_ibu}", "{pekerjaan_ibu}", "{agama_ibu}",
-                                        "{status_perkawinan_ibu}", "{kewarganegaraan_ibu}", "{pendidikan_ibu}", "{alamat_ibu}",
-                                        "{rt}", "{kecamatan}", "{desa}", "{kabupaten}", "{tanggal_pengajuan}"
-                                    ],
-                                    minimumCharacters: 0
-                                }
-                            ]
-                        }
                     }).catch(error => console.error(error));
                 }
 
             }
         });
-    </script> --}}
-
-    {{--
-    <script type="module">
-        import {
-            ClassicEditor,
-            Essentials,
-            Paragraph,
-            Bold,
-            Italic,
-            Font,
-            Alignment,
-            Image,
-            ImageUpload,
-            Table,
-            TableToolbar,
-            Heading,
-            Indent,
-            HorizontalLine,
-            Underline,
-            HtmlEmbed,
-            Mention,
-            TableColumnResize,
-        } from 'ckeditor5';
-
-        if (document.querySelector('.konten')) {
-            ClassicEditor
-                .create(document.querySelector('.konten'), {
-                    plugins: [Mention, HtmlEmbed, Heading, Essentials, Paragraph, Bold, Italic, Font, Alignment, Image, ImageUpload, TableColumnResize, TableToolbar, Table, Indent, HorizontalLine, Underline],
-                    table: {
-                        contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
-                    },
-                    indentBlock: {
-                        offset: 1,
-                        unit: 'em'
-                    },
-                    toolbar: [
-                        'undo', 'redo', '|', 'underline', 'htmlEmbed',
-                        'bold', 'italic', 'underline', 'strikethrough', '|',
-                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
-                        'alignment', 'bulletedList', 'numberedList', '|',
-                        'link', 'blockQuote', 'insertTable', 'imageUpload', '|',
-                        'heading', 'indent', 'outdent', '|',
-                        'code', 'codeBlock', '|',
-                        'removeFormat', 'horizontalLine'
-                    ],
-                })
-                .then(editor => {
-                    window.editor = editor;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-    </script> --}}
-
+    </script>
+    </script>
 
     @if(isset($script))
         {{ $script }}

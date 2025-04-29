@@ -3,10 +3,12 @@
 use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FormatSuratController;
 use App\Http\Controllers\KartuKeluargaController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PengajuanSuratController;
+use App\Http\Controllers\PengajuanSuratRtController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RTController;
@@ -30,6 +32,7 @@ Route::post("testimoni/store", function () { })->name("testimoni.store");
 Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get('/dashboard', [DashboardController::class, "index"])->name('dashboard');
     Route::resource("/surat", SuratController::class);
+    Route::resource("/faq", FaqController::class);
     Route::resource("/kartu-keluarga", KartuKeluargaController::class);
     Route::resource("/kartu-keluarga/{no_kk}/anggota-keluarga", AnggotaKeluargaController::class);
     Route::resource("/berita", BeritaController::class);
@@ -38,6 +41,8 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get("/pengajuan-surat", [PengajuanSuratController::class, "index"])->name("pengajuan-surat.index");
     Route::get("/pengajuan-surat/{id}", [PengajuanSuratController::class, "show"])->name("pengajuan-surat.show");
     Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class, "updateStatus"])->name("pengajuan-surat.update");
+    Route::get("/pengajuan-surat-rt", [PengajuanSuratRtController::class, "index"])->name("pengajuan-surat-rt.index");
+
 
     // Route::get("/surat-keluar", [SuraKeluarController::class, "index"])->name("surat-keluar.index");
     Route::get('/surat-keluar/download/{filename}', [SuraKeluarController::class, 'download'])->name('surat-keluar.download');

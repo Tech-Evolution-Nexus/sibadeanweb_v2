@@ -1,5 +1,5 @@
 
-<aside class=" md:min-w-[300px] md:sticky md:left-0 min-w-full h-screen overflow-auto  fixed top-0   z-10  transition-all  flex flex-col bg-white" :class="{'left-[-100%]': ! sidebarOpen, 'left-0': sidebarOpen }">
+<aside class=" md:min-w-[300px] md:sticky md:left-0 min-w-full h-screen overflow-auto   fixed top-0 border-r  z-10  transition-all  flex flex-col bg-white hide-scroll" :class="{'left-[-100%]': ! sidebarOpen, 'left-0': sidebarOpen }">
     <div class="logo p-4 flex justify-between">
         <a href="{{ route('dashboard') }}">
             <img src="{{asset(auth()->user()->pengaturan()->logo_horizontal? "assets/logos/".auth()->user()->pengaturan()->logo_horizontal:"image/default-2.png" )}}" alt="" class="h-[40px]">
@@ -32,19 +32,37 @@
                 <a href="{{route("dashboard")}}" class="block   px-2 py-1 {{request()->is('c/*/dashboard') ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}} transition-all   rounded-md text-sm flex items-center gap-2"><i class="fa w-[30px] fa-border-all text-lg"></i> Dashboard</a>
             </li>
             {{-- <hr class="block mt-6 mb-2 border-slate-300"> --}}
-            <li class="fi-sidebar-item-label flex-1 my-2 truncate text-sm font-medium text-primary-600 dark:text-primary-400">
-                <!-- <span class="text-lg text-gray-600 block mb-2">Dashboard</span> -->
-                <a href="{{route("pengajuan-surat.index")}}" class="block   px-2 py-1 {{request()->is('c/*/pengajuan-surat') ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}} transition-all   rounded-md text-sm flex items-center gap-2"><i class="fa w-[30px] fa-envelope text-lg"></i> Surat Masuk</a>
+            <li class="fi-sidebar-item-label flex-1 my-2 truncate text-sm font-medium text-primary-600 dark:text-primary-400" x-data="{ isCollapse: true }">
+                    <div @click="isCollapse = !isCollapse" class="flex justify-between items-center text-gray-800 transition-all">
+                        <div  class="   px-2 py-1  transition-all   rounded-md text-sm flex items-center gap-2"><i class="fa w-[30px] fa-envelope text-lg"></i> Surat Masuk</div>
+                <i class="fa transition-transform duration-300" :class="{'fa-chevron-down': isCollapse, 'fa-chevron-up': !isCollapse}"></i>
+            </div>
+            <!-- Dropdown dengan animasi height -->
+            <ul class="overflow-hidden transition-all duration-300 ease-in-out px-4"
+                :class="isCollapse ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'">
+                <li>
+                    <a href="{{ route('pengajuan-surat.index') }}"
+                        class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium {{request()->routeIs("pengajuan-surat.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
+                        <i class="fa fa-circle {{request()->routeIs("pengajuan-surat.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> Menunggu Persetujuan
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('pengajuan-surat-rt.index') }}"
+                        class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium {{request()->routeIs("pengajuan-surat-rt.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
+                        <i class="fa fa-circle {{request()->routeIs("pengajuan-surat-rt.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> Disetujui Rt
+                                        </a>
+                </li>
+        </ul>
             </li>
             <li class="fi-sidebar-item-label flex-1 my-2 truncate text-sm font-medium text-primary-600 dark:text-primary-400">
                 <!-- <span class="text-lg text-gray-600 block mb-2">Dashboard</span> -->
-                <a href="{{route("surat-keluar.index")}}" class="block   px-2 py-1 {{request()->is('c/*/pengajuan-surat') ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}} transition-all   rounded-md text-sm flex items-center gap-2"><i class="fa w-[30px] fa-envelope text-lg"></i> Surat Keluar</a>
+                <a href="{{route("surat-keluar.index")}}" class="block   px-2 py-1 {{request()->is('c/*/surat-keluar') ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}} transition-all   rounded-md text-sm flex items-center gap-2"><i class="fa w-[30px] fa-envelope text-lg"></i> Surat Keluar</a>
             </li>
 
             {{-- <hr class="block mt-6 mb-2 border-slate-300"> --}}
             <li class="mt-6 mb-6 cursor-pointer" x-data="{ isCollapse: true }">
                 <!-- Header -->
-                <div @click="isCollapse = !isCollapse" class="flex justify-between items-center text-gray-400 hover:text-gray-800 transition-all">
+                <div @click="isCollapse = !isCollapse" class="flex justify-between items-center text-gray-800 transition-all">
                     <span class="text-sm font-medium ">Master Data</span>
                     <i class="fa transition-transform duration-300" :class="{'fa-chevron-down': isCollapse, 'fa-chevron-up': !isCollapse}"></i>
                 </div>
@@ -52,7 +70,6 @@
                 <!-- Dropdown dengan animasi height -->
                 <ul class="overflow-hidden transition-all duration-300 ease-in-out "
                     :class="isCollapse ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'">
-
                     <li>
                         <a href="{{ route('rw.index') }}"
                             class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium {{request()->routeIs("rw.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
@@ -89,11 +106,17 @@
                             <i class="fa fa-circle {{request()->routeIs("format-surat.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> Format Surat
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('faq.index') }}"
+                            class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium  {{request()->routeIs("faq.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
+                            <i class="fa fa-circle {{request()->routeIs("faq.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> FAQ
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li class="mt-6 mb-6 cursor-pointer" x-data="{ isCollapse: true }">
                 <!-- Header -->
-                <div @click="isCollapse = !isCollapse" class="flex justify-between items-center text-gray-400 hover:text-gray-800 transition-all">
+                <div @click="isCollapse = !isCollapse" class="flex justify-between items-center text-gray-800 transition-all">
                     <span class="text-sm font-medium">Pengaturan</span>
                     <i class="fa transition-transform duration-300" :class="{'fa-chevron-down': isCollapse, 'fa-chevron-up': !isCollapse}"></i>
                 </div>

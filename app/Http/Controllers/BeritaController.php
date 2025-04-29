@@ -55,7 +55,7 @@ class BeritaController extends Controller
         // Validasi data menggunakan request() dan validasi bahasa Indonesia
         $validated = request()->validate([
             "judul" => "required|min:3",
-            "slug" => "required|min:3",
+            "slug" => "required|min:3|unique:berita,slug",
             "keterangan" => "required|min:3",
             "konten" => "required|min:3",
             "gambar" => "file|image|max:2024",
@@ -125,7 +125,7 @@ class BeritaController extends Controller
         $validated = request()->validate(
             [
                 "judul" => "required|min:3|unique:berita,judul,$id",
-                "slug" => "required|min:3unique:berita,slug,$id",
+                "slug" => "required|min:3|unique:berita,slug,$id",
                 "keterangan" => "required|min:3",
                 "konten" => "required|min:3",
                 "gambar" => "file|image|max:2024", // Validasi foto (optional)
