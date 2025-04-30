@@ -11,7 +11,6 @@ class SuraKeluarController extends Controller
     public function index()
     {
         $suratkeluar = SuratKeluarModel::get();
-
         $params["data"] = (object)[
             "suratkeluar" => $suratkeluar
         ];
@@ -185,11 +184,31 @@ class SuraKeluarController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 $btn = '<div class="row flex">';
-                $btn .= ' <a href="' . route('surat-keluar.edit', $row->id) . '" class="btn-edit"><i class="fa fa-pencil"></i></a>';
+                $path = "/c/private-image?path=surat-keluar/$row->nama_file";
+                // Tombol preview PDF
+                $btn .= "<button class='btn-show'
+                            x-data
+                            x-on:click=\"\$dispatch('open-modal', {name: 'preview'}); previewPdf = '{$path}'\">
+                            <i class='fa fa-eye'></i>
+                         </button>";
+
+                // Tombol edit
+                $btn .= ' <a href="' . route('surat-keluar.edit', $row->id) . '" class="btn-edit">
+                            <i class="fa fa-pencil"></i>
+                         </a>';
+
+                // Tombol hapus
                 $message = "Apakah anda yakin menghapus data {$row->title}?";
-                $btn .= "<button class='btn-delete' x-data x-on:click=\"\$dispatch('open-modal', {name: 'delete'}), message= '$message', url= '" . route("surat-keluar.destroy", $row->id) . "'\"><i class='fa fa-trash'></i></button>";
+                $btn .= "<button class='btn-delete'
+                            x-data
+                            x-on:click=\"\$dispatch('open-modal', {name: 'delete'}); message = '{$message}'; url = '" . route("surat-keluar.destroy", $row->id) . "'\">
+                            <i class='fa fa-trash'></i>
+                         </button>";
+
                 $btn .= '</div>';
+
                 return $btn;
+
             })
             ->rawColumns(['gambar', 'action'])
             ->make(true);

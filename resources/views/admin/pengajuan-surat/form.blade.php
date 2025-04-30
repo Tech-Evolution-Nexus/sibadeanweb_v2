@@ -17,47 +17,49 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <!-- Detail Card -->
-        <div class="bg-white shadow rounded-xl p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-gray-700 text-sm">
+        <div class="card">
+            <!-- Detail Card -->
+            <div class=" p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-gray-700 text-sm">
 
-                @php
-                    $fields = [
-                        'Nama Surat' => $data->pengajuan->surat->nama_surat ?? "-",
-                        'No Surat' => $data->pengajuan->nomor_surat ?? "-",
-                        'Nama' => $data->pengajuan->masyarakat->nama_lengkap ?? "-",
-                        'Jenis Kelamin' => $data->pengajuan->masyarakat->jenis_kelamin ?? "-",
-                        'NIK' => $data->pengajuan->masyarakat->nik ?? "-",
-                        'No KK' => $data->pengajuan->masyarakat->no_kk ?? "-",
-                        'Alamat' => $data->pengajuan->masyarakat->kartuKeluarga->alamat ?? "-",
-                        'No HP' => $data->pengajuan->masyarakat->user->no_telepon ?? "-",
-                        'Agama' => $data->pengajuan->masyarakat->agama ?? "-",
-                        'Pekerjaan' => $data->pengajuan->masyarakat->pekerjaan ?? "-",
-                        'Tanggal Pengajuan' => Helpers::formatDate($data->pengajuan->created_at, true),
-                    ];
-                @endphp
+                    @php
+                        $fields = [
+                            'Nama Surat' => $data->pengajuan->surat->nama_surat ?? "-",
+                            'No Surat' => $data->pengajuan->nomor_surat ?? "-",
+                            'Nama' => $data->pengajuan->masyarakat->nama_lengkap ?? "-",
+                            'Jenis Kelamin' => $data->pengajuan->masyarakat->jenis_kelamin ?? "-",
+                            'NIK' => $data->pengajuan->masyarakat->nik ?? "-",
+                            'No KK' => $data->pengajuan->masyarakat->no_kk ?? "-",
+                            'Alamat' => $data->pengajuan->masyarakat->kartuKeluarga->alamat ?? "-",
+                            'No HP' => $data->pengajuan->masyarakat->user->no_telepon ?? "-",
+                            'Agama' => $data->pengajuan->masyarakat->agama ?? "-",
+                            'Pekerjaan' => $data->pengajuan->masyarakat->pekerjaan ?? "-",
+                            'Tanggal Pengajuan' => Helpers::formatDate($data->pengajuan->created_at, true),
+                        ];
+                    @endphp
 
-                @foreach ($fields as $label => $value)
-                    <div class="flex flex-col">
-                        <span class="text-gray-500">{{ $label }}</span>
-                        <span class="font-medium text-gray-900">{{ $value }}</span>
-                    </div>
-                @endforeach
+                    @foreach ($fields as $label => $value)
+                        <div class="flex flex-col">
+                            <span class="text-gray-500">{{ $label }}</span>
+                            <span class="font-medium text-gray-900">{{ $value }}</span>
+                        </div>
+                    @endforeach
+                </div>
             </div>
-        </div>
 
-        <!-- Actions -->
-        <div>
-            <form action="{{ $data->action_form }}" method="POST" class="mt-6 flex gap-3">
-                @csrf
-                <a href="{{ route('pengajuan-surat.index') }}"
-                    class="bg-gray-100 hover:bg-gray-300 text-gray-800 font-medium px-4 py-2 rounded-md ">
-                    Kembali
-                </a>
-                <button type="submit" class="bg-[--primary] hover:bg-[--primary] text-white  px-4 py-2 rounded-md ">
-                    Setujui
-                </button>
-            </form>
+            <!-- Actions -->
+            <div>
+                <form action="{{ $data->action_form }}" method="POST" class="mt-6 flex gap-3">
+                    @csrf
+                    <a href="{{ route('pengajuan-surat.index') }}"
+                        class="bg-gray-100 hover:bg-gray-300 text-gray-800 font-medium px-4 py-2 rounded-md ">
+                        Kembali
+                    </a>
+                    <button type="submit" class="bg-[--primary] hover:bg-[--primary] text-white  px-4 py-2 rounded-md ">
+                        Setujui
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </x-app-layout>

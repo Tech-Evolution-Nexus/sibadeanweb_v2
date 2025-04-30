@@ -24,7 +24,26 @@ Route::get('/berita', [LandingController::class, "berita"]);
 Route::get('/berita/{slug}', [LandingController::class, "detailBerita"]);
 Route::get('/c/private-image', function () {
     $pathToFile = Storage::disk('private')->path(request()->path);
-    return file_exists($pathToFile) ? response()->file($pathToFile) : false;
+
+    // Cek apakah file ada
+    if (file_exists($pathToFile)) {
+        // Ambil ekstensi file
+        $fileExtension = pathinfo($pathToFile, PATHINFO_EXTENSION);
+
+        // Jika file ekstensi .pdf, gunakan Content-Type untuk PDF
+        if ($fileExtension === 'pdf') {
+            return response()->file($pathToFile, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="Pratinjau Surat Keluar"',
+            ]);
+        }
+
+        // Jika bukan PDF, Anda bisa menambahkan jenis file lainnya jika perlu
+        return response()->file($pathToFile);
+    }
+
+    // Jika file tidak ditemukan, kembalikan error 404
+    abort(404);
 });
 Route::post("testimoni/store", function () { })->name("testimoni.store");
 

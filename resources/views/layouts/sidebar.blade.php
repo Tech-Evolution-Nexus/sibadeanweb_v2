@@ -42,8 +42,10 @@
                 :class="isCollapse ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'">
                 <li>
                     <a href="{{ route('pengajuan-surat.index') }}"
-                        class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium {{request()->routeIs("pengajuan-surat.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
-                        <i class="fa fa-circle {{request()->routeIs("pengajuan-surat.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> Menunggu Persetujuan
+                        class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium {{request()->routeIs("pengajuan-surat.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}"><div class="">
+                        <i class="fa fa-circle {{request()->routeIs("pengajuan-surat.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> Menunggu Persetujuan</div>
+                        <span class=" items-center rounded-md bg-gray[--primary] px-2 py-1 text-xs font-medium text-[--primary] ring-1 ring-[--primary] ring-inset ms-auto {{Helpers::getCountPengajuan()->countMenungguPengajuan ? "inline-flex":"hidden"}}">{{Helpers::getCountPengajuan()->countMenungguPengajuan}}</span>
+
                     </a>
                 </li>
                 <li>

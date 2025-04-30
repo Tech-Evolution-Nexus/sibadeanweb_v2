@@ -11,8 +11,7 @@
         <div class="flex-grow-1 ">
             <div class="p-4">
 
-                <form action="{{ $data->action_form }}" method="post" class="bg-white rounded-lg shadow-md"
-                    enctype="multipart/form-data">
+                <form action="{{ $data->action_form }}" method="post" class="card" enctype="multipart/form-data">
                     @method("PUT")
                     @csrf
                     <div class="p-6">

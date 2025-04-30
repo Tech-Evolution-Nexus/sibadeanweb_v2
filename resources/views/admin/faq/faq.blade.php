@@ -13,7 +13,7 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto card">
             <table id="berita" class="min-w-full divide-y divide-gray-200 text-sm text-left text-gray-700">
                 <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
                     <tr>

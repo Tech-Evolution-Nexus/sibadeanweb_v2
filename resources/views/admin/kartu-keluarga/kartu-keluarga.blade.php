@@ -6,27 +6,30 @@
             <div class="text-sm">Dashboard / Kartu keluarga</div>
             <div class="flex">
                 <h1 class="text-2xl font-bold">Kartu Keluarga</h1>
-                <a href="{{route("kartu-keluarga.create")}}" class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah KK</a>
+                <a href="{{route("kartu-keluarga.create")}}"
+                    class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah KK</a>
             </div>
         </div>
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <table id="kartuKeluarga" class="w-full">
-            <thead>
-                <th>No</th>
-                <th>No KK</th>
-                <th>Kepala Keluarga</th>
-                <th>RT</th>
-                <th>RW</th>
-                <th>Aksi</th>
-            </thead>
-        </table>
+        <div class="card overflow-x-auto">
+            <table id="kartuKeluarga" class="w-full">
+                <thead>
+                    <th>No</th>
+                    <th>No KK</th>
+                    <th>Kepala Keluarga</th>
+                    <th>RT</th>
+                    <th>RW</th>
+                    <th>Aksi</th>
+                </thead>
+            </table>
+        </div>
     </div>
 
     <x-slot name="script">
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#kartuKeluarga').DataTable({
                     processing: true,
                     serverSide: true,
@@ -36,32 +39,32 @@
                         targets: 5
                     }],
                     columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'no_kk',
-                            name: 'No KK'
-                        },
-                        {
-                            data: 'kepala_keluarga',
-                            name: 'Kepala Keluarga'
-                        },
-                        {
-                            data: 'rt',
-                            name: 'RT'
-                        },
-                        {
-                            data: 'rw',
-                            name: 'RW'
-                        },
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'no_kk',
+                        name: 'No KK'
+                    },
+                    {
+                        data: 'kepala_keluarga',
+                        name: 'Kepala Keluarga'
+                    },
+                    {
+                        data: 'rt',
+                        name: 'RT'
+                    },
+                    {
+                        data: 'rw',
+                        name: 'RW'
+                    },
 
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                     ]
                 });
             });

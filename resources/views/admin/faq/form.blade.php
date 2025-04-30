@@ -3,7 +3,7 @@
     <div class="md:px-12 px-6 md:py-10 py-5">
         <div class="mb-10">
             <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("faq.index")}}">FAQ</a>
-                / {{$data->title}}</div>
+                / <span class="text-gray-700 font-semibold">{{ $data->title }}</span></div>
             <div class="flex">
                 <h1 class="text-2xl font-bold">{{$data->title}}</h1>
             </div>
@@ -11,7 +11,7 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <form action="<?= $data->action_form ?>" method="POST" class="" enctype="multipart/form-data">
+        <form action="<?= $data->action_form ?>" method="POST" class="card" enctype="multipart/form-data">
             @csrf
             @method($data->method)
 

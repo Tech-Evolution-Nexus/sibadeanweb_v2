@@ -11,7 +11,7 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <form action="<?= $data->action_form ?>" method="POST" class="" enctype="multipart/form-data">
+        <form action="<?= $data->action_form ?>" method="POST" class="card" enctype="multipart/form-data">
             @csrf
             @method($data->method)
             <div class="">

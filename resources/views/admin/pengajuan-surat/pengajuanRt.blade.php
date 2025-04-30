@@ -11,17 +11,19 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <table id="pengajuan-surat" class="w-full">
-            <thead>
-                <th>No</th>
-                <th>Nama surat</th>
-                <th>Nama masyarakat</th>
-                <th>RT</th>
-                <th>RW</th>
-                <th>Tanggal pengajuan</th>
-                {{-- <th>Aksi</th> --}}
-            </thead>
-        </table>
+        <div class="card overflow-x-auto">
+            <table id="pengajuan-surat" class="w-full">
+                <thead>
+                    <th>No</th>
+                    <th>Nama surat</th>
+                    <th>Nama masyarakat</th>
+                    <th>RT</th>
+                    <th>RW</th>
+                    <th>Tanggal pengajuan</th>
+                    {{-- <th>Aksi</th> --}}
+                </thead>
+            </table>
+        </div>
     </div>
 
     <x-slot name="script">

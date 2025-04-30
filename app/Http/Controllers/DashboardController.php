@@ -9,8 +9,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $suratTertunda = PengajuanSuratModel::where("status","diterima_rw")->count();
-        $suratMasuk = PengajuanSuratModel::where("status","selesai")->orWhere("status","diterima_rw")->count();
+        $suratTertunda = PengajuanSuratModel::where("status","di_terima_rw")->count();
+        $suratMasuk = PengajuanSuratModel::where("status","selesai")->orWhere("status","di_terima_rw")->count();
         $suratKeluar = SuratKeluarModel::count();
 
         $params = [
