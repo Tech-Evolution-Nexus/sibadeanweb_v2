@@ -90,9 +90,7 @@ class DatabaseSeeder extends Seeder
         Petugas::create([
             "id_user"=>$user->id,
             "nama"=>"Muhammad Nor Kholit",
-            "nip"=>1234567890123456,
-            "masa_jabatan_mulai"=>null,
-            "masa_jabatan_selesai"=>null
+            "nip"=>1234567890123456
         ]);
 
         PengaturanModel::create([

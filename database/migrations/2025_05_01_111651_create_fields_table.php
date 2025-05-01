@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('petugas', function (Blueprint $table) {
+        Schema::create('fields', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("id_user")->nullable()->references("id")->on("users")->cascadeOnDelete();
-            $table->char("nip", 16)->nullable();
-            $table->string("nama", 70)->nullable();
+            $table->foreignId("id_surat")->references("id")->on("surat");
+            $table->string("nama_field");
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('petugas');
+        Schema::dropIfExists('fields');
     }
 };
