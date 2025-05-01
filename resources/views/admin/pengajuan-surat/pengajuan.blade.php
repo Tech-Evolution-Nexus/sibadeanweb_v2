@@ -11,22 +11,24 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <table id="pengajuan-surat" class="w-full">
-            <thead>
-                <th>No</th>
-                <th>Nama surat</th>
-                <th>Nama masyarakat</th>
-                <th>RT</th>
-                <th>RW</th>
-                <th>Tanggal pengajuan</th>
-                <th>Aksi</th>
-            </thead>
-        </table>
+        <div class="card overflow-x-auto">
+            <table id="pengajuan-surat" class="w-full">
+                <thead>
+                    <th>No</th>
+                    <th>Nama surat</th>
+                    <th>Nama masyarakat</th>
+                    <th>RT</th>
+                    <th>RW</th>
+                    <th>Tanggal pengajuan</th>
+                    <th>Aksi</th>
+                </thead>
+            </table>
+        </div>
     </div>
 
     <x-slot name="script">
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#pengajuan-surat').DataTable({
                     processing: true,
                     serverSide: true,
@@ -36,37 +38,37 @@
                         targets: 5
                     }],
                     columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'nama_surat',
-                            name: 'nama_surat'
-                        },
-                        {
-                            data: 'nama_masyarakat',
-                            name: 'nama_masyarakat'
-                        },
-                        {
-                            data: 'rt',
-                            name: 'rt'
-                        },
-                        {
-                            data: 'rw',
-                            name: 'rw'
-                        },
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'nama_surat',
+                        name: 'nama_surat'
+                    },
+                    {
+                        data: 'nama_masyarakat',
+                        name: 'nama_masyarakat'
+                    },
+                    {
+                        data: 'rt',
+                        name: 'rt'
+                    },
+                    {
+                        data: 'rw',
+                        name: 'rw'
+                    },
 
-                        {
-                            data: 'created_at',
-                            name: 'created_at'
-                        },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
 
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                     ]
                 });
             });

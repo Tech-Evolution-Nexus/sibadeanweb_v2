@@ -6,14 +6,14 @@ use App\Models\PengajuanSuratModel;
 use Helpers;
 use Yajra\DataTables\DataTables;
 
-class PengajuanSuratController extends Controller
+class PengajuanSuratRtController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $anggotaKeluarga = PengajuanSuratModel::where("status", "di_terima_rw")->orderBy("created_at", "desc")->get();
+        $anggotaKeluarga = PengajuanSuratModel::where("status", "di_terima_rt")->orderBy("created_at", "desc")->get();
 
         $params["data"] = (object)[
             "anggota_keluarga" => $anggotaKeluarga
@@ -22,19 +22,19 @@ class PengajuanSuratController extends Controller
         if (request()->ajax()) {
             return $this->dataTable($anggotaKeluarga);
         }
-        return view("admin.pengajuan-surat.pengajuan", $params);
+        return view("admin.pengajuan-surat.pengajuanRt", $params);
     }
     public function show($id)
     {
-        $pengajuan = PengajuanSuratModel::where("status", "di_terima_rw")->where("id", $id)->first();
-        if (!$pengajuan) {
+        $anggotaKeluarga = PengajuanSuratModel::where("status", "di_terima_rw")->where("id", $id)->first();
+        if (!$anggotaKeluarga) {
             return abort(404);
+            # code...
         }
 
         $params["data"] = (object)[
-            "title" => "Pengajuan Surat",
-            "action_form"=> route("pengajuan-surat.update",$id),
-            "pengajuan" => $pengajuan
+            "title" => "Pengajuan Surat","action_form"=> route("pengajuan-surat.update",$id),
+            "pengajuan" => $anggotaKeluarga
         ];
 
         return view("admin.pengajuan-surat.form", $params);

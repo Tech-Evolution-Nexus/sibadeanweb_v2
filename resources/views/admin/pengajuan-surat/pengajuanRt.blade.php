@@ -1,27 +1,26 @@
-<x-app-layout :title="'Kartu Keluarga'">
+<x-app-layout :title="'Pengajuan surat'">
 
 
     <div class="md:px-12 px-6 md:py-4 py-2">
         <div class="mb-10">
-            <div class="text-sm">Dashboard / Kartu keluarga</div>
+            <div class="text-sm">Dashboard / Pengajuan Surat Rt</div>
             <div class="flex">
-                <h1 class="text-2xl font-bold">Kartu Keluarga</h1>
-                <a href="{{route("kartu-keluarga.create")}}"
-                    class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah KK</a>
+                <h1 class="text-2xl font-bold">Pengajuan Surat Rt</h1>
             </div>
         </div>
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
         <div class="card overflow-x-auto">
-            <table id="kartuKeluarga" class="w-full">
+            <table id="pengajuan-surat" class="w-full">
                 <thead>
                     <th>No</th>
-                    <th>No KK</th>
-                    <th>Kepala Keluarga</th>
+                    <th>Nama surat</th>
+                    <th>Nama masyarakat</th>
                     <th>RT</th>
                     <th>RW</th>
-                    <th>Aksi</th>
+                    <th>Tanggal pengajuan</th>
+                    {{-- <th>Aksi</th> --}}
                 </thead>
             </table>
         </div>
@@ -30,10 +29,10 @@
     <x-slot name="script">
         <script>
             $(document).ready(function () {
-                $('#kartuKeluarga').DataTable({
+                $('#pengajuan-surat').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('kartu-keluarga.index') }}",
+                    ajax: "{{ route('pengajuan-surat-rt.index') }}",
                     columnDefs: [{
                         width: 200,
                         targets: 5
@@ -43,28 +42,33 @@
                         name: 'DT_RowIndex'
                     },
                     {
-                        data: 'no_kk',
-                        name: 'No KK'
+                        data: 'nama_surat',
+                        name: 'nama_surat'
                     },
                     {
-                        data: 'kepala_keluarga',
-                        name: 'Kepala Keluarga'
+                        data: 'nama_masyarakat',
+                        name: 'nama_masyarakat'
                     },
                     {
                         data: 'rt',
-                        name: 'RT'
+                        name: 'rt'
                     },
                     {
                         data: 'rw',
-                        name: 'RW'
+                        name: 'rw'
                     },
 
                     {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
+                        data: 'created_at',
+                        name: 'created_at'
                     },
+
+                        // {
+                        //     data: 'action',
+                        //     name: 'action',
+                        //     orderable: false,
+                        //     searchable: false
+                        // },
                     ]
                 });
             });

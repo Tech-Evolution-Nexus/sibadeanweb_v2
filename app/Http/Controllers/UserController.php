@@ -14,11 +14,11 @@ class UserController extends Controller
     public function index()
     {
         $users = User::orderBy("created_at", "desc")->get();
-        
+
         if (request()->ajax()) {
             return $this->dataTable($users);
         }
-        
+
         return view("admin.user.index", ["users" => $users]);
     }
 
@@ -110,13 +110,14 @@ class UserController extends Controller
                 return $row->masa_jabatan_mulai . ' - ' . $row->masa_jabatan_selesai;
             })
             ->addColumn('action', function ($row) {
-                return '
+                return '<div class="row flex">
                     <a href="' . route("users.edit", $row->id) . '" class="btn-edit">Edit</a>
                     <form action="' . route("users.destroy", $row->id) . '" method="POST" onsubmit="return confirm(\'Yakin ingin menghapus user ini?\')" style="display:inline;">
                         ' . csrf_field() . '
                         ' . method_field("DELETE") . '
                         <button type="submit" class="btn-delete">Hapus</button>
-                    </form>';
+                    </form>
+                    </div>';
             })
             ->rawColumns(["action"])
             ->make(true);

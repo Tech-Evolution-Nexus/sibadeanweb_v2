@@ -7,14 +7,14 @@
         </section>
 
         <!-- Main Statistics Section -->
-        <div class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6 mb-8">
+        <div class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6 mb-4">
             <!-- Surat Masuk -->
             <article class="bg-white border  p-6 rounded-md">
                 <div class="flex justify-between items-center">
                     <span class="font-semibold text-lg">Surat Masuk</span>
                     <i class="text-2xl fa fa-envelope text-blue-500"></i>
                 </div>
-                <span class="text-4xl font-bold text-blue-500">20</span>
+                <span class="text-4xl font-bold text-blue-500">{{$suratMasuk}}</span>
                 <p class="text-slate-500 mt-2">Surat diterima hari ini</p>
             </article>
 
@@ -24,33 +24,33 @@
                     <span class="font-semibold text-lg">Surat Keluar</span>
                     <i class="text-2xl fa fa-envelope text-green-500"></i>
                 </div>
-                <span class="text-4xl font-bold text-green-500">12</span>
+                <span class="text-4xl font-bold text-green-500">{{$suratKeluar}}</span>
                 <p class="text-slate-500 mt-2">Surat dikirim hari ini</p>
             </article>
 
             <!-- Pending Approval -->
-            <article class="bg-white border  p-6 rounded-md">
+            {{-- <article class="bg-white border  p-6 rounded-md">
                 <div class="flex justify-between items-center">
                     <span class="font-semibold text-lg">Persetujuan Tertunda</span>
                     <i class="text-2xl fa fa-circle-info text-yellow-500"></i>
                 </div>
-                <span class="text-4xl font-bold text-yellow-500">8</span>
+                <span class="text-4xl font-bold text-yellow-500">{{$suratTertunda}}</span>
                 <p class="text-slate-500 mt-2">Surat menunggu persetujuan</p>
-            </article>
+            </article> --}}
         </div>
 
-        <div class="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6">
+        <div class=" gap-6">
             <!-- Recent Activities Section -->
 
 
             <!-- Performance Chart Section -->
-            <section class="col-span-2">
+            <section class="">
                 <h2 class="text-xl font-semibold mb-4">Statistik Surat</h2>
                 <div class="bg-white p-6 rounded-md border">
                     <canvas id="performanceChart" class="w-full"></canvas>
                 </div>
             </section>
-            <section>
+            {{-- <section>
                 <h2 class="text-xl font-semibold mb-4">Aktivitas Terbaru</h2>
                 <div class="bg-white p-6 rounded-md border">
                     <ul class="divide-y divide-slate-200">
@@ -68,7 +68,7 @@
                         </li>
                     </ul>
                 </div>
-            </section>
+            </section> --}}
         </div>
     </div>
 

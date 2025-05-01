@@ -2,7 +2,7 @@
 
     <div class="md:px-12 px-6 md:py-10 py-5">
         <div class="mb-10">
-            <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("kartu-keluarga.index")}}">Kartu keluarga</a> / <a class="hover:underline" href="{{route("anggota-keluarga.index",$data->no_kk)}}">Anggota keluarga</a> / {{$data->title}}</div>
+            <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("kartu-keluarga.index")}}">Kartu keluarga</a> / <a class="hover:underline" href="{{route("anggota-keluarga.index",$data->no_kk)}}">Anggota keluarga</a> / <span class="text-gray-700 font-semibold">{{ $data->title }}</span></div>
             <div class="flex">
                 <h1 class="text-2xl font-bold">{{$data->title}}</h1>
             </div>
@@ -10,7 +10,7 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <form action="<?= $data->action_form ?>" method="POST" class="" enctype="multipart/form-data">
+        <form action="<?= $data->action_form ?>" method="POST" class="card" enctype="multipart/form-data">
             @csrf
             @method($data->method)
             <div class="grid md:grid-cols-2 grid-cols-1 gap-2 gap-x-4">
@@ -18,17 +18,27 @@
                 <h6 class="font-bold md:col-span-2  text-lg ">Informasi Diri</h6>
 
                 <div class="md:col-span-2">
-                    <x-input-label for="nik" :value="__('NIK')" />
+                    <div class="flex ">
+                        <x-input-label for="nik" :value="__('NIK')" />
+                        <span class="text-red-600">*</span>
+                    </div>
                     <x-text-input :value="old('nik', $data->data->nik)" maxlength="16" minlength="16" type="text" class="only-number block mt-1 w-full" placeholder="NIK" name="nik" id="nik" required />
                     <x-input-error :messages="$errors->get('nik')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class="">
-                    <x-input-label for="nama_lengkap" :value="__('Nama Lengkap')" />
+                    <div class="flex ">
+
+                        <x-input-label for="nama_lengkap" :value="__('Nama Lengkap')" />
+                        <span class="text-red-600">*</span>
+                    </div>
                     <x-text-input :value="old('nama_lengkap', $data->data->nama_lengkap)" type="text" class=" block mt-1 w-full" placeholder="Nama Lengkap" name="nama_lengkap" id="nama_lengkap" required />
                     <x-input-error :messages="$errors->get('nama_lengkap')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class="">
-                    <x-input-label for="jenis_kelamin" :value="__('Jenis Kelamin')" />
+                    <div class="flex ">
+                        <x-input-label for="jenis_kelamin" :value="__('Jenis Kelamin')" />
+                        <span class="text-red-600">*</span>
+                    </div>
                     <x-select
                         name="jenis_kelamin"
                         id="jenis_kelamin"
@@ -39,17 +49,27 @@
                     <x-input-error :messages="$errors->get('jenis_kelamin')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class="">
-                    <x-input-label for="tempat_lahir" :value="__('Tempat Lahir')" />
-                    <x-text-input :value="old('tempat_lahir', $data->data->tempat_lahir)" type="text" class=" block mt-1 w-full" placeholder="Tempat Lahir" name="tempat_lahir" id="tempat_lahir" required />
+                    <div class="flex ">
+
+                        <x-input-label for="tempat_lahir" :value="__('Tempat Lahir')" /><span class="text-red-600">*</span>
+                    </div>
+                        <x-text-input :value="old('tempat_lahir', $data->data->tempat_lahir)" type="text" class=" block mt-1 w-full" placeholder="Tempat Lahir" name="tempat_lahir" id="tempat_lahir" required />
                     <x-input-error :messages="$errors->get('tempat_lahir')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class="">
-                    <x-input-label for="tanggal_lahir" :value="__('Tanggal Lahir')" />
+                    <div class="flex ">
+
+                        <x-input-label for="tanggal_lahir" :value="__('Tanggal Lahir')" />
+                        <span class="text-red-600">*</span>
+                    </div>
                     <x-text-input :value="old('tanggal_lahir', $data->data->tanggal_lahir)" type="date" class=" block mt-1 w-full" placeholder="Tempat Lahir" name="tanggal_lahir" id="tanggal_lahir" required />
                     <x-input-error :messages="$errors->get('tanggal_lahir')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class="">
-                    <x-input-label for="agama" :value="__('Agama')" />
+                    <div class="flex ">
+
+                        <x-input-label for="agama" :value="__('Agama')" /> <span class="text-red-600">*</span>
+                    </div>
                     <x-select
                         name="agama"
                         id="agama"
@@ -61,7 +81,9 @@
                 </div>
 
                 <div class="">
-                    <x-input-label for="pendidikan" :value="__('Pendidikan')" />
+                    <div class="flex ">
+                        <x-input-label for="pendidikan" :value="__('Pendidikan')" /><span class="text-red-600">*</span>
+                        </div>
                     <x-select
                         name="pendidikan"
                         id="pendidikan"
@@ -84,7 +106,11 @@
                     <x-input-error :messages="$errors->get('pendidikan')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class="">
-                    <x-input-label for="pekerjaan" :value="__('Pekerjaan')" />
+                    <div class="flex">
+
+                        <x-input-label for="pekerjaan" :value="__('Pekerjaan')" />
+                        <span class="text-red-600">*</span>
+                    </div>
                     <x-text-input :value="old('pekerjaan', $data->data->pekerjaan)" type="text" class=" block mt-1 w-full" placeholder="Tempat Lahir" name="pekerjaan" id="pekerjaan" required />
                     <x-input-error :messages="$errors->get('pekerjaan')" class="mt-2 text-red-500 text-xs" />
                 </div>
@@ -92,18 +118,23 @@
                 <h6 class="font-bold md:col-span-2  text-lg mt-4">Informasi Status dan Identitas
                 </h6>
                 <div class="">
-                    <x-input-label for="golongan_darah" :value="__('Golongan Darah')" />
+                    <div class="flex">
+
+                        <x-input-label for="golongan_darah" :value="__('Golongan Darah')" />
+                        <span class="text-red-600">*</span>
+                    </div>
                     <x-select
                         name="golongan_darah"
                         id="golongan_darah"
                         class="block mt-1 w-full"
                         :options="['A+'=>'A+', 'A-'=>'A-' , 'B+'=>'B+' , 'B-'=>'B-' , 'AB+'=>'AB+' , 'AB-'=>'AB-' , 'O+'=>'O+' , 'O-'=>'O-' ]"
-                        value="{{ old('golongan_darah', $data->data->golongan_darah) }}" required />
-
+                        value="{{ old('golongan_darah', $data->data->golongan_darah) }}"  />
                     <x-input-error :messages="$errors->get('golongan_darah')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class="">
-                    <x-input-label for="status_perkawinan" :value="__('Status Perkawinan')" />
+                    <div class="flex ">
+                        <x-input-label for="status_perkawinan" :value="__('Status Perkawinan')" /> <span class="text-red-600">*</span>
+                    </div>
                     <x-select
                         name="status_perkawinan"
                         id="status_perkawinan"
@@ -123,8 +154,11 @@
                     @php
                     $statusKeluargaArr = $data->data->hasKK ?[ 'istri'=>'Istri' , 'anak'=>'Anak' , 'wali'=>'Wali' ]:['kk'=>'Kepala Keluarga', 'istri'=>'Istri' , 'anak'=>'Anak' , 'wali'=>'Wali' ];
                     @endphp
-                    <x-input-label for="status_keluarga" :value="__('Status Keluarga')" />
+                    <div class="flex">
 
+                        <x-input-label for="status_keluarga" :value="__('Status Keluarga')" />
+                        <span class="text-red-600">*</span>
+                    </div>
                     <x-select
                         name="status_keluarga"
                         id="status_keluarga"
@@ -135,7 +169,10 @@
                     <x-input-error :messages="$errors->get('status_keluarga')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class="">
-                    <x-input-label for="kewarganegaraan" :value="__('Kewarganegaraan')" />
+                    <div class="flex">
+                        <x-input-label for="kewarganegaraan" :value="__('Kewarganegaraan')" />
+                        <span class="text-red-600">*</span>
+                    </div>
                     <x-select
                         name="kewarganegaraan"
                         id="kewarganegaraan"

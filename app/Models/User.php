@@ -19,7 +19,6 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
         "masa_jabatan_mulai",
@@ -55,6 +54,10 @@ class User extends Authenticatable
     public function masyarakat()
     {
         return $this->hasOne(MasyarakatModel::class, "id_user");
+    }
+    public function petugas()
+    {
+        return $this->hasOne(Petugas::class, "id_user");
     }
     public function pengaturan()
     {

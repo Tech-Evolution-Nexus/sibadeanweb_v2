@@ -6,26 +6,29 @@
             <div class="text-sm">Dashboard / Surat</div>
             <div class="flex">
                 <h1 class="text-2xl font-bold">Surat</h1>
-                <a href="{{route("surat.create")}}" class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah Surat</a>
+                <a href="{{route("surat.create")}}"
+                    class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah Surat</a>
             </div>
         </div>
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <table id="surat" class="w-full">
-            <thead>
-                <th>No</th>
-                <th>Gambar</th>
-                <th>Nama Surat</th>
-                <th>Aksi</th>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="card overflow-x-auto">
+            <table id="surat" class="w-full">
+                <thead>
+                    <th>No</th>
+                    <th>Gambar</th>
+                    <th>Nama Surat</th>
+                    <th>Aksi</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 
     <x-slot name="script">
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#surat').DataTable({
                     processing: true,
                     serverSide: true,
@@ -35,23 +38,23 @@
                         targets: 3
                     }],
                     columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
-                        },
-                        {
-                            data: 'gambar',
-                            name: 'Gambar'
-                        },
-                        {
-                            data: 'nama_surat',
-                            name: 'Nama Surat'
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false
-                        },
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
+                    },
+                    {
+                        data: 'gambar',
+                        name: 'Gambar'
+                    },
+                    {
+                        data: 'nama_surat',
+                        name: 'Nama Surat'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                     ]
                 });
             });

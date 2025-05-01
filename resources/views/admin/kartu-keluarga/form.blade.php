@@ -3,7 +3,7 @@
     <div class="md:px-12 px-6 md:py-10 py-5">
         <div class="mb-10">
             <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("kartu-keluarga.index")}}">Kartu
-                    keluarga</a> / {{$data->title}}</div>
+                    keluarga</a> / <span class="text-gray-700 font-semibold">{{ $data->title }}</span></div>
             <div class="flex">
                 <h1 class="text-2xl font-bold">{{$data->title}}</h1>
             </div>
@@ -11,7 +11,7 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <form action="<?= $data->action_form ?>" method="POST" class="" enctype="multipart/form-data">
+        <form action="<?= $data->action_form ?>" method="POST" class="card" enctype="multipart/form-data">
             @csrf
             @method($data->method)
             <div class="grid md:grid-cols-2 grid-cols-1 gap-2 gap-x-4">
@@ -41,29 +41,18 @@
 
                 <div class=" mb-2 ms-md-3">
                     <x-input-label for="rt" :value="__('RT')" />
-                    <x-text-input :value="old('rt', $data->data->rt)" maxlength="2" type="text"
+                    <x-text-input :value="old('rt', $data->data->rt)" maxlength="2" type="number"
                         class="only-number block mt-1 w-full" placeholder="Nomor RT" name="rt" id="rt" required />
                     <x-input-error :messages="$errors->get('rt')" class="mt-2 text-red-500 text-xs" />
                 </div>
 
                 <div class=" mb-2">
                     <x-input-label for="rw" :value="__('RW')" />
-                    <x-text-input :value="old('rw', $data->data->rw)" maxlength="2" type="text"
+                    <x-text-input :value="old('rw', $data->data->rw)" maxlength="2" type="number"
                         class="only-number block mt-1 w-full" placeholder="Nomor RW" name="rw" id="rw" required />
                     <x-input-error :messages="$errors->get('rw')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class=" mb-2">
-                    {{-- <x-input-label for="foto_kartu_keluarga" :value="__('Foto Kartu Keluarga')" /> --}}
-                    {{-- <label
-                        class="image-upload rounded mt-2 flex flex-col justify-center items-center border-dashed border p-4 cursor-pointer aspect-video relative">
-                        <img src="{{$data->data->foto_kartu_keluarga ? $data->data->foto_kartu_keluarga : asset('assets/image/default-2.png')}}"
-                            class="absolute inset-0 w-full h-full object-cover" alt="">
-                        <input :value="old('foto_kartu_keluarga', $data->data->foto_kartu_keluarga)" type="file"
-                            class="hidden image-upload-file" accept="image/*" placeholder="foto_kartu_keluarga"
-                            name="foto_kartu_keluarga" id="foto_kartu_keluarga">
-                        <i class="fa fa-image fs-1 text-gray-500"></i>
-                        <span class="text-gray-500">Upload File</span>
-                    </label> --}}
                     <x-file-upload :name="'foto_kartu_keluarga'" :label="'Foto Kartu Keluarga'"
                         :defaultImage="$data->data->foto_kartu_keluarga ? $data->data->foto_kartu_keluarga : asset('assets/image/default-2.png')" />
                     <x-input-error :messages="$errors->get('foto_kartu_keluarga')" class="mt-2 text-red-500 text-xs" />

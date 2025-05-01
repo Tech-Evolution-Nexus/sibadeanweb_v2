@@ -3,10 +3,12 @@
 use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FormatSuratController;
 use App\Http\Controllers\KartuKeluargaController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PengajuanSuratController;
+use App\Http\Controllers\PengajuanSuratRtController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RTController;
@@ -22,7 +24,26 @@ Route::get('/berita', [LandingController::class, "berita"]);
 Route::get('/berita/{slug}', [LandingController::class, "detailBerita"]);
 Route::get('/c/private-image', function () {
     $pathToFile = Storage::disk('private')->path(request()->path);
-    return file_exists($pathToFile) ? response()->file($pathToFile) : false;
+
+    // Cek apakah file ada
+    if (file_exists($pathToFile)) {
+        // Ambil ekstensi file
+        $fileExtension = pathinfo($pathToFile, PATHINFO_EXTENSION);
+
+        // Jika file ekstensi .pdf, gunakan Content-Type untuk PDF
+        if ($fileExtension === 'pdf') {
+            return response()->file($pathToFile, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="Pratinjau Surat Keluar"',
+            ]);
+        }
+
+        // Jika bukan PDF, Anda bisa menambahkan jenis file lainnya jika perlu
+        return response()->file($pathToFile);
+    }
+
+    // Jika file tidak ditemukan, kembalikan error 404
+    abort(404);
 });
 Route::post("testimoni/store", function () { })->name("testimoni.store");
 
@@ -30,6 +51,7 @@ Route::post("testimoni/store", function () { })->name("testimoni.store");
 Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get('/dashboard', [DashboardController::class, "index"])->name('dashboard');
     Route::resource("/surat", SuratController::class);
+    Route::resource("/faq", FaqController::class);
     Route::resource("/kartu-keluarga", KartuKeluargaController::class);
     Route::resource("/kartu-keluarga/{no_kk}/anggota-keluarga", AnggotaKeluargaController::class);
     Route::resource("/berita", BeritaController::class);
@@ -38,6 +60,8 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get("/pengajuan-surat", [PengajuanSuratController::class, "index"])->name("pengajuan-surat.index");
     Route::get("/pengajuan-surat/{id}", [PengajuanSuratController::class, "show"])->name("pengajuan-surat.show");
     Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class, "updateStatus"])->name("pengajuan-surat.update");
+    Route::get("/pengajuan-surat-rt", [PengajuanSuratRtController::class, "index"])->name("pengajuan-surat-rt.index");
+
 
     // Route::get("/surat-keluar", [SuraKeluarController::class, "index"])->name("surat-keluar.index");
     Route::get('/surat-keluar/download/{filename}', [SuraKeluarController::class, 'download'])->name('surat-keluar.download');

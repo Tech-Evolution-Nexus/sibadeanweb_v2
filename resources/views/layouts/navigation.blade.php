@@ -26,7 +26,7 @@
                     <x-slot name="trigger">
                         <button class="inline-flex items-start px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                            <div class="text-end">
-                            <div>{{ Auth::user()->name }}</div>
+                            <div>{{ Auth::user()->petugas->nama }}</div>
                             <small class="text-xs text-end text-slate-400 relative inline-flex gap-1 items-center">
                                 <span class="relative flex size-2">
                                     <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
