@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("secondary_color", 10);
             $table->string("logo_horizontal");
             $table->string("logo");
+            $table->string("tanda_tangan");
             $table->string("kelurahan", 50);
             $table->string("kode_pos", 5);
             $table->string("kabupaten", 50);

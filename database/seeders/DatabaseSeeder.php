@@ -9,6 +9,7 @@ use App\Models\KartuKeluargaModel;
 use App\Models\Landing;
 use App\Models\MasyarakatModel;
 use App\Models\PengaturanModel;
+use App\Models\Petugas;
 use App\Models\SuratModel;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -78,12 +79,20 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        User::factory()->create([
-            'name' => 'Muhammad Nor Kholit',
+       $user =  User::factory()->create([
+            // 'name' => 'Muhammad Nor Kholit',
             'email' => 'badean@gmail.com',
             "password" => bcrypt("12341234"),
             "role" => "admin",
             "status" => 1
+        ]);
+
+        Petugas::create([
+            "id_user"=>$user->id,
+            "nama"=>"Muhammad Nor Kholit",
+            "nip"=>1234567890123456,
+            "masa_jabatan_mulai"=>null,
+            "masa_jabatan_selesai"=>null
         ]);
 
         PengaturanModel::create([
@@ -91,6 +100,7 @@ class DatabaseSeeder extends Seeder
             "primary_color" => "#052158",
             "secondary_color" => "#052158",
             "logo_horizontal" => "6782678fb6528.png",
+            "tanda_tangan" => "6782678fb6528.png",
             "logo" => "6782671469edb.png",
             "kelurahan" => "Badean",
             "kode_pos" => "68727",

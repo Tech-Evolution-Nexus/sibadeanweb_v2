@@ -25,16 +25,22 @@
         <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
             <div class="mb-2">
                 <a href="/" class="flex justify-center">
-                    <img src="{{asset("assets/logos/".Helpers::pengaturan()->logo_horizontal)}}" class="w-[150px]" alt="">
+                    <img src="{{asset("assets/logos/" . Helpers::pengaturan()->logo_horizontal)}}" class="w-[150px]"
+                        alt="">
                 </a>
                 @if(request()->routeIs("login"))
-                <h2 class="text-2xl font-medium">Login</h2>
-                <p class="text-slate-600">Masukkan informasi akun untuk melanjutkan</p>
+                    <h2 class="text-2xl font-medium">Login</h2>
+                    <p class="text-slate-600">Masukkan informasi akun untuk melanjutkan</p>
                 @endif
             </div>
             {{ $slot }}
         </div>
     </div>
+
+    <script>
+        const primary = "{{Helpers::pengaturan()->primary_color }}";
+        document.documentElement.style.setProperty('--primary', primary);
+    </script>
 </body>
 
 </html>

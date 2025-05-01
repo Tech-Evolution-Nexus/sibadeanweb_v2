@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 50);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -21,8 +20,7 @@ return new class extends Migration
             $table->boolean("status")->default(0);
             $table->string("avatar")->default("default.png");
             $table->enum("role", ["rt", "rw", "masyarakat", "admin", "lurah"])->default("masyarakat");
-            $table->date("masa_jabatan_mulai")->nullable();
-            $table->date("masa_jabatan_selesai")->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });
