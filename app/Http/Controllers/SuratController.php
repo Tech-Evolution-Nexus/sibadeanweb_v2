@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Field;
+use App\Models\LampiranModel;
+use App\Models\LampiranSuratModel;
 use App\Models\SuratModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 
 class SuratController extends Controller
@@ -31,17 +36,23 @@ class SuratController extends Controller
      */
     public function create()
     {
-        $params["data"] = (object)[
-            "title" => "Tambah surat",
+        $params = (object)[
+            "title" => "Tambah Surat",
             "action_form" => route("surat.store"),
             "method" => "POST",
             "data" => (object)[
                 "nama_surat" => "",
                 "gambar" => "",
+                "pendukungFields" => [],
+                "lampiranFields" => [] // Tambahkan properti fields dengan array kosong
             ]
         ];
-        return view("admin.surat.form", $params);
+        return view("admin.surat.form", [
+            'data' => $params,
+            'lampiranList' => LampiranModel::all()
+        ]); // Fixed the array syntax and added correct passing of params and lampiranFields
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -52,6 +63,10 @@ class SuratController extends Controller
         $validated = request()->validate([
             "nama_surat" => "required|min:3|max:50",
             "gambar" => "file|image|max:2024", // Validasi foto (optional)
+            "pendukungFields" => "array", // Validasi array pendukungFields
+            "pendukungFields.*" => "required|min:3|max:50", // Validasi setiap data pendukung
+            "lampiranFields" => "array", // Validasi array lampiranFields
+            "lampiranFields.*" => "nullable|integer|exists:lampiran,id", // Validasi ID lampiran yang valid
         ]);
 
         // Menyimpan data Surat
@@ -59,28 +74,28 @@ class SuratController extends Controller
             'nama_surat' => $validated['nama_surat'],
             'gambar' => $validated['gambar'],
             'format_surat' => <<<HTML
-            <h2 style='text-align:center;'><strong>Surat Keterangan</strong></h2>
-            <p style='text-align:center;'><strong>No.</strong> <strong>{no_surat}</strong></p>
-            <p><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</strong>Yang bertanda tangan di bawah ini ketua RT {rt}, RW {rw}, Desa {desa} Kecamatan {kecamatan} Kabupaten {kabupaten} dengan ini menerangkan bahwa :</p>
-            <figure class='table'>
-                <table>
-                    <tbody>
-                        <tr><td>Nama</td><td>: {nama}</td></tr>
-                        <tr><td>Tempat/ Tanggal lahir</td><td>: {tempat_lahir}/{tanggal_lahir}</td></tr>
-                        <tr><td>Jenis Kelamin</td><td>: {jenis_kelamin}</td></tr>
-                        <tr><td>Pekerjaan</td><td>: {pekerjaan}</td></tr>
-                        <tr><td>Agama</td><td>: {agama}</td></tr>
-                        <tr><td>Status perkawinan</td><td>: {status_perkawinan}</td></tr>
-                        <tr><td>Kewarganegaraan</td><td>: {kewarganegaraan}</td></tr>
-                        <tr><td>Alamat</td><td>: {alamat}</td></tr>
-                    </tbody>
-                </table>
-            </figure>
-            <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Orang tersebut diatas, adalah benar-benar warga kami dan berdomisili di RT {rt}, RW {rw} Desa {desa} Kecamatan {kecamatan} Kabupaten {kabupaten} surat keterangan ini digunakan sebagai kelengkapan pengurusan perpindahan penduduk.</p>
-            <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Demikian surat keterangan ini kami buat, untuk dapat dipergunakan sebagaimana semestinya.</p>
-            <p style="text-align:right;">{tanggal_pengajuan},Ketua RT {rt} RW {rt} &nbsp; &nbsp; &nbsp;&nbsp;</p>
-            <p style='text-align:right;'>{nama} &nbsp; &nbsp;</p>
-            HTML,
+        <h2 style='text-align:center;'><strong>Surat Keterangan</strong></h2>
+        <p style='text-align:center;'><strong>No.</strong> <strong>{no_surat}</strong></p>
+        <p><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</strong>Yang bertanda tangan di bawah ini ketua RT {rt}, RW {rw}, Desa {desa} Kecamatan {kecamatan} Kabupaten {kabupaten} dengan ini menerangkan bahwa :</p>
+        <figure class='table'>
+            <table>
+                <tbody>
+                    <tr><td>Nama</td><td>: {nama}</td></tr>
+                    <tr><td>Tempat/ Tanggal lahir</td><td>: {tempat_lahir}/{tanggal_lahir}</td></tr>
+                    <tr><td>Jenis Kelamin</td><td>: {jenis_kelamin}</td></tr>
+                    <tr><td>Pekerjaan</td><td>: {pekerjaan}</td></tr>
+                    <tr><td>Agama</td><td>: {agama}</td></tr>
+                    <tr><td>Status perkawinan</td><td>: {status_perkawinan}</td></tr>
+                    <tr><td>Kewarganegaraan</td><td>: {kewarganegaraan}</td></tr>
+                    <tr><td>Alamat</td><td>: {alamat}</td></tr>
+                </tbody>
+            </table>
+        </figure>
+        <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Orang tersebut diatas, adalah benar-benar warga kami dan berdomisili di RT {rt}, RW {rw} Desa {desa} Kecamatan {kecamatan} Kabupaten {kabupaten} surat keterangan ini digunakan sebagai kelengkapan pengurusan perpindahan penduduk.</p>
+        <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Demikian surat keterangan ini kami buat, untuk dapat dipergunakan sebagaimana semestinya.</p>
+        <p style="text-align:right;">{tanggal_pengajuan},Ketua RT {rt} RW {rt} &nbsp; &nbsp; &nbsp;&nbsp;</p>
+        <p style='text-align:right;'>{nama} &nbsp; &nbsp;</p>
+        HTML,
         ];
 
         // Jika ada file foto Surat
@@ -92,9 +107,34 @@ class SuratController extends Controller
         }
 
         // Menyimpan data Surat
-        SuratModel::create($dataSurat);
+        $surat = SuratModel::create($dataSurat);
+
+        // Menyimpan Data Pendukung
+        if (isset($validated['pendukungFields'])) {
+            foreach ($validated['pendukungFields'] as $field) {
+                Field::create([
+                    'id_surat' => $surat->id,
+                    'nama_field' => $field,
+                ]);
+            }
+        }
+
+        // Menyimpan Data Lampiran
+        if (isset($validated['lampiranFields'])) {
+            foreach ($validated['lampiranFields'] as $lampiranId) {
+                if ($lampiranId) { // Pastikan ID lampiran valid
+                    LampiranSuratModel::create([
+                        'id_surat' => $surat->id,
+                        'id_lampiran' => $lampiranId,
+                    ]);
+                }
+            }
+        }
+
+        // Redirect kembali ke halaman daftar Surat dengan pesan sukses
         return redirect()->route('surat.index')->with('success', 'Surat berhasil ditambahkan');
     }
+
 
 
     /**
@@ -108,65 +148,91 @@ class SuratController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
     public function edit($id)
     {
-        $surat = SuratModel::find($id);
+        $surat = SuratModel::with('fields', 'lampiransurat.lampiran')->where('id', $id)->first();
+        $lampiranList = LampiranModel::all();
         $gambar = $surat->gambar ? url("/c/private-image?path=surat/$surat->gambar") : asset("assets/image/default-2.png");
-        $params["data"] = (object)[
+        $params = (object)[
             "title" => "Ubah Surat",
             "action_form" => route("surat.update", $id),
             "method" => "PUT",
             "data" => (object)[
                 "nama_surat" => $surat->nama_surat,
                 "gambar" => $gambar,
+                "pendukungFields" => $surat->fields->pluck('nama_field')->toArray(),
+                "lampiranFields" => $surat->lampiransurat->map(fn($item) => $item->lampiran->id)->toArray(),
+
 
             ]
         ];
-        return view("admin.surat.form", $params);
+        // dd($params);
+        return view("admin.surat.form", ['data' => $params, 'lampiranList' => $lampiranList]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update($id)
     {
-        $masyarakat = SuratModel::findOrFail($id)->kepalaKeluarga;
-        // Validasi data menggunakan request()
-        $validated = request()->validate(
-            [
-                "nama_surat" => "required|min:3|max:50",
-                "gambar" => "file|image|max:2024", // Validasi foto (optional)
-            ]
-        );
+        // Validasi input data
+        $validated = request()->validate([
+            "nama_surat" => "required|min:3|max:50",
+            "gambar" => "file|image|max:2024",
+            "pendukungFields" => "array", // Validasi array pendukungFields
+            "pendukungFields.*" => "nullable|string|max:255", // Validasi setiap field
+            "lampiranFields" => "array", // Validasi array lampiranFields
+            "lampiranFields.*" => "nullable|integer|exists:lampiran,id", // Validasi ID lampiran yang valid
+        ]);
+
+        DB::beginTransaction(); // Mulai transaksi
 
         try {
-            // Cari data Surat berdasarkan ID
-            $surat = SuratModel::findOrFail($id);
-            // Menyimpan data Surat yang telah diperbarui
-            $surat->nama_surat = $validated['nama_surat'];
-            // $surat->kk_tgl = $validated['tanggal_kk'];
-            $oldImagePath = storage_path('app/private/surat/' . $surat->gambar);
-            // Jika ada file foto Surat baru
-            if (request()->hasFile('gambar')) {
-                // Menghapus gambar lama jika ada
-                if ($surat->kk_gambar) {
-                    $oldImagePath = storage_path('app/private/surat/' . $surat->gambar);
-                    if (file_exists($oldImagePath) && $surat->gambar != "default-2.png") {
-                        unlink($oldImagePath); // Menghapus file gambar lama
-                    }
-                }
+            $surat = SuratModel::findOrFail($id); // Mencari Surat berdasarkan ID
+            $surat->nama_surat = $validated['nama_surat']; // Update nama_surat
 
-                // Menyimpan gambar yang baru
+            // Cek jika ada gambar baru, hapus gambar lama dan simpan gambar baru
+            if (request()->hasFile('gambar')) {
+                if ($surat->gambar && file_exists(storage_path('app/private/surat/' . $surat->gambar))) {
+                    unlink(storage_path('app/private/surat/' . $surat->gambar)); // Hapus gambar lama
+                }
                 $file = request()->file('gambar');
                 $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('surat', $randomName, ['disk' => 'private']);
-                $surat->gambar = $randomName;
+                $surat->gambar = $randomName; // Update nama gambar
             }
 
-            // Menyimpan data Surat yang telah diperbarui
-            $surat->save();
+            $surat->save(); // Simpan perubahan surat
+
+            // 🔁 Hapus field lama lalu insert ulang
+            $surat->fields()->delete(); // Hapus semua field lama
+            if (isset($validated['pendukungFields'])) {
+                foreach ($validated['pendukungFields'] as $field) {
+                    if (!empty($field)) {
+                        Field::create([ // Simpan field baru yang tidak kosong
+                            'id_surat' => $surat->id,
+                            'nama_field' => $field,
+                        ]);
+                    }
+                }
+            }
+
+            // Hapus lampiran lama dan simpan yang baru
+            $surat->lampiransurat()->delete(); // Hapus lampiran lama
+            if (isset($validated['lampiranFields'])) {
+                foreach ($validated['lampiranFields'] as $lampiranId) {
+                    if ($lampiranId) { // Pastikan ID lampiran valid
+                        LampiranSuratModel::create([
+                            'id_surat' => $surat->id,
+                            'id_lampiran' => $lampiranId,
+                        ]);
+                    }
+                }
+            }
+
+            DB::commit(); // Commit transaksi jika semuanya berhasil
             return redirect()->route('surat.index')->with('success', 'Surat berhasil diperbarui');
         } catch (\Throwable $th) {
+            DB::rollBack(); // Rollback transaksi jika ada error
+            Log::error('Error in update surat: ' . $th->getMessage(), ['exception' => $th]);
             return redirect()->back()->with('error', 'Surat gagal diperbarui');
         }
     }
@@ -196,12 +262,11 @@ class SuratController extends Controller
                 $gambarUrl = $surat->gambar
                     ? url("/c/private-image?path=surat/$surat->gambar")
                     : asset("assets/image/default-2.png");
-            
-                    return '<img src="' . $gambarUrl . '" alt="Gambar Surat" width="50">';
 
+                return '<img src="' . $gambarUrl . '" alt="Gambar Surat" width="50">';
             })
-            
-            
+
+
             // ->addColumn('kepala_keluarga', function ($row) {
             //     return $row->kepalaKeluarga->nama_lengkap;
             // })
@@ -213,7 +278,7 @@ class SuratController extends Controller
                 $btn .= '</div>';
                 return $btn;
             })
-            ->rawColumns(['gambar','action'])
+            ->rawColumns(['gambar', 'action'])
             ->make(true);
     }
 }

@@ -6,11 +6,14 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FormatSuratController;
 use App\Http\Controllers\KartuKeluargaController;
+use App\Http\Controllers\LampiranController;
+use App\Http\Controllers\LampiranSuratController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PengajuanSuratController;
 use App\Http\Controllers\PengajuanSuratRtController;
 use App\Http\Controllers\PengajuanSuratSelesai;
 use App\Http\Controllers\PengaturanController;
+use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RTController;
 use App\Http\Controllers\RWController;
@@ -46,7 +49,7 @@ Route::get('/c/private-image', function () {
     // Jika file tidak ditemukan, kembalikan error 404
     abort(404);
 });
-Route::post("testimoni/store", function () { })->name("testimoni.store");
+Route::post("testimoni/store", function () {})->name("testimoni.store");
 
 
 Route::prefix("/c/admin")->middleware("auth")->group(function () {
@@ -75,6 +78,9 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::put("/format-surat/{id}", [FormatSuratController::class, "update"])->name("format-surat.update");
 
     Route::resource("/surat-keluar", SuraKeluarController::class);
+    Route::resource("/petugas", PetugasController::class);
+
+    Route::resource("/lampiran", LampiranController::class);
 
     Route::resource("/setting", PengaturanController::class);
     Route::resource("/rw", RWController::class);

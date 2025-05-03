@@ -109,6 +109,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('lampiran.index') }}"
+                            class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium  {{request()->routeIs("lampiran.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
+                            <i class="fa fa-circle {{request()->routeIs("lampiran.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> Lampiran
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('format-surat.index') }}"
                             class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium  {{request()->routeIs("format-surat.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
                             <i class="fa fa-circle {{request()->routeIs("format-surat.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> Format Surat
@@ -132,7 +138,12 @@
                 <!-- Dropdown dengan animasi height -->
                 <ul class="overflow-hidden transition-all duration-300 ease-in-out mt-4"
                     :class="isCollapse ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'">
-
+                    <li>
+                        <a href="{{ route('petugas.index') }}"
+                            class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium  {{request()->routeIs("petugas.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
+                            <i class="fa fa-circle text-gray-400 text-[6px] w-6"></i> Petugas
+                        </a>
+                    </li>
                     <li>
                         <a href="{{ route('setting.index') }}"
                             class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium  {{request()->routeIs("setting.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">

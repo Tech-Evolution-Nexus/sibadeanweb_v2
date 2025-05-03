@@ -12,8 +12,14 @@ class SuratModel extends Model
     protected $fillable = ["nama_surat", "gambar", "format_surat"];
 
 
-    public function lampiran()
+    public function lampiransurat()
     {
-        return $this->belongsToMany(LampiranModel::class, "lampiran_surat");
+        return $this->hasMany(LampiranSuratModel::class, "id_surat");
+    }
+
+    // Define a relationship where each Surat can have many Fields
+    public function fields()
+    {
+        return $this->hasMany(Field::class, 'id_surat');
     }
 }
