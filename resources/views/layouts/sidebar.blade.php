@@ -46,6 +46,18 @@
                                 <i class="fa fa-circle {{request()->routeIs("pengajuan-surat.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> Menunggu Persetujuan
                             </div>
                             <span class=" items-center rounded-md bg-gray[--primary] px-2 py-1 text-xs font-medium text-[--primary] ring-1 ring-[--primary] ring-inset ms-auto {{Helpers::getCountPengajuan()->countMenungguPengajuan ? "inline-flex":"hidden"}}">{{Helpers::getCountPengajuan()->countMenungguPengajuan}}</span>
+                    <div @click="isCollapse = !isCollapse" class="flex justify-between items-center text-gray-800 transition-all">
+                        <div  class="   px-2 py-1  transition-all   rounded-md text-sm flex items-center gap-2"><i class="fa w-[30px] fa-envelope text-lg"></i> Surat Masuk</div>
+                <i class="fa transition-transform duration-300" :class="{'fa-chevron-down': isCollapse, 'fa-chevron-up': !isCollapse}"></i>
+            </div>
+            <!-- Dropdown dengan animasi height -->
+            <ul class="overflow-hidden transition-all duration-300 ease-in-out px-4"
+                :class="isCollapse ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'">
+                <li>
+                    <a href="{{ route('pengajuan-surat.index') }}"
+                        class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium {{request()->routeIs("pengajuan-surat.index") && (request()->query('status') == 'menunggu'||request()->query('status') == '')? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}"><div class="">
+                        <i class="fa fa-circle {{request()->routeIs("pengajuan-surat.index") && (request()->query('status') == 'menunggu'||request()->query('status') == '') ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> Menunggu Persetujuan</div>
+                        <span class=" items-center rounded-md bg-gray[--primary] px-2 py-1 text-xs font-medium text-[--primary] ring-1 ring-[--primary] ring-inset ms-auto {{Helpers::getCountPengajuan()->countMenungguPengajuan ? "inline-flex":"hidden"}}">{{Helpers::getCountPengajuan()->countMenungguPengajuan}}</span>
 
                         </a>
                     </li>
@@ -56,6 +68,21 @@
                         </a>
                     </li>
                 </ul>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('pengajuan-surat.index') }}?status=di_terima_rt"
+                        class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium {{request()->routeIs("pengajuan-surat.index") && request()->query('status') == 'di_terima_rt' ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
+                        <i class="fa fa-circle {{request()->routeIs("pengajuan-surat.index") && request()->query('status') == 'di_terima_rt' ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> Disetujui Rt
+                                        </a>
+                </li>
+                <li>
+                    <a href="{{ route('pengajuan-surat.index') }}?status=selesai"
+                        class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium {{request()->routeIs("pengajuan-surat.index") && request()->query('status') == 'selesai' ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
+                        <i class="fa fa-circle {{request()->routeIs("pengajuan-surat.index") && request()->query('status') == 'selesai' ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> Selesai
+                                        </a>
+                </li>
+        </ul>
             </li>
             <li class="fi-sidebar-item-label flex-1 my-2 truncate text-sm font-medium text-primary-600 dark:text-primary-400">
                 <!-- <span class="text-lg text-gray-600 block mb-2">Dashboard</span> -->

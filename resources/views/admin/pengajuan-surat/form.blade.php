@@ -55,7 +55,8 @@
                         class="bg-gray-100 hover:bg-gray-300 text-gray-800 font-medium px-4 py-2 rounded-md ">
                         Kembali
                     </a>
-                    <button type="submit" class="bg-[--primary] hover:bg-[--primary] text-white  px-4 py-2 rounded-md ">
+                    <button type="submit"
+                        class="{{($data->pengajuan->status == "selesai" || $data->pengajuan->status == "di_tolak_rw" || $data->pengajuan->status == "di_tolak_rt" ? "hidden" : "") }} bg-[--primary] hover:bg-[--primary] text-white  px-4 py-2 rounded-md ">
                         Setujui
                     </button>
                 </form>

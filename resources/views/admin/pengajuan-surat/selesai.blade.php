@@ -3,9 +3,9 @@
 
     <div class="md:px-12 px-6 md:py-4 py-2">
         <div class="mb-10">
-            <div class="text-sm">Dashboard / Pengajuan Surat</div>
+            <div class="text-sm">Dashboard / Pengajuan Surat Selesai</div>
             <div class="flex">
-                <h1 class="text-2xl font-bold">Pengajuan Surat</h1>
+                <h1 class="text-2xl font-bold">Pengajuan Surat Selesai</h1>
             </div>
         </div>
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
@@ -19,7 +19,6 @@
                     <th>Nama masyarakat</th>
                     <th>RT</th>
                     <th>RW</th>
-                    <th>Status</th>
                     <th>Tanggal pengajuan</th>
                     <th>Aksi</th>
                 </thead>
@@ -33,7 +32,7 @@
                 $('#pengajuan-surat').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "",
+                    ajax: "{{ route('pengajuan-surat.index') }}",
                     columnDefs: [{
                         width: 200,
                         targets: 5
@@ -57,10 +56,6 @@
                     {
                         data: 'rw',
                         name: 'rw'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
                     },
 
                     {
