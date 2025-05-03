@@ -8,4 +8,8 @@ class LampiranModel extends Model
 {
     protected $table = "lampiran";
     protected $fillable = ["nama_lampiran"];
+    public function lampiranSurat()
+    {
+        return $this->hasMany(LampiranSuratModel::class, "id_lampiran");
+    }
 }
