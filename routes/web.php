@@ -9,6 +9,7 @@ use App\Http\Controllers\KartuKeluargaController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PengajuanSuratController;
 use App\Http\Controllers\PengajuanSuratRtController;
+use App\Http\Controllers\PengajuanSuratSelesai;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RTController;
@@ -60,7 +61,10 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get("/pengajuan-surat", [PengajuanSuratController::class, "index"])->name("pengajuan-surat.index");
     Route::get("/pengajuan-surat/{id}", [PengajuanSuratController::class, "show"])->name("pengajuan-surat.show");
     Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class, "updateStatus"])->name("pengajuan-surat.update");
-    Route::get("/pengajuan-surat-rt", [PengajuanSuratRtController::class, "index"])->name("pengajuan-surat-rt.index");
+    Route::get("/pengajuan-surat/{id}/download", [PengajuanSuratController::class, "download"])->name("pengajuan-surat.download");
+    // Route::get("/pengajuan-surat-rt", [PengajuanSuratRtController::class, "index"])->name("pengajuan-surat-rt.index");
+    // Route::get("/pengajuan-surat-selesai", [PengajuanSuratSelesai::class, "index"])->name("pengajuan-surat-selesai.index");
+    // Route::get("/pengajuan-surat-selesai/{id}", [PengajuanSuratSelesai::class, "show"])->name("pengajuan-surat-selesai.show");
 
 
     // Route::get("/surat-keluar", [SuraKeluarController::class, "index"])->name("surat-keluar.index");

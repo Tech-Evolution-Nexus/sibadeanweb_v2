@@ -43,15 +43,23 @@ class MasyarakatModel extends Model
     }
     protected function nik(): Attribute
     {
-        return Attribute::make(
+        return (Attribute::make(
             get: fn(string $value) => (string)$value,
-        );
+        ));
     }
 
     public function kartuKeluarga()
     {
         return $this->belongsTo(KartuKeluargaModel::class, "no_kk");
     }
+    public function bapak()
+    {
+        return MasyarakatModel::where("no_kk",$this->no_kk)->where("status_keluarga","kk")->first();
+    }
+    public function ibu()
+    {
+        return MasyarakatModel::where("no_kk",$this->no_kk)->where("status_keluarga","istri")->first();
+     }
     public function user()
     {
         return $this->belongsTo(User::class, "id_user");
