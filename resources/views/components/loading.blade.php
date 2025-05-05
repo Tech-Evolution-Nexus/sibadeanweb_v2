@@ -10,7 +10,7 @@
         <!-- Loader Spinner -->
         <div
             class="loader border-t-4 border-solid  border-gray-300 rounded-full w-10 h-10 animate-spin border-t-[--primary]">
-        </div>
+        </div> 
         <span>Loading...</span>
     </div>
 </div>

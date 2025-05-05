@@ -28,6 +28,6 @@ class PengajuanSuratModel extends Model
 
     public function lampiran()
     {
-        return $this->belongsToMany(LampiranModel::class, "lampiran_pengajuan");
+        return $this->belongsToMany(LampiranModel::class, "lampiran_pengajuan","id_pengajuan","id");
     }
 }
