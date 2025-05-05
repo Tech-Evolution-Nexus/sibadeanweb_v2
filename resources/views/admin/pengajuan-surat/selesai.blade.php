@@ -3,9 +3,9 @@
 
     <div class="md:px-12 px-6 md:py-4 py-2">
         <div class="mb-10">
-            <div class="text-sm">Dashboard / Pengajuan Surat Rt</div>
+            <div class="text-sm">Dashboard / Pengajuan Surat Selesai</div>
             <div class="flex">
-                <h1 class="text-2xl font-bold">Pengajuan Surat Rt</h1>
+                <h1 class="text-2xl font-bold">Pengajuan Surat Selesai</h1>
             </div>
         </div>
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
@@ -20,7 +20,7 @@
                     <th>RT</th>
                     <th>RW</th>
                     <th>Tanggal pengajuan</th>
-                    {{-- <th>Aksi</th> --}}
+                    <th>Aksi</th>
                 </thead>
             </table>
         </div>
@@ -32,7 +32,7 @@
                 $('#pengajuan-surat').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('pengajuan-surat-rt.index') }}",
+                    ajax: "{{ route('pengajuan-surat.index') }}",
                     columnDefs: [{
                         width: 200,
                         targets: 5
@@ -63,12 +63,12 @@
                         name: 'created_at'
                     },
 
-                        // {
-                        //     data: 'action',
-                        //     name: 'action',
-                        //     orderable: false,
-                        //     searchable: false
-                        // },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
                     ]
                 });
             });

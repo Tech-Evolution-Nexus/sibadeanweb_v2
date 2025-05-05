@@ -16,13 +16,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use ResponseHelper;
 
-class DashboardControllerApi extends Controller
+class SuratControllerApi extends Controller
 {
     public function index()
     {
         return ResponseHelper::success([
-            'surat' => SuratResource::collection(SuratModel::limit(7)->get()),
-            'berita' => BeritaResource::collection(BeritaModel::limit(5)->get()),
+            'surat' => SuratResource::collection(SuratModel::get()),
         ], 'Data Berhasil Diambil');
     }
 }

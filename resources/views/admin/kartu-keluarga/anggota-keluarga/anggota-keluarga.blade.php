@@ -14,16 +14,18 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <table id="kartuKeluarga" class="w-full">
-            <thead>
-                <th>No</th>
-                <th>NIK</th>
-                <th>Nama Lengkap</th>
-                <th>Jenis Kelamin</th>
-                <th>Status Keluarga</th>
-                <th>Aksi</th>
-            </thead>
-        </table>
+        <div class="card overflow-x-auto">
+            <table id="kartuKeluarga" class="w-full">
+                <thead>
+                    <th>No</th>
+                    <th>NIK</th>
+                    <th>Nama Lengkap</th>
+                    <th>Jenis Kelamin</th>
+                    <th>Status Keluarga</th>
+                    <th>Aksi</th>
+                </thead>
+            </table>
+        </div>
 
     </div>
 

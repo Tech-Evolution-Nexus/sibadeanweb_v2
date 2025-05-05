@@ -13,17 +13,26 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <table id="pengajuan-surat" class="w-full">
-            <thead>
-                <th>No</th>
-                <th>Judul</th>
-                <th>File</th>
-                <th>Tanggal Acara</th>
-                <th>Aksi</th>
-            </thead>
-        </table>
+        <div class="card overflow-x-auto">
+            <table id="pengajuan-surat" class="w-full">
+                <thead>
+                    <th>No</th>
+                    <th>Judul</th>
+                    {{-- <th>File</th> --}}
+                    <th>Tanggal Acara</th>
+                    <th>Aksi</th>
+                </thead>
+            </table>
+        </div>
     </div>
 
+
+    <x-modal :name="'preview'" :maxWidth="'2xl'">
+        <iframe :src="previewPdf" id="frame" width="100%" height="600px" frameborder="0"></iframe>
+        <div class="flex md:justify-end flex-wrap-reverse gap-2 mt-10">
+
+        </div>
+    </x-modal>
     <x-slot name="script">
         <script>
             $(document).ready(function () {
@@ -33,7 +42,7 @@
                     ajax: "{{ route('surat-keluar.index') }}",
                     columnDefs: [{
                         width: 200,
-                        targets: 4
+                        targets: 3
                     }],
                     columns: [{
                         data: 'DT_RowIndex',
@@ -43,10 +52,10 @@
                         data: 'title',
                         name: 'title'
                     },
-                    {
-                        data: 'nama_file',
-                        name: 'nama_file'
-                    },
+                    // {
+                    //     data: 'nama_file',
+                    //     name: 'nama_file'
+                    // },
                     {
                         data: 'exp_date',
                         name: 'exp_date'

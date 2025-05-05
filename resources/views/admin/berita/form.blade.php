@@ -2,8 +2,7 @@
 
     <div class="md:px-12 px-6 md:py-10 py-5">
         <div class="mb-10">
-            <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("kartu-keluarga.index")}}">Kartu
-                    keluarga</a> / {{$data->title}}</div>
+            <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("berita.index")}}">Berita</a> / <span class="text-gray-700 font-semibold">{{ $data->title }}</span></div>
             <div class="flex">
                 <h1 class="text-2xl font-bold">{{$data->title}}</h1>
             </div>
@@ -11,7 +10,7 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
-        <form action="<?= $data->action_form ?>" method="POST" class="" enctype="multipart/form-data">
+        <form action="<?= $data->action_form ?>" method="POST" class="card" enctype="multipart/form-data">
             @csrf
             @method($data->method)
             <div class="grid md:grid-cols-2 grid-cols-1 gap-2 gap-x-4">
@@ -37,28 +36,28 @@
             </div>
 
             <div class="mb-2 ms-md-3">
-                <x-input-label for="judul" :value="__('judul')" />
+                <x-input-label for="judul" :value="__('J    udul')" />
                 <x-text-input name="judul" id="judul" class="block mt-1 w-full"
                     :value=" old('judul', $data->data->judul) " type="text" placeholder="judul" />
                 <x-input-error :messages="$errors->get('judul')" class="mt-2 text-red-500 text-xs" />
             </div>
 
             <div class="mb-2 ms-md-3">
-                <x-input-label for="slug" :value="__('slug')" />
+                <x-input-label for="slug" :value="__('Slug')" />
                 <x-text-input name="slug" id="slug" type="text" class="block mt-1 w-full"
                     :value="old('slug', $data->data->slug) " placeholder="slug" />
                 <x-input-error :messages="$errors->get('slug')" class="mt-2 text-red-500 text-xs" />
             </div>
 
             <div class="mb-2 ms-md-3">
-                <x-input-label for="keterangan" :value="__('keterangan')" />
+                <x-input-label class="mb-2" for="keterangan" :value="__('Keterangan')" />
                 <textarea name="keterangan" id="keterangan"
                     class="block mt-1 w-full">{{ old('keterangan', $data->data->keterangan) }}</textarea>
                 <x-input-error :messages="$errors->get('keterangan')" class="mt-2 text-red-500 text-xs" />
             </div>
 
             <div class="mb-2 ms-md-3">
-                <x-input-label for="konten" :value="__('konten')" />
+                <x-input-label class="mb-2" for="konten" :value="__('Konten')" />
                 <textarea name="konten" id="konten"
                     class="block mt-1 w-full">{{ old('konten', $data->data->konten) }}</textarea>
                 <x-input-error :messages="$errors->get('konten')" class="mt-2 text-red-500 text-xs" />
