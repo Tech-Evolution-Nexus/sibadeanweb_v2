@@ -121,6 +121,7 @@
                     <i class="fa transition-transform duration-300" :class="{'fa-chevron-down': isCollapse, 'fa-chevron-up': !isCollapse}"></i>
                 </div>
 
+<<<<<<< Updated upstream
                 <!-- Dropdown dengan animasi height -->
                 <ul class="overflow-hidden transition-all duration-300 ease-in-out mt-4"
                     :class="isCollapse ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'">
@@ -140,6 +141,12 @@
                         </form>
                     </li>
                 </ul>
+=======
+            <li>
+                <!-- <span class="text-lg text-gray-600 block mb-2">Dashboard</span> -->
+                <a href="{{route("setting.index")}}" class="block   px-4 py-2 {{request()->is('c/*/setting') ? 'bg-[var(--primary)] text-white' : 'text-slate-700 md:hover:bg-white/80 '}} transition-all  rounded-md text-base flex items-center gap-2"><i class="fa w-[30px] fa-gear text-lg"></i> Pengaturan</a>
+                <a href="{{route("setting.index")}}" class="block   px-4 py-2 {{request()->is('c/*/setting') ? 'bg-[var(--primary)] text-white' : 'text-slate-700 md:hover:bg-white/80 '}} transition-all  rounded-md text-base flex items-center gap-2"><i class="fa w-[30px] fa-gear text-lg"></i> Pengaturan</a>
+>>>>>>> Stashed changes
             </li>
 
 
