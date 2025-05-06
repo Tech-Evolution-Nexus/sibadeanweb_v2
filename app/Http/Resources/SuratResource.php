@@ -15,9 +15,11 @@ class SuratResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'       => $this->id,
-            'nama_surat' => $this->nama_surat,
-            'gambar'    => $this->gambar,
+            'id'             => $this->id,
+            'nama_surat'     => $this->nama_surat,
+            'gambar'         => url("/c/private-image?path=surat/$this->gambar") ?? $this->gambar,
+            'field'          => $this->field ?? [],
+            'lampiransurat'  => $this->lampiransurat ?? [],
         ];
     }
 }

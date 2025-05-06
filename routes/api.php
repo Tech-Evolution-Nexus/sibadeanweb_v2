@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\BeritaControllerApi;
 use App\Http\Controllers\API\DashboardControllerApi;
 use App\Http\Controllers\API\SuratControllerApi;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,9 @@ Route::post('/aktivasi', [AuthController::class, 'activateAccount']);
 Route::get('/user', [AuthController::class, 'getUserData']);
 Route::get('/dash', [DashboardControllerApi::class, 'index']);
 Route::get('/surat', [SuratControllerApi::class, 'index']);
+Route::get('/surat/{id}', [SuratControllerApi::class, 'detail']);
+Route::apiResource('/berita', BeritaControllerApi::class)->only('index', 'show');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });

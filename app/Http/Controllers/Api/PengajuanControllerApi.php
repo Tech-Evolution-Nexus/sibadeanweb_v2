@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\BeritaResource;
 use App\Http\Resources\SuratResource;
 use App\Models\BeritaModel;
+use App\Models\PengajuanSuratModel;
 use Illuminate\Http\Request;
 use App\Models\MasyarakatModel;
 use App\Models\KartuKeluargaModel;
@@ -16,24 +17,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use ResponseHelper;
 
-class SuratControllerApi extends Controller
+class PengajuanControllerApi extends Controller
 {
     public function index()
     {
         return ResponseHelper::success([
-            'surat' => SuratResource::collection(SuratModel::get()),
+            'pengajuan' => BeritaResource::collection(PengajuanSuratModel::get()),
         ], 'Data Berhasil Diambil');
-    }
-    public function detail($id)
-    {
-        $surat = SuratModel::with(['fields', 'lampiransurat.lampiran'])->find($id);
-
-        if (!$surat) {
-            return ResponseHelper::error('Berita tidak ditemukan', 404);
-        }
-
-        return ResponseHelper::success([
-            'surat' => new SuratResource($surat),
-        ], 'Detail surat berhasil diambil');
     }
 }
