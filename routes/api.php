@@ -27,6 +27,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/aktivasi', [AuthController::class, 'activateAccount']);
 // Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUserData']);
 Route::get('/riwayat-pengajuan/{idMasyarakat}', [PengajuanController::class, 'getRiwayat']);
+Route::get('/riwayat-pengajuan-detail/{idPengajuan}', [PengajuanController::class, 'getRiwayatDetail']);
 Route::get('/user', [AuthController::class, 'getUserData']);
 Route::get('/dash', [DashboardControllerApi::class, 'index']);
 Route::get('/surat', [SuratControllerApi::class, 'index']);
