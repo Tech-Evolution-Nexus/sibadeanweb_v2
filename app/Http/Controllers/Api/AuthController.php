@@ -73,8 +73,9 @@ class AuthController extends Controller
         return ResponseHelper::success([
             'user' => [
                 'id' => $user->id,
-                'name' => $user->name,
+                'name' => $user->masyarakat->nama_lengkap,
                 'email' => $user->email,
+                'role' => $user->role,
                 'masyarakat' => $user->masyarakat
             ],
             'access_token' => $token,
