@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\LampiranSuratModel;
 use App\Models\PengajuanSuratModel;
+use App\Models\SuratModel;
 use Carbon\Carbon;
 use ResponseHelper;
 
@@ -67,5 +69,17 @@ class PengajuanController extends Controller
         return ResponseHelper::success(
             $pengajuan,
         );
+    }
+    public function getDetailPengajuan($id)
+    {
+        $lampiran = SuratModel::where("id", $id)
+            ->with(["lampiransurat.lampiran", "fields"])
+            // ->where("status", "pending")
+            ->first();
+
+
+        return ResponseHelper::success([
+            "surat" => $lampiran,
+        ]);
     }
 }

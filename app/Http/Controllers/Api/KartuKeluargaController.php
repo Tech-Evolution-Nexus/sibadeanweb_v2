@@ -11,7 +11,7 @@ class KartuKeluargaController extends Controller
 {
   public function getAnggotaKeluarga($nokk)  {
     $anggotaKeluarga=MasyarakatModel::where("no_kk","=",$nokk)->get();
-    dd($anggotaKeluarga,$nokk);
+   
     return ResponseHelper::success($anggotaKeluarga);
     
   }

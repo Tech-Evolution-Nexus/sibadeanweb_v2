@@ -37,7 +37,8 @@ Route::get('/surat', [SuratControllerApi::class, 'index']);
 Route::get('/surat/{id}', [SuratControllerApi::class, 'detail']);
 Route::apiResource('/berita', BeritaControllerApi::class)->only('index', 'show');
 
+Route::get('/detail-pengajuan/{id}', [PengajuanController::class, 'getDetailPengajuan']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-
 });
