@@ -6,6 +6,7 @@ use App\Http\Controllers\API\DashboardControllerApi;
 use App\Http\Controllers\Api\KartuKeluargaController;
 use App\Http\Controllers\Api\PengajuanController;
 use App\Http\Controllers\API\SuratControllerApi;
+use App\Http\Controllers\API\ProfileControllerApi;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\Mail;
@@ -38,6 +39,8 @@ Route::get('/surat/{id}', [SuratControllerApi::class, 'detail']);
 Route::apiResource('/berita', BeritaControllerApi::class)->only('index', 'show');
 
 Route::get('/detail-pengajuan/{id}', [PengajuanController::class, 'getDetailPengajuan']);
+
+Route::get('/ubhemail', [ProfileControllerApi::class, 'ubhEmail']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

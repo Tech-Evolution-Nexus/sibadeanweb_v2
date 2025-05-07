@@ -151,6 +151,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('tentang.index') }}"
+                            class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium  {{request()->routeIs("tentang.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
+                            <i class="fa fa-circle text-gray-400 text-[6px] w-6"></i> Tentang
+                        </a>
+                    </li>
+                    <li>
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
