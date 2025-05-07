@@ -41,6 +41,7 @@ Route::apiResource('/berita', BeritaControllerApi::class)->only('index', 'show')
 Route::get('/detail-pengajuan/{id}', [PengajuanController::class, 'getDetailPengajuan']);
 
 Route::get('/ubhemail', [ProfileControllerApi::class, 'ubhEmail']);
+Route::post('/ubhPass', [ProfileControllerApi::class, 'ubhPass']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
