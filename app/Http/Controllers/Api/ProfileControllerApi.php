@@ -10,30 +10,36 @@ use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use ResponseHelper;
 
 class ProfileControllerApi extends Controller
 {
     public function ubhEmail(Request $request)
     {
-        $validatedData = $request->validate([
-            'nik' => 'required|string',
-            'email' => 'required|string|email',
-        ], [
-            'nik.required' => 'NIK tidak ada.',
-            'nik.string' => 'Harus berupa angka',
-            'email.required' => 'E-mail tidak boleh kosong.',
-            'email.string' => 'E-mail tidak boleh kosong.',
-            'email.email' => 'Format E-Mail tidak valid.',
+        try {
+            $validatedData = $request->validate([
+                'nik' => 'required|string',
+                'email' => 'required|string|email',
+            ], [
+                'nik.required' => 'NIK tidak ada.',
+                'nik.string' => 'Harus berupa angka.',
+                'email.required' => 'E-mail tidak boleh kosong.',
+                'email.string' => 'E-mail tidak boleh kosong.',
+                'email.email' => 'Format E-Mail tidak valid.',
+            ]);
 
-        ]);
-
-        return response()->json([
-            'message' => 'Berhasil ubah E-mail!',
-            'data' => $data = [null],
-        ], 200);
+            return response()->json([
+                'message' => 'Berhasil ubah E-mail!',
+                'data' => [null],
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validasi gagal.',
+                'errors' => $e->errors()
+            ], 422);
+        }
     }
-
     public function ubhNoHp(Request $request)
     {
         $validatedData = $request->validate([
