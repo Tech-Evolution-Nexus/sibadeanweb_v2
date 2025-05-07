@@ -15,4 +15,5 @@ class KartuKeluargaController extends Controller
         return ResponseHelper::success($anggotaKeluarga);
 
     }
+
 }
