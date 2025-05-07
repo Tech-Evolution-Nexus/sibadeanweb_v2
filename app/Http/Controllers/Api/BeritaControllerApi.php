@@ -16,24 +16,24 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use ResponseHelper;
 
-class SuratControllerApi extends Controller
+class BeritaControllerApi extends Controller
 {
     public function index()
     {
         return ResponseHelper::success([
-            'surat' => SuratResource::collection(SuratModel::get()),
+            'berita' => BeritaResource::collection(BeritaModel::get()),
         ], 'Data Berhasil Diambil');
     }
-    public function detail($id)
+    public function show($id)
     {
-        $surat = SuratModel::with(['fields', 'lampiransurat.lampiran'])->find($id);
+        $berita = BeritaModel::find($id);
 
-        if (!$surat) {
+        if (!$berita) {
             return ResponseHelper::error('Berita tidak ditemukan', 404);
         }
 
         return ResponseHelper::success([
-            'surat' => new SuratResource($surat),
-        ], 'Detail surat berhasil diambil');
+            'berita' => new BeritaResource($berita),
+        ], 'Detail berita berhasil diambil');
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BeritaResource extends JsonResource
+class PengajuanResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,7 +19,7 @@ class BeritaResource extends JsonResource
             'judul' => $this->judul,
             'keterangan'    => $this->keterangan,
             'konten'     => $this->konten,
-            'gambar'     => url("/c/private-image?path=berita/$this->gambar") ?? $this->gambar,
+            'gambar'     =>     $this->gambar,
         ];
     }
 }

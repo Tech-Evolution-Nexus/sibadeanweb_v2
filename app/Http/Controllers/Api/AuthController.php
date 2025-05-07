@@ -20,7 +20,6 @@ class AuthController extends Controller
         $user = User::all();
         return response()->json($user);
 
-        return response()->json($user);
     }
     public function login(Request $request)
     {
