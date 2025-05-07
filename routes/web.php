@@ -19,9 +19,11 @@ use App\Http\Controllers\RTController;
 use App\Http\Controllers\RWController;
 use App\Http\Controllers\SuraKeluarController;
 use App\Http\Controllers\SuratController;
+use App\Http\Controllers\TentangController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+
 
 Route::get('/', [LandingController::class, "home"]);
 Route::get('/berita', [LandingController::class, "berita"]);
@@ -89,7 +91,7 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Route::resource("/setting", TentangController::class);
+    Route::get("/tentang", [TentangController::class, 'index'])->name('tentang.index');
 });
 
 

@@ -1,114 +1,125 @@
-@extends('layouts.welcome')
-@section('title', 'Tentang')
-@include('sweetalert::alert')
-<!-- partial -->
-@section('content')
-@if (session::has('success'))
-<script>
-    toastr.success('Berhasil Diupdate', '')
-</script>
-@endif
-@if ($errors->any())
-<script>
-    toastr.error('Cek Kembali input', 'Gagal Diupdate')
-</script>
-@endif
-<div class="card" style="border-radius: 2px;">
-    <div class="card-body">
-        <div class="container">
-            @foreach ($data as $value)
-            <form action="{{ url('/tentang/update/'. $value->id) }}" method="post">
-                <h5 class="font-weight-bold text-dark">Edit Halaman Landing Page</h5>
-                <h6 class="font-weight-bold text-dark mt-3">- Section Home</h6>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="nama_website">Nama Website:</label>
-                            <input type="text" value="{{ $value->nama_website }}" class="form-control" id="nama_website" name="nama_website">
-                        </div>
+<x-app-layout>
+    <div class="bg-white shadow rounded p-6">
+        <div class="container mx-auto">
+            <form action="{{ url('/admin/tentang/' . $value->id) }}" method="post">
+                @csrf
+                @method('POST')
+
+                <h5 class="text-xl font-bold text-gray-800 mb-4">Edit Halaman Landing Page</h5>
+
+                <h6 class="text-lg font-semibold    text-gray-700 mt-6 mb-2">- Section Home</h6>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="nama_website" class="block text-sm font-medium text-gray-700">Nama Website:</label>
+                        <input type="text" value="{{ $value->nama_website }}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="nama_website" name="nama_website">
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="judul_home">Judul Halaman Home:</label>
-                            <input type="text" value="{{ $value->judul_home }}" class="form-control" id="judul_home" name="judul_home">
-                        </div>
+                    <div>
+                        <label for="judul_home" class="block text-sm font-medium text-gray-700">Judul Halaman Home:</label>
+                        <input type="text" value="{{ $value->hero_title }}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="judul_home" name="judul_home">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="deskripsi_home">Deskripsi Halaman Home:</label>
-                            <textarea class="form-control" id="deskripsi_home" name="deskripsi_home" rows="4">{{ $value->deskripsi_home }}</textarea>
-                        </div>
+                <div class="mt-4">
+                    <label for="deskripsi_home" class="block text-sm font-medium text-gray-700">Deskripsi Halaman Home:</label>
+                    <textarea id="deskripsi_home" name="deskripsi_home" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->hero_description }}</textarea>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class=" mb-2 mt-4">
+                        <x-file-upload :name="'hero_img'" :label="'Gambar Home'"
+                        :defaultImage="$value->hero_img ? asset($value->hero_img) : asset('assets/image/default-2.png')" />
+                        <x-input-error :messages="$errors->get('hero_img')" class="mt-2 text-red-500 text-xs" />
+                    </div>
+                    <div class=" mb-2 mt-4">
+                        <x-file-upload :name="'about_img'" :label="'Gambar Kelurahan'"
+                        :defaultImage="$value->about_img ? asset($value->about_img) : asset('assets/image/default-2.png')" />
+                        <x-input-error :messages="$errors->get('about_img')" class="mt-2 text-red-500 text-xs" />
                     </div>
                 </div>
-                <h6 class="font-weight-bold text-dark mt-3">- Section Tentang</h6>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="judul_tentang">Judul Halaman Tentang:</label>
-                            <input type="text" value="{{ $value->judul_tentang }}" class="form-control" id="judul_tentang" name="judul_tentang">
-                        </div>
+
+                </div>
+
+                <h6 class="text-lg font-semibold text-gray-700 mt-6 mb-2">- Section Tentang</h6>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="judul_tentang" class="block text-sm font-medium text-gray-700">Judul Halaman Tentang:</label>
+                        <input type="text" value="{{ $value->about_title }}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="judul_tentang" name="judul_tentang">
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="link_download">Link Download Aplikasi:</label>
-                            <input type="text" value="{{ $value->link_download }}" class="form-control" id="link_download" name="link_download">
-                        </div>
+                    <div>
+                        <label for="judul_fitur" class="block text-sm font-medium text-gray-700">Judul Fitur:</label>
+                        <input type="text" value="{{ $value->about_title }}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="judul_fitur" name="judul_fitur">
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="video_url">Video:</label>
-                            <input type="text" value="{{ $value->video_url }}" class="form-control" id="video_url" name="video_url">
-                        </div>
+                    <div>
+                        <label for="deskripsi_tentang" class="block text-sm font-medium text-gray-700">Deskripsi Tentang Badean:</label>
+                        <textarea id="deskripsi_tentang" name="deskripsi_tentang" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->about_description }}</textarea>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="token">Token:</label>
-                            <input type="text" value="{{ $value->token }}" class="form-control" id="token" name="token">
-                        </div>
+
+                    <div>
+                        <label for="deskripsi_fitur" class="block text-sm font-medium text-gray-700">Deskripsi Fitur:</label>
+                        <textarea id="deskripsi_fitur" name="deskripsi_fitur" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->about_description }}</textarea>
+                    </div>
+                        <div class=" mb-2 mt-4">
+                        <x-file-upload :name="'fitur_1'" :label="'Fitur 1'"
+                        :defaultImage="$value->fitur_1 ? asset($value->fitur_1) : asset('assets/image/default-2.png')" />
+                        <x-input-error :messages="$errors->get('fitur_1')" class="mt-2 text-red-500 text-xs" />
+                    </div>
+                    <div class=" mb-2 mt-4">
+                        <x-file-upload :name="'fitur_2'" :label="'Fitur 2'"
+                        :defaultImage="$value->fitur_2 ? asset($value->fitur_2) : asset('assets/image/default-2.png')" />
+                        <x-input-error :messages="$errors->get('fitur_2')" class="mt-2 text-red-500 text-xs" />
+                    </div>
+                    <div class=" mb-2 mt-4">
+                        <x-file-upload :name="'fitur_3'" :label="'Fitur 3'"
+                        :defaultImage="$value->fitur_3 ? asset($value->fitur_3) : asset('assets/image/default-2.png')" />
+                        <x-input-error :messages="$errors->get('fitur_3')" class="mt-2 text-red-500 text-xs" />
+                    </div>
+                    <div class=" mb-2 mt-4">
+                        <x-file-upload :name="'fitur_4'" :label="'Fitur 4'"
+                        :defaultImage="$value->fitur_4 ? asset($value->fitur_4) : asset('assets/image/default-2.png')" />
+                        <x-input-error :messages="$errors->get('fitur_4')" class="mt-2 text-red-500 text-xs" />
+                    </div>
+                    {{-- <div>
+                        <label for="link_download" class="block text-sm font-medium text-gray-700">Link Download Aplikasi:</label>
+                        <input type="text" value="{{ $value->link_download }}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="link_download" name="link_download">
+                    </div> --}}
+                    <div class="md:col-span-2">
+                        <label for="video_url" class="block text-sm font-medium text-gray-700">Video:</label>
+                        <input type="text" value="{{ $value->demo_url }}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="video_url" name="video_url">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="tentang_aplikasi">Tentang Aplikasi:</label>
-                            <textarea class="form-control" id="tentang_aplikasi" name="tentang_aplikasi" rows="4">{{ $value->tentang_aplikasi }}</textarea>
-                        </div>
+
+                <div class="mt-4">
+                    <label for="tentang_aplikasi" class="block text-sm font-medium text-gray-700">Tentang Aplikasi:</label>
+                    <textarea id="tentang_aplikasi" name="tentang_aplikasi" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->tentang_aplikasi }}</textarea>
+                </div>
+
+                <h6 class="text-lg font-semibold text-gray-700 mt-6 mb-2">- Section Footer</h6>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="email_kelurahan" class="block text-sm font-medium text-gray-700">Email Kelurahan:</label>
+                        <input type="text" value="{{ $value->email_kelurahan }}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="email_kelurahan" name="email_kelurahan">
+                    </div>
+                    <div>
+                        <label for="no_telp" class="block text-sm font-medium text-gray-700">No Telp:</label>
+                        <input type="text" value="{{ $value->no_telp }}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="no_telp" name="no_telp">
                     </div>
                 </div>
-                <h6 class="font-weight-bold text-dark mt-3">- Section Footer</h6>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="email_kelurahan">Email Kelurahan:</label>
-                            <input type="text" value="{{ $value->email_kelurahan }}" class="form-control" id="email_kelurahan" name="email_kelurahan">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="no_telp">No Telp:</label>
-                            <input type="text" value="{{ $value->no_telp }}" class="form-control" id="no_telp" name="no_telp">
-                        </div>
-                    </div>
+
+                <div class="mt-4">
+                    <label for="alamat_kelurahan" class="block text-sm font-medium text-gray-700">Alamat Kelurahan:</label>
+                    <textarea id="alamat_kelurahan" name="alamat_kelurahan" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->alamat_kelurahan }}</textarea>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="alamat_kelurahan">Alamat Kelurahan:</label>
-                            <textarea class="form-control" id="alamat_kelurahan" name="alamat_kelurahan" rows="4">{{ $value->alamat_kelurahan }}</textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <button type="submit" class="btn btn-success">Kirim</button>
+
+                <div class="mt-6 text-right">
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded shadow">
+                        Kirim
+                    </button>
                 </div>
             </form>
-            @endforeach
         </div>
     </div>
-</div>
-@endsection
+</x-app-layout>
+
+
+
 
 
 
