@@ -44,9 +44,9 @@ class ProfileControllerApi extends Controller
             'nik.required' => 'NIK tidak ada.',
             'nik.string' => 'Harus berupa angka',
             // 'noHp.required' => 'Nomor HP tidak boleh kosong.',
-            // 'noHp.numeric' => 'Nomor HP harus berupa angka.',
+            // 'noHp.digits_between' => 'Nomor HP harus berupa angka.',
             'no_kitap.required' => 'Nomor HP tidak boleh kosong.',
-            'no_kitap.numeric' => 'Nomor HP harus berupa angka.',
+            'no_kitap.digits_between' => 'Nomor HP harus berupa angka.',
         ]);
 
         return response()->json([
