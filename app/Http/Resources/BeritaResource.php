@@ -15,11 +15,12 @@ class BeritaResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'       => $this->id,
+            'id' => $this->id,
             'judul' => $this->judul,
-            'keterangan'    => $this->keterangan,
-            'konten'     => $this->konten,
-            'gambar'     => url("/c/private-image?path=berita/$this->gambar") ?? $this->gambar,
+            'keterangan' => $this->keterangan,
+            'konten' => $this->konten,
+            'gambar' => url("/c/private-image?path=berita/$this->gambar") ?? $this->gambar,
+            "created_at" => $this->created_at
         ];
     }
 }
