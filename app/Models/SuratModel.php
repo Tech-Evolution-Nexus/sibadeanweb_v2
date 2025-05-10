@@ -9,7 +9,7 @@ class SuratModel extends Model
 {
     use HasFactory;
     protected $table = "surat";
-    protected $fillable = ["nama_surat", "gambar", "format_surat"];
+    protected $fillable = ["nama_surat", "singkata_nama_surat", "gambar", "format_surat"];
 
 
     public function lampiransurat()

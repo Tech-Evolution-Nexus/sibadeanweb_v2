@@ -21,7 +21,7 @@ class DashboardControllerApi extends Controller
     public function index()
     {
         return ResponseHelper::success([
-            'surat' => SuratResource::collection(SuratModel::limit(7)->get()),
+            'surat' => SuratResource::collection(SuratModel::limit(3)->whereIn("singkatan_nama_surat", ["skck", "sku", "sktm"])->get()),
             'berita' => BeritaResource::collection(BeritaModel::limit(5)->get()),
         ], 'Data Berhasil Diambil');
     }
