@@ -98,7 +98,7 @@
                     class="px-6 py-3 bg-black text-white rounded-md flex items-center gap-2 shadow-md hover:bg-opacity-80 transition-all">
                     <img src="{{ asset('assets/image/playstore.png') }}" class="w-6"> Google Play
                 </a>
-                <a href="#"
+                <a href="{{asset("assets/image/secure.webp")}}" download
                     class="px-6 py-3 bg-black text-white rounded-md flex items-center gap-2 shadow-md hover:bg-opacity-80 transition-all">
                     <div class="fa fa-download"></div> Unduh
                 </a>
