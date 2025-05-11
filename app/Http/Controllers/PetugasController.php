@@ -17,8 +17,11 @@ class PetugasController extends Controller
      */
     public function index()
     {
-        $users = User::with("petugas")->where("role", "!=", "masyarakat")->orderBy("created_at", "desc")->get();
-
+        $users = User::where("role", "!=", "masyarakat")
+            ->whereHas("petugas")
+            ->with("petugas")
+            ->orderBy("created_at", "desc")
+            ->get();
         if (request()->ajax()) {
             return $this->dataTable($users);
         }
