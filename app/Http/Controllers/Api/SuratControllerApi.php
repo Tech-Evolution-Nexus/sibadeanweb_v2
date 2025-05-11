@@ -24,4 +24,16 @@ class SuratControllerApi extends Controller
             'surat' => SuratResource::collection(SuratModel::get()),
         ], 'Data Berhasil Diambil');
     }
+    public function detail($id)
+    {
+        $surat = SuratModel::with(['fields', 'lampiransurat.lampiran'])->find($id);
+
+        if (!$surat) {
+            return ResponseHelper::error('Berita tidak ditemukan', 404);
+        }
+
+        return ResponseHelper::success([
+            'surat' => new SuratResource($surat),
+        ], 'Detail surat berhasil diambil');
+    }
 }

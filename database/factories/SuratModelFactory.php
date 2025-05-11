@@ -16,20 +16,24 @@ class SuratModelFactory extends Factory
      */
     public function definition(): array
     {
+        $namaSurat = $this->faker->unique()->randomElement([
+            'Surat Keterangan Domisili',
+            'Surat Keterangan Tidak Mampu (SKTM)',
+            'Surat Keterangan Usaha (SKU)',
+            'Surat Keterangan Kematian',
+            'Surat Keterangan Kelahiran',
+            'Surat Keterangan Pindah',
+            'Surat Keterangan Ahli Waris',
+            'Surat Pengantar Nikah',
+            'Surat Keterangan Tanah',
+            'Surat Keterangan Catatan Kepolisian',
+        ]);
         return [
-            "nama_surat" => $this->faker->unique()->randomElement([
-                'Surat Keterangan Domisili',
-                'Surat Keterangan Tidak Mampu (SKTM)',
-                'Surat Keterangan Usaha (SKU)',
-                'Surat Keterangan Kematian',
-                'Surat Keterangan Kelahiran',
-                'Surat Keterangan Pindah',
-                'Surat Keterangan Ahli Waris',
-                'Surat Pengantar Nikah',
-                'Surat Keterangan Tanah',
-                'Surat Permohonan SKCK',
-            ]),
-            "gambar" => "s",
+            "nama_surat" => $namaSurat,
+            "gambar" => public_path("assets/image/surat/police.png"),
+            "singkatan_nama_surat" => implode('', array_map(function ($word) use ($namaSurat) {
+                return ctype_alpha($word[0]) ? strtoupper($word[0]) : '';
+            }, explode(' ', $namaSurat))),
             "format_surat" => <<<HTML
             <h2 style='text-align:center;'><strong>Surat Keterangan</strong></h2>
             <p style='text-align:center;'><strong>No.</strong> <strong>{no_surat}</strong></p>
@@ -52,6 +56,7 @@ class SuratModelFactory extends Factory
             <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Demikian surat keterangan ini kami buat, untuk dapat dipergunakan sebagaimana semestinya.</p>
             <p style="text-align:right;">{tanggal_pengajuan},Ketua RT {rt} RW {rt} &nbsp; &nbsp; &nbsp;&nbsp;</p>
             <p style='text-align:right;'>{nama} &nbsp; &nbsp;</p>
-            HTML];
+            HTML
+        ];
     }
 }

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -20,7 +19,8 @@ return new class extends Migration
             $table->boolean("status")->default(0);
             $table->string("avatar")->default("default.png");
             $table->enum("role", ["rt", "rw", "masyarakat", "admin", "lurah"])->default("masyarakat");
-
+            $table->timestamp("masa_jabatan_mulai")->nullable();
+            $table->timestamp("masa_jabatan_selesai")->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

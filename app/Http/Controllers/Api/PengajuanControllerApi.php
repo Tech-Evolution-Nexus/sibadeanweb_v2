@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\BeritaResource;
 use App\Http\Resources\SuratResource;
 use App\Models\BeritaModel;
+use App\Models\PengajuanSuratModel;
 use Illuminate\Http\Request;
 use App\Models\MasyarakatModel;
 use App\Models\KartuKeluargaModel;
@@ -16,13 +17,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use ResponseHelper;
 
-class DashboardControllerApi extends Controller
+class PengajuanControllerApi extends Controller
 {
     public function index()
     {
         return ResponseHelper::success([
-            'surat' => SuratResource::collection(SuratModel::limit(3)->whereIn("singkatan_nama_surat", ["skck", "sku", "sktm"])->get()),
-            'berita' => BeritaResource::collection(BeritaModel::limit(5)->get()),
+            'pengajuan' => BeritaResource::collection(PengajuanSuratModel::get()),
         ], 'Data Berhasil Diambil');
     }
 }

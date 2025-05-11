@@ -20,7 +20,7 @@ class SuratController extends Controller
     {
 
         $surat = SuratModel::orderBy("created_at", "desc")->get();
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "surat" => $surat
         ];
 
@@ -36,11 +36,11 @@ class SuratController extends Controller
      */
     public function create()
     {
-        $params = (object)[
+        $params = (object) [
             "title" => "Tambah Surat",
             "action_form" => route("surat.store"),
             "method" => "POST",
-            "data" => (object)[
+            "data" => (object) [
                 "nama_surat" => "",
                 "gambar" => "",
                 "pendukungFields" => [],
@@ -73,6 +73,9 @@ class SuratController extends Controller
         $dataSurat = [
             'nama_surat' => $validated['nama_surat'],
             'gambar' => $validated['gambar'],
+            'singkata_nama_surat' => implode('', array_map(function ($word) {
+                return ctype_alpha($word[0]) ? strtoupper($word[0]) : '';
+            }, explode(' ', $validated['nama_surat']))),
             'format_surat' => <<<HTML
         <h2 style='text-align:center;'><strong>Surat Keterangan</strong></h2>
         <p style='text-align:center;'><strong>No.</strong> <strong>{no_surat}</strong></p>
@@ -154,11 +157,11 @@ class SuratController extends Controller
         $surat = SuratModel::with('fields', 'lampiransurat.lampiran')->where('id', $id)->first();
         $lampiranList = LampiranModel::all();
         $gambar = $surat->gambar ? url("/c/private-image?path=surat/$surat->gambar") : asset("assets/image/default-2.png");
-        $params = (object)[
+        $params = (object) [
             "title" => "Ubah Surat",
             "action_form" => route("surat.update", $id),
             "method" => "PUT",
-            "data" => (object)[
+            "data" => (object) [
                 "nama_surat" => $surat->nama_surat,
                 "gambar" => $gambar,
                 "pendukungFields" => $surat->fields->pluck('nama_field')->toArray(),
@@ -199,6 +202,9 @@ class SuratController extends Controller
                 $file->storeAs('surat', $randomName, ['disk' => 'private']);
                 $surat->gambar = $randomName; // Update nama gambar
             }
+            $surat->singkata_nama_surat = implode('', array_map(function ($word) {
+                return ctype_alpha($word[0]) ? strtoupper($word[0]) : '';
+            }, explode(' ', $validated['nama_surat'])));
 
             $surat->save(); // Simpan perubahan surat
 

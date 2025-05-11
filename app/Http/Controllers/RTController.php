@@ -24,7 +24,7 @@ class RTController extends Controller
         })
             ->orderBy("created_at", "desc")
             ->get();
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "rt" => $rt,
             "rw" => $rw
         ];
@@ -55,12 +55,12 @@ class RTController extends Controller
             ->orderBy("nama_lengkap")
             ->get();
         // dd($masyarakat);
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "title" => "Tambah RT",
             "action_form" => route("rt.store", $rw),
             "method" => "POST",
             "masyarakat" => $masyarakat,
-            "data" => (object)[
+            "data" => (object) [
                 "nik" => "",
                 "masa_jabatan_mulai" => "",
                 "masa_jabatan_selesai" => "",
@@ -132,12 +132,12 @@ class RTController extends Controller
             ->orderBy("nama_lengkap")
             ->get();
         $rt = MasyarakatModel::find($id);
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "title" => "Ubah RT",
             "action_form" => route("rt.update", [$rw, $id]),
             "method" => "PUT",
             "masyarakat" => $masyarakat,
-            "data" => (object)[
+            "data" => (object) [
                 "nik" => $id,
                 "masa_jabatan_mulai" => $rt->user->masa_jabatan_mulai,
                 "masa_jabatan_selesai" => $rt->user->masa_jabatan_selesai,
