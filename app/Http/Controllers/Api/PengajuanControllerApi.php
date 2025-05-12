@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use ResponseHelper;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 
 class PengajuanControllerApi extends Controller
 {
@@ -80,7 +83,20 @@ class PengajuanControllerApi extends Controller
                 ]);
             }
         }
+        try {
+            $fcmToken = 'elmt0uOhS0O3Ze4EdOcz1N:APA91bFp6dvxMq3JkQV7Ayxtf_dkNPu2OU9545EUPnceG0pSkKmlXBApxtdVC8cgZMQq5juDlHGFHSLcKiRxkxxzsvVsbdUxEO8lj8epG_jkiL0l1__66QY'; // Ambil dari DB atau request jika tersedia
 
+            $factory = (new Factory)->withServiceAccount(base_path('firebase.json'));
+            $messaging = $factory->createMessaging();
+
+            $message = CloudMessage::withTarget('token', $fcmToken)
+                ->withNotification(Notification::create('Pengajuan Baru', 'Ada pengajuan surat baru yang masuk.'));
+
+            $messaging->send($message);
+        } catch (\Throwable $e) {
+            // Optional: log error jika notifikasi gagal
+            \Log::error('FCM Error: ' . $e->getMessage());
+        }
         return response()->json([
             'message' => 'Pengajuan berhasil disimpan.',
             'data' => $pengajuan

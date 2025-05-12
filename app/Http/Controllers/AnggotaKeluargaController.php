@@ -15,7 +15,7 @@ class AnggotaKeluargaController extends Controller
     {
         $anggotaKeluarga = MasyarakatModel::where("no_kk", $no_kk)->orderBy("created_at", "desc")->get();
 
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "anggota_keluarga" => $anggotaKeluarga,
             "no_kk" => $no_kk
         ];
@@ -34,7 +34,7 @@ class AnggotaKeluargaController extends Controller
     {
         $ayah = MasyarakatModel::where("no_kk", $no_kk)->where("status_keluarga", "kk")->first();
         $ibu = MasyarakatModel::where("no_kk", $no_kk)->where("status_keluarga", "istri")->first();
-        $data = (object)[
+        $data = (object) [
             "nik" => "",
             "nama_lengkap" => "",
             "jenis_kelamin" => "",
@@ -54,7 +54,7 @@ class AnggotaKeluargaController extends Controller
             "nama_ibu" => $ibu->nama_lengkap ?? "",
             "hasKK" => isset($ayah)
         ];
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "title" => "Tambah Anggota Keluarga",
             "method" => "POST",
             "action_form" => route("anggota-keluarga.store", $no_kk),
@@ -70,7 +70,7 @@ class AnggotaKeluargaController extends Controller
      */
     public function store($no_kk, Request $request)
     {
-        $result =  request()->validate([
+        $result = request()->validate([
             'nik' => "required|string|min:16|max:16|unique:masyarakat,nik",
             'nama_lengkap' => 'required|string|max:50',
             'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
@@ -104,7 +104,10 @@ class AnggotaKeluargaController extends Controller
      */
     public function show($no_kk, string $id)
     {
-        //
+        $data = MasyarakatModel::find($id);
+        if (!$data)
+            return abort(404);
+        return view("admin.kartu-keluarga.anggota-keluarga.detail", $data);
     }
 
     /**
@@ -118,7 +121,7 @@ class AnggotaKeluargaController extends Controller
             ->first();
 
         $masyarakat = MasyarakatModel::find($id);
-        $data = (object)[
+        $data = (object) [
             "nik" => $id,
             "nama_lengkap" => $masyarakat->nama_lengkap,
             "jenis_kelamin" => $masyarakat->jenis_kelamin,
@@ -138,7 +141,7 @@ class AnggotaKeluargaController extends Controller
             "nama_ibu" => $masyarakat->nama_ibu,
             "hasKK" => isset($kk)
         ];
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "title" => "Ubah Anggota Keluarga",
             "method" => "PUT",
             "action_form" => route("anggota-keluarga.update", [$no_kk, $id]),
@@ -154,7 +157,7 @@ class AnggotaKeluargaController extends Controller
      */
     public function update($no_kk, Request $request, string $id)
     {
-        $result =  request()->validate([
+        $result = request()->validate([
             'nik' => "required|string|min:16|max:16|unique:masyarakat,nik," . $id . ",nik",
             'nama_lengkap' => 'required|string|max:50',
             'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',

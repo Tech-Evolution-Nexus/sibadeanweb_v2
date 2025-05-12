@@ -26,6 +26,9 @@ Route::get('/test-email', function () {
 });
 
 Route::post('/ajukan-surat', [PengajuanControllerApi::class, 'store']);
+Route::get('/profile', [ProfileControllerApi::class, 'profile']);
+Route::post('/updategambarkk', [ProfileControllerApi::class, 'updatekkgambar']);
+Route::post('/updategambarktp', [ProfileControllerApi::class, 'updatektpgambar']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/verifikasi', [AuthController::class, 'verifikasi']);

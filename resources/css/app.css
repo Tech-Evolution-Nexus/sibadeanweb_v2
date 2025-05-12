@@ -28,7 +28,7 @@ section{
     @apply md:py-20 py-10;
 }
 .card{
-    @apply bg-white p-4 rounded-md;
+    @apply bg-white p-4 rounded-md border;
 }
 .container{
     @apply max-w-7xl mx-auto w-full px-4;
