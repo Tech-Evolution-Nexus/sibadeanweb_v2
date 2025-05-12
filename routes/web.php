@@ -21,8 +21,10 @@ use App\Http\Controllers\SuraKeluarController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\TentangController;
 use App\Http\Controllers\UserController;
+use App\Imports\MasyarakatImport;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 Route::get('/', [LandingController::class, "home"]);
@@ -51,7 +53,7 @@ Route::get('/c/private-image', function () {
     // Jika file tidak ditemukan, kembalikan error 404
     abort(404);
 });
-Route::post("testimoni/store", function () {})->name("testimoni.store");
+Route::post("testimoni/store", function () { })->name("testimoni.store");
 
 
 Route::prefix("/c/admin")->middleware("auth")->group(function () {
@@ -67,6 +69,18 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get("/pengajuan-surat/{id}", [PengajuanSuratController::class, "show"])->name("pengajuan-surat.show");
     Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class, "updateStatus"])->name("pengajuan-surat.update");
     Route::get("/pengajuan-surat/{id}/download", [PengajuanSuratController::class, "download"])->name("pengajuan-surat.download");
+
+    Route::post("/masyarakat/import", function () {
+        try {
+            request()->validate([
+                'importFile' => 'required|file|mimes:xls,xlsx'
+            ]);
+            Excel::import(new MasyarakatImport, request()->file('importFile'));
+            return back()->with('success', 'Import berhasil.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal mengimpor: ' . $e->getMessage());
+        }
+    })->name("import.masyarakat");
     // Route::get("/pengajuan-surat-rt", [PengajuanSuratRtController::class, "index"])->name("pengajuan-surat-rt.index");
     // Route::get("/pengajuan-surat-selesai", [PengajuanSuratSelesai::class, "index"])->name("pengajuan-surat-selesai.index");
     // Route::get("/pengajuan-surat-selesai/{id}", [PengajuanSuratSelesai::class, "show"])->name("pengajuan-surat-selesai.show");

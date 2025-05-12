@@ -9,16 +9,16 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $suratTertunda = PengajuanSuratModel::where("status","di_terima_rw")->count();
-        $suratMasuk = PengajuanSuratModel::where("status","selesai")->orWhere("status","di_terima_rw")->count();
+        $suratTertunda = PengajuanSuratModel::where("status", "di_terima_rw")->count();
+        $suratMasuk = PengajuanSuratModel::where("status", "di_terima_rw")->count();
         $suratKeluar = SuratKeluarModel::count();
 
         $params = [
-            "suratTertunda"=>$suratTertunda,
-            "suratKeluar"=>$suratKeluar,
-            "suratMasuk"=>$suratMasuk,
+            "suratTertunda" => $suratTertunda,
+            "suratKeluar" => $suratKeluar,
+            "suratMasuk" => $suratMasuk,
         ];
 
-        return view("dashboard",$params);
+        return view("dashboard", $params);
     }
 }
