@@ -32,6 +32,8 @@ return new class extends Migration
             $table->string("no_kitap", 11)->nullable();
             $table->string("nama_ayah", 50)->nullable();
             $table->string("nama_ibu", 50)->nullable();
+            $table->string("ktp_gambar")->nullable();
+
             $table->timestamps();
         });
     }
