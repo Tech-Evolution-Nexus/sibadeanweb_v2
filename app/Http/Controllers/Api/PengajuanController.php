@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PengajuanResource;
 use App\Models\LampiranSuratModel;
 use App\Models\PengajuanSuratModel;
 use App\Models\SuratModel;
@@ -20,11 +21,7 @@ class PengajuanController extends Controller
             ->where("status", "pending")
             ->orderBy("id", "desc")
             ->get()
-            ->map(function ($item) {
-                // Format the created_at date
-                $item->created_at = Carbon::parse($item->created_at)->format('d-m-Y'); // Modify the format as needed
-                return $item;
-            });
+        ;
 
         $pengajuanProses = PengajuanSuratModel::where("nik", $idMasyarakat)
             ->with(["masyarakat", "surat", "lampiran"])
@@ -51,22 +48,22 @@ class PengajuanController extends Controller
             ->get();
         return ResponseHelper::success(
             [
-                "pengajuanMenunggu" => $pengajuan,
-                "pengajuanProses" => $pengajuanProses,
-                "pengajuanSelesai" => $pengajuanSelesai,
-                "pengajuanTolak" => $pengajuanTolak,
-                "pengajuanBatal" => $pengajuanBatal,
+                "pengajuanMenunggu" => PengajuanResource::collection($pengajuan),
+                "pengajuanProses" => PengajuanResource::collection($pengajuanProses),
+                "pengajuanSelesai" => PengajuanResource::collection($pengajuanSelesai),
+                "pengajuanTolak" => PengajuanResource::collection($pengajuanTolak),
+                "pengajuanBatal" => PengajuanResource::collection($pengajuanBatal),
             ]
         );
     }
     public function getRiwayatDetail($idPengajuan)
     {
-        $pengajuan = PengajuanSuratModel::where("id", $idPengajuan)
-            ->with(["masyarakat", "surat", "lampiran"])
-            // ->where("status", "pending")
+        $pengajuanRaw = PengajuanSuratModel::where("id", $idPengajuan)
+            ->with(["masyarakat", "surat", "lampiran", "fieldValues"])
             ->orderBy("id", "desc")
             ->first();
 
+        $pengajuan = new PengajuanResource($pengajuanRaw);
 
         return ResponseHelper::success(
             $pengajuan,

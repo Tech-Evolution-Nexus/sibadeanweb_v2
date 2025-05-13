@@ -15,11 +15,20 @@ class PengajuanResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'       => $this->id,
-            'judul' => $this->judul,
-            'keterangan'    => $this->keterangan,
-            'konten'     => $this->konten,
-            'gambar'     =>     $this->gambar,
+            "id" => $this->id,
+            "nik" => $this->nik,
+            "id_surat" => $this->id_surat,
+            "keterangan" => $this->keterangan,
+            "keterangan_ditolak" => $this->keterangan_ditolak,
+            "status" => $this->status,
+            "nomor_surat" => $this->nomor_surat,
+            "pengantar_rt" => $this->pengantar_rt,
+            "created_at" => $this->created_at,
+            "masyarakat" => $this->masyarakat,
+            "surat" => $this->surat,
+            "lampiran" => LampiranResource::collection($this->lampiran),
+            "fieldValues" => FieldValuesResource::collection($this->fieldValues),
+
         ];
     }
 }
