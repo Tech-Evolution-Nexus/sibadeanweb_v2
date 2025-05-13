@@ -6,6 +6,7 @@ use App\Http\Controllers\API\DashboardControllerApi;
 use App\Http\Controllers\Api\KartuKeluargaController;
 use App\Http\Controllers\Api\PengajuanController;
 use App\Http\Controllers\API\PengajuanControllerApi;
+use App\Http\Controllers\Api\PengajuanMasyarakatController;
 use App\Http\Controllers\API\SuratControllerApi;
 use App\Http\Controllers\API\ProfileControllerApi;
 use Illuminate\Support\Facades\Route;
@@ -24,34 +25,32 @@ Route::get('/test-email', function () {
         return 'Gagal mengirim email: ' . $e->getMessage();
     }
 });
-
-Route::post('/ajukan-surat', [PengajuanControllerApi::class, 'store']);
-Route::get('/profile', [ProfileControllerApi::class, 'profile']);
-Route::post('/updategambarkk', [ProfileControllerApi::class, 'updatekkgambar']);
-Route::post('/updategambarktp', [ProfileControllerApi::class, 'updatektpgambar']);
-
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/verifikasi', [AuthController::class, 'verifikasi']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/aktivasi', [AuthController::class, 'activateAccount']);
-// Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUserData']);
-Route::get('/riwayat-pengajuan/{idMasyarakat}', [PengajuanController::class, 'getRiwayat']);
-Route::get('/riwayat-pengajuan-detail/{idPengajuan}', [PengajuanController::class, 'getRiwayatDetail']);
-Route::get('/riwayat-pengajuan-masyarakat/{idMasyarakat}', [PengajuanMasyarakatController::class, 'getRiwayat']);
-
-Route::get('/riwayat-pengajuan/{idPengajuan}/download', [PengajuanController::class, 'download']);
-Route::get('/anggota-keluarga/{nokk}', [KartuKeluargaController::class, 'getAnggotaKeluarga']);
-Route::get('/user', [AuthController::class, 'getUserData']);
-Route::get('/dash', [DashboardControllerApi::class, 'index']);
-Route::get('/surat', [SuratControllerApi::class, 'index']);
-Route::get('/surat/{id}', [SuratControllerApi::class, 'detail']);
-Route::apiResource('/berita', BeritaControllerApi::class)->only('index', 'show');
-
-Route::get('/detail-pengajuan/{id}', [PengajuanController::class, 'getDetailPengajuan']);
-
-Route::get('/ubhemail', [ProfileControllerApi::class, 'ubhEmail']);
-Route::post('/ubhPass', [ProfileControllerApi::class, 'ubhPass']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/ajukan-surat', [PengajuanControllerApi::class, 'store']);
+    Route::get('/profile', [ProfileControllerApi::class, 'profile']);
+    Route::post('/updategambarkk', [ProfileControllerApi::class, 'updatekkgambar']);
+    Route::post('/updategambarktp', [ProfileControllerApi::class, 'updatektpgambar']);
+
+    // Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUserData']);
+    Route::get('/riwayat-pengajuan', [PengajuanController::class, 'getRiwayat']);
+    Route::get('/riwayat-pengajuan-detail/{idPengajuan}', [PengajuanController::class, 'getRiwayatDetail']);
+    Route::get('/riwayat-pengajuan-masyarakat', [PengajuanMasyarakatController::class, 'getRiwayat']);
+    Route::get('/riwayat-pengajuan/{idPengajuan}/download', [PengajuanController::class, 'download']);
+    Route::get('/anggota-keluarga/{nokk}', [KartuKeluargaController::class, 'getAnggotaKeluarga']);
+    Route::get('/user', [AuthController::class, 'getUserData']);
+    Route::get('/dash', [DashboardControllerApi::class, 'index']);
+    Route::get('/surat', [SuratControllerApi::class, 'index']);
+    Route::get('/surat/{id}', [SuratControllerApi::class, 'detail']);
+    Route::apiResource('/berita', BeritaControllerApi::class)->only('index', 'show');
+
+    Route::get('/detail-pengajuan/{id}', [PengajuanController::class, 'getDetailPengajuan']);
+
+    Route::get('/ubhemail', [ProfileControllerApi::class, 'ubhEmail']);
+    Route::post('/ubhPass', [ProfileControllerApi::class, 'ubhPass']);
 });

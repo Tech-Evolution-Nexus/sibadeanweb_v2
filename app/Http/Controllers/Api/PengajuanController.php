@@ -16,6 +16,7 @@ class PengajuanController extends Controller
 {
     public function getRiwayat($idMasyarakat)
     {
+        $idMasyarakat = auth()->user()->masyarakat->nik;
         $pengajuan = PengajuanSuratModel::where("nik", $idMasyarakat)
             ->with(["masyarakat", "surat", "lampiran"])
             ->where("status", "pending")

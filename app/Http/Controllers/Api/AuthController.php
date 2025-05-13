@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use Auth;
 use Illuminate\Http\Request;
 use App\Models\MasyarakatModel;
 use App\Models\KartuKeluargaModel;
@@ -68,7 +69,7 @@ class AuthController extends Controller
 
         // Membuat token akses baru
         $token = $user->createToken('auth_token')->plainTextToken;
-
+        Auth::login($user);
         // Kembalikan response dengan data user (tanpa password) dan token
         return ResponseHelper::success([
             'user' => [

@@ -16,8 +16,9 @@ use ResponseHelper;
 
 class PengajuanMasyarakatController extends Controller
 {
-    public function getRiwayat($idMasyarakat)
+    public function getRiwayat()
     {
+        $idMasyarakat = auth()->user()->masyarakat->nik;
         $user = MasyarakatModel::whereHas("user", function ($qr) {
             $qr->whereIn("role", ["rt", "rw"]);
         })->where("nik", $idMasyarakat)->first();
