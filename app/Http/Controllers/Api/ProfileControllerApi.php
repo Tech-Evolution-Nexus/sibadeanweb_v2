@@ -164,6 +164,12 @@ class ProfileControllerApi extends Controller
         ]);
 
         $data = MasyarakatModel::where('nik', $request->nik)->with('kartuKeluarga', 'user')->firstOrFail();
+        if ($data->ktp_gambar) {
+            $data->ktp_gambar = url('storage/ktp/' . $data->ktp_gambar);
+        }
+        if ($data->kartuKeluarga->kk_gambar) {
+            $data->kartuKeluarga->kk_gambar = url('storage/kk/' . $data->kartuKeluarga->kk_gambar);
+        }
         return ResponseHelper::success(
             $data,
             'Detail berita berhasil diambil'

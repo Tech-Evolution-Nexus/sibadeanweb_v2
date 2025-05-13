@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BeritaControllerApi;
 use App\Http\Controllers\API\DashboardControllerApi;
+use App\Http\Controllers\API\ImageControllerApi;
 use App\Http\Controllers\Api\KartuKeluargaController;
 use App\Http\Controllers\Api\PengajuanController;
 use App\Http\Controllers\API\PengajuanControllerApi;
@@ -29,6 +30,7 @@ Route::post('/ajukan-surat', [PengajuanControllerApi::class, 'store']);
 Route::get('/profile', [ProfileControllerApi::class, 'profile']);
 Route::post('/updategambarkk', [ProfileControllerApi::class, 'updatekkgambar']);
 Route::post('/updategambarktp', [ProfileControllerApi::class, 'updatektpgambar']);
+Route::get('/getimage/{filename}', [ImageControllerApi::class, 'getImage']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/verifikasi', [AuthController::class, 'verifikasi']);
