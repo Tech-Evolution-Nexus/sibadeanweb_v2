@@ -30,17 +30,14 @@ class ProfileControllerApi extends Controller
                 'email.email' => 'Format E-Mail tidak valid.',
             ]);
 
-            return response()->json([
-                'message' => 'Berhasil ubah E-mail!',
-                'data' => [null],
-            ], 200);
+            return ResponseHelper::success([
+                'nik_gambar' => null,
+            ], 'Detail berita berhasil diambil');
         } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Validasi gagal.',
-                'errors' => $e->errors()
-            ], 422);
+            return ResponseHelper::error('Berita tidak ditemukan', 404);
         }
     }
+
     public function ubhNoHp(Request $request)
     {
         $validatedData = $request->validate([
@@ -58,7 +55,7 @@ class ProfileControllerApi extends Controller
 
         return response()->json([
             'message' => 'Berhasil ubah Nomor HP!',
-            'data' => [null],
+            'data' => $data = [null],
         ], 200);
     }
 
