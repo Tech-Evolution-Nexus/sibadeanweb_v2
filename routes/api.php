@@ -6,6 +6,7 @@ use App\Http\Controllers\API\DashboardControllerApi;
 use App\Http\Controllers\Api\KartuKeluargaController;
 use App\Http\Controllers\Api\PengajuanController;
 use App\Http\Controllers\API\PengajuanControllerApi;
+use App\Http\Controllers\Api\PengajuanMasyarakatController;
 use App\Http\Controllers\API\SuratControllerApi;
 use App\Http\Controllers\API\ProfileControllerApi;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,10 @@ Route::get('/detail-pengajuan/{id}', [PengajuanController::class, 'getDetailPeng
 
 Route::post('/ubhEmail', [ProfileControllerApi::class, 'ubhEmail']);
 Route::post('/chgPass', [ProfileControllerApi::class, 'ubhPass']);
+
+
+Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

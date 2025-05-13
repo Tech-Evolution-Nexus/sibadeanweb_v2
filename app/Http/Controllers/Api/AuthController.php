@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\API;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MasyarakatModel;
@@ -11,6 +10,10 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use ResponseHelper;
+use Illuminate\Auth\Events\PasswordReset; 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Password;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
@@ -224,10 +227,72 @@ class AuthController extends Controller
             'user' => $user,
         ], 200);
     }
+
+    
     public function logout(Request $request)
     {
         // Hapus token dari user yang sedang login
         $request->user()->currentAccessToken()->delete();
         return ResponseHelper::success(null, 'Berhasil logout', 200);
     }
+
+   
+
+public function forgotPassword(Request $request)
+{
+    // Validasi email yang dimasukkan
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+    ]);
+
+    if ($validator->fails()) {
+        return ResponseHelper::error($validator->errors()->first(), 422);
+    }
+
+    // Mengirimkan link reset password ke email pengguna
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    // Menangani jika email tidak ditemukan
+    if ($status == Password::RESET_LINK_SENT) {
+        return ResponseHelper::success(null, 'Link reset password telah dikirim ke email Anda', 200);
+    } else {
+        return ResponseHelper::error('Terjadi kesalahan, email tidak ditemukan', 404);
+    }
+}
+
+
+public function resetPassword(Request $request)
+{
+    // Validasi input
+    $validator = Validator::make($request->all(), [
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|min:6|confirmed',
+    ]);
+
+    if ($validator->fails()) {
+        return ResponseHelper::error($validator->errors()->first(), 422);
+    }
+
+    // Proses reset password
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user) use ($request) {
+            $user->forceFill([
+                'password' => Hash::make($request->password),
+            ])->save();
+        }
+    );
+
+    if ($status == Password::PASSWORD_RESET) {
+        return ResponseHelper::success(null, 'Password berhasil diubah', 200);
+    } else {
+        return ResponseHelper::error('Terjadi kesalahan saat reset password', 500);
+    }
+}
+
+
+
 }
