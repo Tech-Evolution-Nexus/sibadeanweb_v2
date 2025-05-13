@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BeritaControllerApi;
 use App\Http\Controllers\API\DashboardControllerApi;
+use App\Http\Controllers\API\ImageControllerApi;
 use App\Http\Controllers\Api\KartuKeluargaController;
 use App\Http\Controllers\Api\PengajuanController;
 use App\Http\Controllers\API\PengajuanControllerApi;
@@ -29,6 +30,7 @@ Route::post('/ajukan-surat', [PengajuanControllerApi::class, 'store']);
 Route::get('/profile', [ProfileControllerApi::class, 'profile']);
 Route::post('/updategambarkk', [ProfileControllerApi::class, 'updatekkgambar']);
 Route::post('/updategambarktp', [ProfileControllerApi::class, 'updatektpgambar']);
+Route::get('/getimage/{filename}', [ImageControllerApi::class, 'getImage']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/verifikasi', [AuthController::class, 'verifikasi']);
@@ -49,8 +51,9 @@ Route::apiResource('/berita', BeritaControllerApi::class)->only('index', 'show')
 
 Route::get('/detail-pengajuan/{id}', [PengajuanController::class, 'getDetailPengajuan']);
 
-Route::post('/ubhEmail', [ProfileControllerApi::class, 'ubhEmail']);
+Route::post('/chgEmail', [ProfileControllerApi::class, 'ubhEmail']);
 Route::post('/chgPass', [ProfileControllerApi::class, 'ubhPass']);
+Route::post('/chgNoHp', [ProfileControllerApi::class, 'ubhNoHp']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
