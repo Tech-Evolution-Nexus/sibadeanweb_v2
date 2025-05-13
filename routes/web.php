@@ -63,7 +63,7 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get("/pengajuan-surat/{id}", [PengajuanSuratController::class, "show"])->name("pengajuan-surat.show");
     Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class, "updateStatus"])->name("pengajuan-surat.update");
     Route::get("/pengajuan-surat/{id}/download", [PengajuanSuratController::class, "download"])->name("pengajuan-surat.download");
-
+    // Route::get("/pengajuan-surat/{id}/download", [PengajuanSuratController::class, "download"])->name("pengajuan-surat.download");
     Route::post("/masyarakat/import", function () {
         try {
             request()->validate([

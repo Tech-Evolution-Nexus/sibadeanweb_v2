@@ -1,4 +1,4 @@
-<x-app-layout :title="$data->title">
+t<x-app-layout :title="$data->title">
 
     <div class="md:px-12 px-6 md:py-10 py-5">
         <div class="mb-10">
