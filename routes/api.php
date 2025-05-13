@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\BeritaControllerApi;
 use App\Http\Controllers\API\DashboardControllerApi;
+use App\Http\Controllers\API\ImageControllerApi;
 use App\Http\Controllers\Api\KartuKeluargaController;
 use App\Http\Controllers\Api\PengajuanController;
 use App\Http\Controllers\API\PengajuanControllerApi;
