@@ -13,7 +13,7 @@ class PengajuanSuratModel extends Model
     protected function nik(): Attribute
     {
         return Attribute::make(
-            get: fn(string $value) => (string)$value,
+            get: fn(string $value) => (string) $value,
         );
     }
 
@@ -28,6 +28,10 @@ class PengajuanSuratModel extends Model
 
     public function lampiran()
     {
-        return $this->belongsToMany(LampiranModel::class, "lampiran_pengajuan","id_pengajuan","id");
+        return $this->belongsToMany(LampiranModel::class, "lampiran_pengajuan", "id_pengajuan", "id")->withPivot("gambar");
+    }
+    public function fieldValues()
+    {
+        return $this->hasMany(FieldValue::class, 'id_pengajuan');
     }
 }

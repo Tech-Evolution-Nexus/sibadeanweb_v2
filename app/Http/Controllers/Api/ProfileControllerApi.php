@@ -9,6 +9,7 @@ use App\Models\KartuKeluargaModel;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use ResponseHelper;
@@ -87,7 +88,82 @@ class ProfileControllerApi extends Controller
             'data' => $data = [null],
         ], 200);
     }
+    public function updatektpgambar(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|image|mimes:jpg,jpeg,png',
+            'nik' => 'required',
+
+        ]);
 
 
+        $data = MasyarakatModel::where('nik', $request->nik)->firstOrFail();
 
+        // Validasi
+
+        // Cek apakah ada gambar yang di-upload
+        if ($request->hasFile('file')) {
+            // Hapus gambar lama jika ada
+            if ($data->ktp_gambar && Storage::exists('ktp/' . $data->ktp_gambar)) {
+                Storage::delete('ktp/' . $data->ktp_gambar);
+            }
+
+            // Simpan gambar baru
+            $imageName = time() . '.' . $request->file->extension();
+            $request->file->storeAs('ktp', $imageName);
+
+            // Update nama gambar di database
+            $data->ktp_gambar = $imageName;
+        }
+
+        $data->save();
+        return ResponseHelper::success([
+            'nik_gambar' => null,
+        ], 'Detail berita berhasil diambil');
+    }
+    public function updatekkgambar(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|image|mimes:jpg,jpeg,png',
+            'no_kk' => 'required',
+        ]);
+        $data = KartuKeluargaModel::where('no_kk', $request->no_kk)->firstOrFail();
+
+
+        // Validasi
+
+
+        // Cek apakah ada gambar yang di-upload
+        if ($request->hasFile('file')) {
+            // Hapus gambar lama jika ada
+            if ($data->kk_gambar && Storage::exists('kk/' . $data->kk_gambar)) {
+                Storage::delete('kk/' . $data->kk_gambar);
+            }
+
+            // Simpan gambar baru
+            $imageName = time() . '.' . $request->file->extension();
+            $request->file->storeAs('kk', $imageName);
+
+            // Update nama gambar di database
+            $data->kk_gambar = $imageName;
+        }
+
+
+        $data->save();
+        return ResponseHelper::success([
+            'nik_gambar' => null,
+        ], 'Detail berita berhasil diambil');
+    }
+    public function profile(Request $request)
+    {
+        $request->validate([
+            'nik' => 'required',
+        ]);
+
+        $data = MasyarakatModel::where('nik', $request->nik)->with('kartuKeluarga', 'user')->firstOrFail();
+        return ResponseHelper::success(
+            $data,
+            'Detail berita berhasil diambil'
+        );
+    }
 }
