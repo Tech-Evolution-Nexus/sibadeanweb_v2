@@ -32,21 +32,14 @@ Route::get('/berita', [LandingController::class, "berita"]);
 Route::get('/berita/{slug}', [LandingController::class, "detailBerita"]);
 Route::get('/c/private-image', function () {
     $pathToFile = Storage::disk('private')->path(request()->path);
-
-    // Cek apakah file ada
     if (file_exists($pathToFile)) {
-        // Ambil ekstensi file
         $fileExtension = pathinfo($pathToFile, PATHINFO_EXTENSION);
-
-        // Jika file ekstensi .pdf, gunakan Content-Type untuk PDF
         if ($fileExtension === 'pdf') {
             return response()->file($pathToFile, [
                 'Content-Type' => 'application/pdf',
                 'Content-Disposition' => 'inline; filename="Pratinjau Surat Keluar"',
             ]);
         }
-
-        // Jika bukan PDF, Anda bisa menambahkan jenis file lainnya jika perlu
         return response()->file($pathToFile);
     }
 
@@ -81,12 +74,7 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
             return back()->with('error', 'Gagal mengimpor: ' . $e->getMessage());
         }
     })->name("import.masyarakat");
-    // Route::get("/pengajuan-surat-rt", [PengajuanSuratRtController::class, "index"])->name("pengajuan-surat-rt.index");
-    // Route::get("/pengajuan-surat-selesai", [PengajuanSuratSelesai::class, "index"])->name("pengajuan-surat-selesai.index");
-    // Route::get("/pengajuan-surat-selesai/{id}", [PengajuanSuratSelesai::class, "show"])->name("pengajuan-surat-selesai.show");
 
-
-    // Route::get("/surat-keluar", [SuraKeluarController::class, "index"])->name("surat-keluar.index");
     Route::get('/surat-keluar/download/{filename}', [SuraKeluarController::class, 'download'])->name('surat-keluar.download');
 
     Route::get("/format-surat", [FormatSuratController::class, "index"])->name("format-surat.index");
