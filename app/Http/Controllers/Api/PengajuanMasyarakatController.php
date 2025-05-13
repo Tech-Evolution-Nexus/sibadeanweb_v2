@@ -12,6 +12,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Helpers;
+use Illuminate\Support\Facades\Validator;
 use ResponseHelper;
 
 class PengajuanMasyarakatController extends Controller
@@ -76,6 +77,47 @@ class PengajuanMasyarakatController extends Controller
 
         return ResponseHelper::success(
             $pengajuan,
+        );
+    }
+
+
+    public function updateStatus($idPengajuan)
+    {
+        $validated = Validator::make(request()->all(), [
+            "status" => "required|in:ditolak,disetujui"
+        ]);
+
+        if ($validated->fails()) {
+            return ResponseHelper::error(
+                ["message" => "Status Pengajuan berhasil diupdate", "error" => $validated->errors()]
+            );
+        }
+        $userAprove = auth()->user();
+        $role = $userAprove->role;
+        $statusPengajuan = request()->status;
+
+        $pengajuan = PengajuanSuratModel::find($idPengajuan);
+
+        $status = "";
+        if ($role == "rw") {
+            $status = match ($statusPengajuan) {
+                "ditolak" => "di_tolak_rw",
+                "disetujui" => "di_terima_rw",
+            };
+        } else if ($role == "rt") {
+            $status = match ($statusPengajuan) {
+                "ditolak" => "di_tolak_rt",
+                "disetujui" => "di_terima_rt",
+            };
+        }
+
+        $pengajuan->update([
+            "status" => $status,
+            "keterangan_di_tolak" => request()->keterangan,
+        ]);
+
+        return ResponseHelper::success(
+            ["message" => "Status Pengajuan berhasil diupdate"]
         );
     }
 }
