@@ -1,15 +1,15 @@
 <?php
 
-use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\BeritaControllerApi;
-use App\Http\Controllers\API\DashboardControllerApi;
-use App\Http\Controllers\API\ImageControllerApi;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BeritaControllerApi;
+use App\Http\Controllers\Api\DashboardControllerApi;
+use App\Http\Controllers\Api\ImageControllerApi;
 use App\Http\Controllers\Api\KartuKeluargaController;
 use App\Http\Controllers\Api\PengajuanController;
-use App\Http\Controllers\API\PengajuanControllerApi;
+use App\Http\Controllers\Api\PengajuanControllerApi;
 use App\Http\Controllers\Api\PengajuanMasyarakatController;
-use App\Http\Controllers\API\SuratControllerApi;
-use App\Http\Controllers\API\ProfileControllerApi;
+use App\Http\Controllers\Api\SuratControllerApi;
+use App\Http\Controllers\Api\ProfileControllerApi;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\Mail;

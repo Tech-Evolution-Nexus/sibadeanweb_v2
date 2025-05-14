@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BeritaResource;
@@ -38,53 +38,53 @@ class SuratControllerApi extends Controller
     }
 
     public function masukRt(Request $request)
-{
-    $user = $request->user(); // RT yang login
+    {
+        $user = $request->user(); // RT yang login
 
-    // Validasi: hanya RT boleh akses
-    if (!$user || $user->role !== 'rt') {
-        return ResponseHelper::error('Akses ditolak', 403);
+        // Validasi: hanya RT boleh akses
+        if (!$user || $user->role !== 'rt') {
+            return ResponseHelper::error('Akses ditolak', 403);
+        }
+
+        // Ambil surat yang diajukan ke RT tersebut dan masih pending
+        $surats = SuratModel::with('user')
+            ->where('rt_id', $user->id)
+            ->where('status', 'pending')
+            ->latest()
+            ->get();
+
+        return ResponseHelper::success([
+            'surat' => SuratResource::collection($surats)
+        ], 'Surat masuk berhasil diambil');
     }
 
-    // Ambil surat yang diajukan ke RT tersebut dan masih pending
-    $surats = SuratModel::with('user')
-        ->where('rt_id', $user->id)
-        ->where('status', 'pending')
-        ->latest()
-        ->get();
+    public function acc($id, Request $request)
+    {
+        $surat = SuratModel::findOrFail($id);
 
-    return ResponseHelper::success([
-        'surat' => SuratResource::collection($surats)
-    ], 'Surat masuk berhasil diambil');
-}
+        // Pastikan RT yang sesuai
+        if ($request->user()->id !== $surat->rt_id) {
+            return ResponseHelper::error('Akses ditolak', 403);
+        }
 
-public function acc($id, Request $request)
-{
-    $surat = SuratModel::findOrFail($id);
+        $surat->status = 'disetujui';
+        $surat->save();
 
-    // Pastikan RT yang sesuai
-    if ($request->user()->id !== $surat->rt_id) {
-        return ResponseHelper::error('Akses ditolak', 403);
+        return ResponseHelper::success([], 'Surat berhasil disetujui');
     }
 
-    $surat->status = 'disetujui';
-    $surat->save();
+    public function tolak($id, Request $request)
+    {
+        $surat = SuratModel::findOrFail($id);
 
-    return ResponseHelper::success([], 'Surat berhasil disetujui');
-}
+        if ($request->user()->id !== $surat->rt_id) {
+            return ResponseHelper::error('Akses ditolak', 403);
+        }
 
-public function tolak($id, Request $request)
-{
-    $surat = SuratModel::findOrFail($id);
+        $surat->status = 'ditolak';
+        $surat->save();
 
-    if ($request->user()->id !== $surat->rt_id) {
-        return ResponseHelper::error('Akses ditolak', 403);
+        return ResponseHelper::success([], 'Surat berhasil ditolak');
     }
-
-    $surat->status = 'ditolak';
-    $surat->save();
-
-    return ResponseHelper::success([], 'Surat berhasil ditolak');
-}
 
 }
