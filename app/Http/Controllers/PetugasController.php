@@ -50,20 +50,24 @@ class PetugasController extends Controller
             "email" => "required|email|unique:users,email",
             "password" => "required|min:6",
             "role" => "required",
-            "status" => "required",
         ]);
+
+        // Check if a 'lurah' already exists
+        if ($validated['role'] == 'lurah' && User::where('role', 'lurah')->exists()) {
+            return back()->withErrors("Role 'lurah' sudah ada, tidak bisa menambah petugas baru dengan role tersebut.");
+        }
 
         DB::beginTransaction();
         try {
-            // Simpan ke tabel users
+            // Save to users table
             $user = User::create([
                 "email" => $validated["email"],
                 "password" => bcrypt($validated["password"]),
                 "role" => $validated["role"],
-                "status" => $validated["status"],
+                "status" => 1,
             ]);
 
-            // Simpan ke tabel petugas
+            // Save to petugas table
             Petugas::create([
                 "nip" => $validated["nip"],
                 "nama" => $validated["nama"],
@@ -78,6 +82,7 @@ class PetugasController extends Controller
             return back()->withErrors("Terjadi kesalahan: " . $e->getMessage());
         }
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -112,7 +117,7 @@ class PetugasController extends Controller
             "nip" => "required|numeric|digits:16",
             "nama" => "required|min:3|max:50",
             "email" => [
-                "sometimes",
+                "required",
                 "email",
                 Rule::unique('users', 'email')->ignore($petugas->id_user),
             ],
@@ -121,19 +126,32 @@ class PetugasController extends Controller
             "status" => "required",
         ]);
 
+        // Cegah lebih dari satu lurah
+        if (
+            $validated['role'] === 'lurah' &&
+            User::where('role', 'lurah')->where('id', '!=', $petugas->id_user)->exists()
+        ) {
+            return back()->withErrors("Role 'lurah' sudah ada. Tidak boleh ada lebih dari satu petugas dengan role tersebut.");
+        }
+
+        // Enkripsi password jika ada input
         if ($request->filled("password")) {
             $validated["password"] = bcrypt($request->password);
         } else {
-            // Don't include the password in the update if it's not filled
             unset($validated['password']);
         }
 
         DB::beginTransaction();
         try {
-            // Update user
-            $petugas->user->update($validated);
+            // Update tabel users
+            $petugas->user->update([
+                'email' => $validated['email'],
+                'password' => $validated['password'] ?? $petugas->user->password,
+                'role' => $validated['role'],
+                'status' => $validated['status'],
+            ]);
 
-            // Update petugas
+            // Update tabel petugas
             $petugas->update([
                 'nip' => $validated['nip'],
                 'nama' => $validated['nama'],
