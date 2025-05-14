@@ -26,20 +26,20 @@ class PengajuanMasyarakatController extends Controller
 
         $pengajuan = PengajuanSuratModel::where("nik", $idMasyarakat)
             ->with(["masyarakat", "surat", "lampiran"])
-            // ->when($user->user->role == "rw", function ($qr) use ($user) {
-            //     $qr->where("status", "di_terima_rt")
-            //         ->whereHas("masyarakat.kartuKeluarga", function ($qr2) use ($user) {
-            //             $qr2->where("rw", $user->kartuKeluarga->rw);
-            //         });
-            // })
-            // ->when($user->user->role == "rt", function ($qr) use ($user) {
-            //     $qr->where("status", "pending")
-            //         ->whereHas("masyarakat.kartuKeluarga", function ($qr2) use ($user) {
-            //             $qr2->where("rw", $user->kartuKeluarga->rw);
-            //             $qr2->where("rt", $user->kartuKeluarga->rt);
-            //         });
-            //     ;
-            // })
+            ->when($user->user->role == "rw", function ($qr) use ($user) {
+                $qr->where("status", "di_terima_rt")
+                    ->whereHas("masyarakat.kartuKeluarga", function ($qr2) use ($user) {
+                        $qr2->where("rw", $user->kartuKeluarga->rw);
+                    });
+            })
+            ->when($user->user->role == "rt", function ($qr) use ($user) {
+                $qr->where("status", "pending")
+                    ->whereHas("masyarakat.kartuKeluarga", function ($qr2) use ($user) {
+                        $qr2->where("rw", $user->kartuKeluarga->rw);
+                        $qr2->where("rt", $user->kartuKeluarga->rt);
+                    });
+                ;
+            })
             ->orderBy("id", "desc")
             ->get();
 
