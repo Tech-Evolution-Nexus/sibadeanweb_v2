@@ -24,8 +24,7 @@ class PengajuanMasyarakatController extends Controller
             $qr->whereIn("role", ["rt", "rw"]);
         })->where("nik", $idMasyarakat)->first();
 
-        $pengajuan = PengajuanSuratModel::where("nik", $idMasyarakat)
-            ->with(["masyarakat", "surat", "lampiran"])
+        $pengajuan = PengajuanSuratModel::with(["masyarakat", "surat", "lampiran"])
             ->when($user->user->role == "rw", function ($qr) use ($user) {
                 $qr->where("status", "di_terima_rt")
                     ->whereHas("masyarakat.kartuKeluarga", function ($qr2) use ($user) {
@@ -43,8 +42,7 @@ class PengajuanMasyarakatController extends Controller
             ->orderBy("id", "desc")
             ->get();
 
-        $pengajuanSelesai = PengajuanSuratModel::where("nik", $idMasyarakat)
-            ->with(["masyarakat", "surat", "lampiran"])
+        $pengajuanSelesai = PengajuanSuratModel::with(["masyarakat", "surat", "lampiran"])
             ->when($user->user->role == "rw", function ($qr) use ($user) {
                 $qr->whereIn("status", ["di_terima_rw", "di_tolak_rw", "selesai", "di_tolak_lurah"])
                     ->whereHas("masyarakat.kartuKeluarga", function ($qr2) use ($user) {
