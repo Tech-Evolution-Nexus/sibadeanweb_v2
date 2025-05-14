@@ -62,7 +62,6 @@ class PengajuanMasyarakatController extends Controller
             [
                 "pengajuanMenunggu" => PengajuanResource::collection($pengajuan),
                 "pengajuanSelesai" => PengajuanResource::collection($pengajuanSelesai),
-                "pengajuan" => $pengajuan
             ]
         );
     }
