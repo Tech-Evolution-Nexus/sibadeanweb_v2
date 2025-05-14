@@ -309,7 +309,7 @@ return ResponseHelper::success($masyarakat);
 }
 public function postVerifikasiMasyarakat ($idUser)
 {
-User::find($idUser)->update(['status'=>1]);
+User::find($idUser)->update(['status'=>request('status')]);
 return ResponseHelper::success([]);
 }
 
