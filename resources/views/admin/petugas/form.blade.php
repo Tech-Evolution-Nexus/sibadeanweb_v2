@@ -55,10 +55,13 @@
                     <x-input-label for="role" :value="__('Role')" />
                     <select name="role" id="role" class="block w-full mt-1 p-2 border border-gray-300 rounded-md">
                         <option value="">Pilih Role</option>
-                        <option value="admin" {{ old('role', $data->user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="petugas" {{ old('role', $data->user->role) == 'petugas' ? 'selected' : '' }}>Petugas
+                        <option value="admin" {{ old('role', $data->user->role) == 'admin' ? 'selected' : '' }}>Admin
                         </option>
-
+                        <option value="petugas" {{ old('role', $data->user->role) == 'petugas' ? 'selected' : '' }}>
+                            Petugas
+                        </option>
+                        <option value="lurah" {{ old('role', $data->user->role) == 'lurah' ? 'selected' : '' }}>lurah
+                        </option>
                     </select>
                     <x-input-error :messages="$errors->get('role')" class="mt-2 text-red-500 text-xs" />
                 </div>
