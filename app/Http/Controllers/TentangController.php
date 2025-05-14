@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 class TentangController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $tentang = Landing::first();
         return view('admin.tentang.tentang', ["value" => $tentang]);
         // dd($tentang);
@@ -144,11 +145,19 @@ class TentangController extends Controller
             ]);
 
 
-            FiturUtama::where("landing_id",$id)->delete();
+            FiturUtama::where("landing_id", $id)->delete();
 
+            $iconName1 = "";
+            if ($request->hasFile('img_fitur_1')) {
+                if ($tentang->img_fitur_1 && file_exists(public_path('assets/images/' . $tentang->img_fitur_1))) {
+                    unlink(public_path('assets/images/' . $tentang->img_fitur_1));
+                }
+                $iconName1 = uniqid() . '.' . $request->img_fitur_1->extension();
+                $request->file('img_fitur_1')->move(public_path('assets/images'), $iconName1);
+            }
             FiturUtama::create([
-                "title" =>request()->title_fitur_1,
-                "icon" => request()->img_fitur_1,
+                "title" => request()->title_fitur_1,
+                "icon" => $iconName1,
                 "description" => request()->desc_fitur_1,
                 "landing_id" => $id
 
