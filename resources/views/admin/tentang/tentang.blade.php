@@ -56,42 +56,18 @@
                         <label for="deskripsi_fitur" class="block text-sm font-medium text-gray-700">Deskripsi Fitur:</label>
                         <textarea id="deskripsi_fitur" name="deskripsi_fitur" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->deskripsi_fitur }}</textarea>
                     </div>
+                  @foreach ($value->fiturUtama as $fu)
                         <div class=" mb-2 mt-4">
-                        <label for="title_fitur_1" class="block text-sm font-medium text-gray-700">Judul Fitur 1:</label>
-                        <input type="text" value="{{ $value->title_fitur_1}}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="title_fitur_1" name="title_fitur_1">
-                        <x-file-upload :name="'img_fitur_1'" :label="'Gambar Fitur 1'"
-                        :defaultImage="$value->img_fitur_1 ? asset($value->img_fitur_1) : asset('assets/image/default-2.png')" />
-                        <x-input-error :messages="$errors->get('img_fitur_1')" class="mt-2 text-red-500 text-xs" />
-                        <label for="desc_fitur_1" class="block text-sm font-medium text-gray-700">Deskripsi Fitur 1:</label>
-                        <textarea id="desc_fitur_1" name="desc_fitur_1" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->desc_fitur_1 }}</textarea>
+                        <label for="title_fitur_{{ $loop->iteration }}" class="block text-sm font-medium text-gray-700">Judul Fitur {{ $loop->iteration }}:</label>
+                        <input type="text" value="{{ $fu->title}}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="title_fitur_1" name="title_fitur_1">
+                        <x-file-upload :name="'icon'" :label="'Gambar Fitur 1'"
+                        :defaultImage="$fu->icon ? asset($fu->icon) : asset('assets/image/default-2.png')" />
+                        <x-input-error :messages="$errors->get('img_fitur_'.$loop->iteration)" class="mt-2 text-red-500 text-xs" />
+                        <label for="desc_fitur_{{ $loop->iteration }}" class="block text-sm font-medium text-gray-700">Deskripsi Fitur {{ $loop->iteration }}:</label>
+                        <textarea id="desc_fitur_{{ $loop->iteration }}" name="desc_fitur_{{ $loop->iteration }}" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $fu->description }}</textarea>
                     </div>
-                    <div class=" mb-2 mt-4">
-                        <label for="title_fitur_2" class="block text-sm font-medium text-gray-700">Judul Fitur 2:</label>
-                        <input type="text" value="{{ $value->title_fitur_2}}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="title_fitur_2" name="title_fitur_2">
-                        <x-file-upload :name="'img_fitur_2'" :label="'Gambar Fitur 2'"
-                        :defaultImage="$value->img_fitur_2 ? asset($value->img_fitur_2) : asset('assets/image/default-2.png')" />
-                        <x-input-error :messages="$errors->get('img_fitur_2')" class="mt-2 text-red-500 text-xs" />
-                        <label for="desc_fitur_2" class="block text-sm font-medium text-gray-700">Deskripsi Fitur 2:</label>
-                        <textarea id="desc_fitur_2" name="desc_fitur_2" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->desc_fitur_2 }}</textarea>
-                    </div>
-                    <div class=" mb-2 mt-4">
-                        <label for="title_fitur_3" class="block text-sm font-medium text-gray-700">Judul Fitur 3:</label>
-                        <input type="text" value="{{ $value->title_fitur_3}}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="title_fitur_3" name="title_fitur_3">
-                        <x-file-upload :name="'img_fitur_3'" :label="'Gambar Fitur 3'"
-                        :defaultImage="$value->img_fitur_3 ? asset($value->img_fitur_3) : asset('assets/image/default-2.png')" />
-                        <x-input-error :messages="$errors->get('img_fitur_3')" class="mt-2 text-red-500 text-xs" />
-                        <label for="desc_fitur_3" class="block text-sm font-medium text-gray-700">Deskripsi Fitur 3:</label>
-                        <textarea id="desc_fitur_3" name="desc_fitur_3" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->desc_fitur_3 }}</textarea>
-                    </div>
-                    <div class=" mb-2 mt-4">
-                        <label for="title_fitur_4" class="block text-sm font-medium text-gray-700">Judul Fitur 4:</label>
-                        <input type="text" value="{{ $value->title_fitur_4}}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="title_fitur_4" name="title_fitur_4">
-                        <x-file-upload :name="'img_fitur_4'" :label="'Gambar Fitur 4'"
-                        :defaultImage="$value->img_fitur_4 ? asset($value->img_fitur_4) : asset('assets/image/default-2.png')" />
-                        <x-input-error :messages="$errors->get('img_fitur_4')" class="mt-2 text-red-500 text-xs" />
-                        <label for="desc_fitur_4" class="block text-sm font-medium text-gray-700">Deskripsi Fitur 4:</label>
-                        <textarea id="desc_fitur_4" name="desc_fitur_4" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->desc_fitur_4 }}</textarea>
-                    </div>
+                  @endforeach
+
                     {{-- <div>
                         <label for="link_download" class="block text-sm font-medium text-gray-700">Link Download Aplikasi:</label>
                         <input type="text" value="{{ $value->link_download }}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="link_download" name="link_download">

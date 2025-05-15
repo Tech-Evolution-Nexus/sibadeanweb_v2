@@ -163,7 +163,7 @@ class TentangController extends Controller
                 "description" => request()->desc_fitur_1,
                 "landing_id" => $id
 
-
+            ]);
             FiturUtama::create([
                 "title" => request()->title_fitur_2,
                 "icon" => request()->img_fitur_2,
