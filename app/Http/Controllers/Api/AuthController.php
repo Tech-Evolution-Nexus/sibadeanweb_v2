@@ -292,30 +292,30 @@ class AuthController extends Controller
         } else {
             return ResponseHelper::error('Terjadi kesalahan saat reset password', 500);
         }
-    
+
     }
 
-public function getVerifikasiMasyarakat ()
-{
-$kartuKeluarga = auth()->user()->masyarakat()->kartuKeluarga;
-$masyarakat=MasyarakatModel::whereHas('kartuKeluarga',function($query)use($kartuKeluarga){
-$query->where('rt',$kartuKeluarga->rt)->where('rw',$kartuKeluarga->rw);
+    public function getVerifikasiMasyarakat()
+    {
+        $kartuKeluarga = auth()->user()->masyarakat->kartuKeluarga;
+        $masyarakat = MasyarakatModel::whereHas('kartuKeluarga', function ($query) use ($kartuKeluarga) {
+            $query->where('rt', $kartuKeluarga->rt)->where('rw', $kartuKeluarga->rw);
 
 
-})->whereHas('user',function($query){
-    $query->where('status',0);
-})->get();
-return ResponseHelper::success($masyarakat);
-}
-public function postVerifikasiMasyarakat ($idUser)
-{
-User::find($idUser)->update(['status'=>request('status')]);
-return ResponseHelper::success([]);
-}
-public function verifikasiDetailMasyarakat ($idUser)
-{
-$masyarakat = MasyarakatModel::where("id_user",$idUser)->with(['user','kartuKeluarga'])->first();
-return ResponseHelper::success($masyarakat);
-}
+        })->whereHas('user', function ($query) {
+            $query->where('status', 0);
+        })->get();
+        return ResponseHelper::success($masyarakat);
+    }
+    public function postVerifikasiMasyarakat($idUser)
+    {
+        User::find($idUser)->update(['status' => request('status')]);
+        return ResponseHelper::success([]);
+    }
+    public function verifikasiDetailMasyarakat($idUser)
+    {
+        $masyarakat = MasyarakatModel::where("id_user", $idUser)->with(['user', 'kartuKeluarga'])->first();
+        return ResponseHelper::success($masyarakat);
+    }
 
 }
