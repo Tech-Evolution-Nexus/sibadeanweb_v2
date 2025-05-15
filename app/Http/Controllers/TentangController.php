@@ -62,10 +62,12 @@ class TentangController extends Controller
             'judul_tentang.string' => 'Judul Tentang harus berupa huruf dan angka',
             'judul_tentang.max' => 'Judul Tentang tidak boleh lebih dari 20 karakter',
             'deskripsi_tentang.max' => 'deskripsi_home tidak boleh lebih dari 150 karakter.',
-            'deskripsi_fitur.max' => 'Kecamatan tidak boleh lebih dari 150 karakter.',
             'judul_fitur.required' => 'Judul Fitur harus diisi',
             'judul_fitur.string' => 'Judul Fitur harus berupa huruf dan angka',
             'judul_fitur.max' => 'Judul Fitur tidak boleh lebih dari 20 karakter',
+            'deskripsi_fitur.required' => 'Deskripsi Fitur tidak boleh kosong',
+            'deskripsi_fitur.string' => 'Deskripsi Fitur harus berupa huruf dan angka',
+            'deskripsi_fitur.max' => 'Deskripsi Fitur tidak boleh lebih dari 150 karakter.',
             'title_fitur_1.required' => 'Title Fitur 1 harus diisi',
             'title_fitur_1.string' => 'Title Fitur 1 harus berupa huruf dan angka',
             'title_fitur_1.max' => 'Title Fitur 1 tidak boleh lebih dari 25 karakter',
@@ -161,7 +163,6 @@ class TentangController extends Controller
                 "description" => request()->desc_fitur_1,
                 "landing_id" => $id
 
-            ]);
 
             FiturUtama::create([
                 "title" => request()->title_fitur_2,
