@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\BeritaControllerApi;
-use App\Http\Controllers\API\DashboardControllerApi;
-use App\Http\Controllers\API\ImageControllerApi;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BeritaControllerApi;
+use App\Http\Controllers\Api\DashboardControllerApi;
+use App\Http\Controllers\Api\ImageControllerApi;
 use App\Http\Controllers\Api\KartuKeluargaController;
+use App\Http\Controllers\Api\Ocrtest;
 use App\Http\Controllers\Api\PengajuanController;
-use App\Http\Controllers\API\PengajuanControllerApi;
+use App\Http\Controllers\Api\PengajuanControllerApi;
 use App\Http\Controllers\Api\PengajuanMasyarakatController;
-use App\Http\Controllers\API\SuratControllerApi;
-use App\Http\Controllers\API\ProfileControllerApi;
+use App\Http\Controllers\Api\SuratControllerApi;
+use App\Http\Controllers\Api\ProfileControllerApi;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\Mail;
@@ -30,6 +31,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/verifikasi', [AuthController::class, 'verifikasi']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/aktivasi', [AuthController::class, 'activateAccount']);
+    Route::post('/updategambarkk', [ProfileControllerApi::class, 'updatekkgambar']);
+    Route::post('/updategambarktp', [ProfileControllerApi::class, 'updatektpgambar']);
 
 
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
@@ -41,7 +44,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileControllerApi::class, 'profile']);
     Route::post('/updategambarkk', [ProfileControllerApi::class, 'updatekkgambar']);
     Route::post('/updategambarktp', [ProfileControllerApi::class, 'updatektpgambar']);
-
+Route::get('/verifikasi',[AuthController::class,'getVerifikasiMasyarakat']);
+Route::post('/verifikasi/{idUser}',[AuthController::class,'postVerifikasiMasyarakat']);
+Route::get('/verifikasi/{idUser}',[AuthController::class,'verifikasiDetailMasyarakat']);
     // Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUserData']);
     Route::get('/riwayat-pengajuan', [PengajuanController::class, 'getRiwayat']);
     Route::get('/riwayat-pengajuan-detail/{idPengajuan}', [PengajuanController::class, 'getRiwayatDetail']);
@@ -60,3 +65,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/ubhemail', [ProfileControllerApi::class, 'ubhEmail']);
     Route::post('/ubhPass', [ProfileControllerApi::class, 'ubhPass']);
 });
+    Route::post('/ocr-api', [Ocrtest::class, 'ocrWithApi']);
+

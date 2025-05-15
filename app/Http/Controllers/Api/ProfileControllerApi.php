@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -121,22 +121,20 @@ class ProfileControllerApi extends Controller
 
 
         $data = MasyarakatModel::where('nik', $request->nik)->firstOrFail();
-
-        // Validasi
-
-        // Cek apakah ada gambar yang di-upload
-        if ($request->hasFile('file')) {
-            // Hapus gambar lama jika ada
-            if ($data->ktp_gambar && Storage::exists('ktp/' . $data->ktp_gambar)) {
-                Storage::delete('ktp/' . $data->ktp_gambar);
+        $oldImagePath = storage_path('app/private/ktp/' . $data->ktp_gambar);
+        // Jika ada file foto kartu keluarga baru
+        if (request()->hasFile('file')) {
+            // Menghapus gambar lama jika ada
+            if ($data->ktp_gambar) {
+                $oldImagePath = storage_path('app/private/ktp/' . $data->ktp_gambar);
+                if (file_exists($oldImagePath) && $data->ktp_gambar) {
+                    unlink($oldImagePath); // Menghapus file gambar lama
+                }
             }
-
-            // Simpan gambar baru
-            $imageName = time() . '.' . $request->file->extension();
-            $request->file->storeAs('ktp', $imageName);
-
-            // Update nama gambar di database
-            $data->ktp_gambar = $imageName;
+            $file = request()->file('file');
+            $randomName = 'ktp/' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('ktp', $randomName, ['disk' => 'private']);
+            $data->ktp_gambar = $randomName;
         }
 
         $data->save();
@@ -155,26 +153,24 @@ class ProfileControllerApi extends Controller
 
         // Validasi
 
-
-        // Cek apakah ada gambar yang di-upload
-        if ($request->hasFile('file')) {
-            // Hapus gambar lama jika ada
-            if ($data->kk_gambar && Storage::exists('kk/' . $data->kk_gambar)) {
-                Storage::delete('kk/' . $data->kk_gambar);
+        $oldImagePath = storage_path('app/private/kk/' . $data->kk_gambar);
+        // Jika ada file foto kartu keluarga baru
+        if (request()->hasFile('file')) {
+            // Menghapus gambar lama jika ada
+            if ($data->kk_gambar) {
+                $oldImagePath = storage_path('app/private/kk/' . $data->kk_gambar);
+                if (file_exists($oldImagePath) && $data->kk_gambar) {
+                    unlink($oldImagePath); // Menghapus file gambar lama
+                }
             }
-
-            // Simpan gambar baru
-            $imageName = time() . '.' . $request->file->extension();
-            $request->file->storeAs('kk', $imageName);
-
-            // Update nama gambar di database
-            $data->kk_gambar = $imageName;
+            $file = request()->file('file');
+            $randomName = 'kk/' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('kk', $randomName, ['disk' => 'private']);
+            $data->kk_gambar = $randomName;
         }
-
-
         $data->save();
         return ResponseHelper::success([
-            'nik_gambar' => null,
+            'kk' =>  $data,
         ], 'Detail berita berhasil diambil');
     }
     public function profile(Request $request)
@@ -185,11 +181,14 @@ class ProfileControllerApi extends Controller
 
         $data = MasyarakatModel::where('nik', $request->nik)->with('kartuKeluarga', 'user')->firstOrFail();
         if ($data->ktp_gambar) {
-            $data->ktp_gambar = url('storage/ktp/' . $data->ktp_gambar);
+
+            $data->ktp_gambar = url("/c/private-image?path=$data->ktp_gambar") ?? $data->ktp_gambar;
         }
         if ($data->kartuKeluarga->kk_gambar) {
-            $data->kartuKeluarga->kk_gambar = url('storage/kk/' . $data->kartuKeluarga->kk_gambar);
+            $data->kartuKeluarga->kk_gambar = url("/c/private-image?path=" . $data->kartuKeluarga->kk_gambar) ?? $data->kartuKeluarga->kk_gambar;
+            // $data->kartuKeluarga->kk_gambar = url('storage/kk/' . $data->kartuKeluarga->kk_gambar);
         }
+
         return ResponseHelper::success(
             $data,
             'Detail berita berhasil diambil'

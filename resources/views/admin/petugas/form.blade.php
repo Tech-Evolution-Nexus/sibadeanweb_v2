@@ -11,7 +11,9 @@
 
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
-
+        @if ($errors->any())
+        <x-alert-status :status="'error'" :message="$errors->first('errorvalidasi')" class="mb-4" />
+        @endif
         <form action="{{ $action_form }}" method="POST" class="card">
             @csrf
             @method($method)
@@ -49,21 +51,31 @@
                     <!-- <small class="text-gray-500">Kosongkan jika tidak ingin mengubah password</small> -->
                     <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-500 text-xs" />
                 </div>
+                <div>
+                    <x-input-label for="nohp" :value="__('nohp')" />
+                    <x-text-input :value="old('nohp', $data->user->no_hp)" type="number" class="block mt-1 w-full"
+                        placeholder="No Hp" name="number" id="nohp" required />
+                    <x-input-error :messages="$errors->get('nohp')" class="mt-2 text-red-500 text-xs" />
+                </div>
+
 
                 <!-- Role -->
                 <div>
                     <x-input-label for="role" :value="__('Role')" />
                     <select name="role" id="role" class="block w-full mt-1 p-2 border border-gray-300 rounded-md">
                         <option value="">Pilih Role</option>
-                        <option value="admin" {{ old('role', $data->user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="petugas" {{ old('role', $data->user->role) == 'petugas' ? 'selected' : '' }}>Petugas
+                        <option value="admin" {{ old('role', $data->user->role) == 'admin' ? 'selected' : '' }}>Admin
                         </option>
-
+                        <option value="petugas" {{ old('role', $data->user->role) == 'petugas' ? 'selected' : '' }}>
+                            Petugas
+                        </option>
+                        <option value="lurah" {{ old('role', $data->user->role) == 'lurah' ? 'selected' : '' }}>lurah
+                        </option>
                     </select>
                     <x-input-error :messages="$errors->get('role')" class="mt-2 text-red-500 text-xs" />
                 </div>
 
-                <!-- Status -->
+                @if ($data->user->status != "")
                 <div>
                     <x-input-label for="status" :value="__('Status')" />
                     <select name="status" id="status" class="block w-full mt-1 p-2 border border-gray-300 rounded-md">
@@ -75,6 +87,9 @@
                     </select>
                     <x-input-error :messages="$errors->get('status')" class="mt-2 text-red-500 text-xs" />
                 </div>
+                @endif
+                <!-- Status -->
+
 
                 <!-- Masa Jabatan -->
 
@@ -82,7 +97,7 @@
 
             <!-- Tombol -->
             <div class="flex md:justify-end md:flex-row flex-col-reverse mt-8 gap-4">
-                <a href="{{ route('users.index') }}"
+                <a href="{{ route('petugas.index') }}"
                     class="px-4 md:w-auto w-full py-2 bg-slate-200 text-center rounded-md text-gray-900">Kembali</a>
                 <button type="submit"
                     class="px-4 md:w-auto w-full py-2 bg-[--primary] rounded-md text-white">Simpan</button>

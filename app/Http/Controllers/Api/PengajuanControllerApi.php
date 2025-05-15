@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BeritaResource;
@@ -40,28 +40,40 @@ class PengajuanControllerApi extends Controller
             'keterangan' => 'nullable|string',
             'pengantar_rt' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
-        // 2. Simpan data pengajuan
+
+        // 2. Ambil data masyarakat dan role
+        $data = MasyarakatModel::where('nik', $request->nik)->with('user')->firstOrFail();
+        $userRole = $data->user->role;
+
+        // 3. Simpan file pengantar jika ada
         $pengantarPath = null;
         if ($request->hasFile('pengantar_rt')) {
             $pengantarPath = $request->file('pengantar_rt')->store('pengantar_rt', 'public');
-            $pengajuan = PengajuanSuratModel::create([
-                'nik' => $request->nik,
-                'id_surat' => $request->id_surat,
-                'keterangan' => $request->keterangan,
-                'pengantar_rt' => $pengantarPath,
-                'status' => 'di_terima_rt', // default status
-            ]);
-        } else {
-            $pengajuan = PengajuanSuratModel::create([
-                'nik' => $request->nik,
-                'id_surat' => $request->id_surat,
-                'keterangan' => $request->keterangan,
-                'status' => 'pending', // default status
-            ]);
         }
+
+        // 4. Tentukan status berdasarkan role dan pengantar
+        if ($userRole === 'masyarakat') {
+            $status = $pengantarPath ? 'di_terima_rt' : 'pending';
+        } elseif ($userRole === 'rt') {
+            $status = 'di_terima_rt';
+        } elseif ($userRole === 'rw') {
+            $status = $pengantarPath ? 'di_terima_rt' : 'pending';
+        } else {
+            $status = 'pending';
+        }
+
+        // 5. Simpan data pengajuan surat
+        $pengajuan = PengajuanSuratModel::create([
+            'nik' => $request->nik,
+            'id_surat' => $request->id_surat,
+            'keterangan' => $request->keterangan,
+            'pengantar_rt' => $pengantarPath,
+            'status' => $status,
+        ]);
+
+        // 6. Simpan field dinamis jika ada
         foreach ($request->all() as $key => $value) {
             if (str_starts_with($key, 'field_')) {
-
                 $idField = (int) str_replace('field_', '', $key);
 
                 FieldValue::create([
@@ -71,6 +83,8 @@ class PengajuanControllerApi extends Controller
                 ]);
             }
         }
+
+        // 7. Simpan lampiran file jika ada
         foreach ($request->allFiles() as $key => $file) {
             if (str_starts_with($key, 'lampiran_')) {
                 $idLampiran = (int) str_replace('lampiran_', '', $key);
@@ -83,6 +97,8 @@ class PengajuanControllerApi extends Controller
                 ]);
             }
         }
+
+        // 8. Kirim notifikasi FCM (opsional)
         try {
             $fcmToken = 'elmt0uOhS0O3Ze4EdOcz1N:APA91bFp6dvxMq3JkQV7Ayxtf_dkNPu2OU9545EUPnceG0pSkKmlXBApxtdVC8cgZMQq5juDlHGFHSLcKiRxkxxzsvVsbdUxEO8lj8epG_jkiL0l1__66QY'; // Ambil dari DB atau request jika tersedia
 
@@ -94,9 +110,10 @@ class PengajuanControllerApi extends Controller
 
             $messaging->send($message);
         } catch (\Throwable $e) {
-            // Optional: log error jika notifikasi gagal
             \Log::error('FCM Error: ' . $e->getMessage());
         }
+
+        // 9. Response
         return response()->json([
             'message' => 'Pengajuan berhasil disimpan.',
             'data' => $pengajuan

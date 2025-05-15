@@ -14,7 +14,7 @@ use ResponseHelper;
 
 class PengajuanController extends Controller
 {
-    public function getRiwayat($idMasyarakat)
+    public function getRiwayat()
     {
         $idMasyarakat = auth()->user()->masyarakat->nik;
         $pengajuan = PengajuanSuratModel::where("nik", $idMasyarakat)

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BeritaResource;
@@ -14,6 +14,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Kreait\Firebase\Database\Query\Sorter\OrderByKey;
 use ResponseHelper;
 
 class DashboardControllerApi extends Controller
@@ -22,7 +23,7 @@ class DashboardControllerApi extends Controller
     {
         return ResponseHelper::success([
             'surat' => SuratResource::collection(SuratModel::limit(3)->whereIn("singkatan_nama_surat", ["skck", "sku", "sktm"])->get()),
-            'berita' => BeritaResource::collection(BeritaModel::limit(5)->get()),
+            'berita' => BeritaResource::collection(BeritaModel::limit(5)->orderByDesc("created_at")->get()),
         ], 'Data Berhasil Diambil');
     }
 }
