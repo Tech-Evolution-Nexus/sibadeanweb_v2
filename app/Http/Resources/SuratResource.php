@@ -18,7 +18,7 @@ class SuratResource extends JsonResource
             'id' => $this->id,
             'nama_surat' => $this->nama_surat,
             'singkatan_nama_surat' => $this->singkatan_nama_surat,
-            'gambar' => url("/c/private-image?path=surat/$this->gambar") ?? $this->gambar,
+            'gambar' => url("/c/private-image?path=$this->gambar") ?? $this->gambar,
             'field' => $this->field ?? [],
             'lampiransurat' => $this->lampiransurat ?? [],
         ];

@@ -21,7 +21,7 @@ class BeritaControllerApi extends Controller
     public function index()
     {
         return ResponseHelper::success([
-            'berita' => BeritaResource::collection(BeritaModel::get()),
+            'berita' => BeritaResource::collection(BeritaModel::orderByDesc("created_at")->get()),
         ], 'Data Berhasil Diambil');
     }
     public function show($id)

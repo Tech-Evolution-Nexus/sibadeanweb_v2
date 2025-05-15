@@ -16,7 +16,7 @@ class LampiranResource extends JsonResource
     {
         return [
             "nama_lampiran" => $this->nama_lampiran,
-            "value" => url('/c/private-image?path=' . $this->pivot->gambar)
+            'value' => url("/c/private-image?path=$this->gambar") ?? $this->gambar,
         ];
     }
 }

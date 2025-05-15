@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\BeritaControllerApi;
 use App\Http\Controllers\Api\DashboardControllerApi;
 use App\Http\Controllers\Api\ImageControllerApi;
 use App\Http\Controllers\Api\KartuKeluargaController;
+use App\Http\Controllers\Api\Ocrtest;
 use App\Http\Controllers\Api\PengajuanController;
 use App\Http\Controllers\Api\PengajuanControllerApi;
 use App\Http\Controllers\Api\PengajuanMasyarakatController;
@@ -30,6 +31,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/verifikasi', [AuthController::class, 'verifikasi']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/aktivasi', [AuthController::class, 'activateAccount']);
+    Route::post('/updategambarkk', [ProfileControllerApi::class, 'updatekkgambar']);
+    Route::post('/updategambarktp', [ProfileControllerApi::class, 'updatektpgambar']);
 
 
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
@@ -62,3 +65,5 @@ Route::get('/verifikasi/{idUser}',[AuthController::class,'verifikasiDetailMasyar
     Route::get('/ubhemail', [ProfileControllerApi::class, 'ubhEmail']);
     Route::post('/ubhPass', [ProfileControllerApi::class, 'ubhPass']);
 });
+    Route::post('/ocr-api', [Ocrtest::class, 'ocrWithApi']);
+

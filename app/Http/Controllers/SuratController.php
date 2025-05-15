@@ -42,6 +42,7 @@ class SuratController extends Controller
             "method" => "POST",
             "data" => (object) [
                 "nama_surat" => "",
+                "singkatan_surat" => "",
                 "gambar" => "",
                 "pendukungFields" => [],
                 "lampiranFields" => [] // Tambahkan properti fields dengan array kosong
@@ -62,7 +63,8 @@ class SuratController extends Controller
         // Validasi data menggunakan request() dan validasi bahasa Indonesia
         $validated = request()->validate([
             "nama_surat" => "required|min:3|max:50",
-            "gambar" => "file|image|max:2024", // Validasi foto (optional)
+            "singkatan_surat" => "required|min:3|max:8",
+            "gambar" => "required|file|image|max:2024", // Validasi foto (optional)
             "pendukungFields" => "array", // Validasi array pendukungFields
             "pendukungFields.*" => "required|min:3|max:50", // Validasi setiap data pendukung
             "lampiranFields" => "array", // Validasi array lampiranFields
@@ -72,6 +74,7 @@ class SuratController extends Controller
         // Menyimpan data Surat
         $dataSurat = [
             'nama_surat' => $validated['nama_surat'],
+            'singkatan_nama_surat' => $validated['singkatan_surat'],
             'gambar' => $validated['gambar'],
             'singkata_nama_surat' => implode('', array_map(function ($word) {
                 return ctype_alpha($word[0]) ? strtoupper($word[0]) : '';
@@ -104,7 +107,7 @@ class SuratController extends Controller
         // Jika ada file foto Surat
         if (request()->hasFile('gambar')) {
             $file = request()->file('gambar');
-            $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
+            $randomName = 'surat/' . uniqid() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('surat', $randomName, ['disk' => 'private']);
             $dataSurat['gambar'] = $randomName;
         }
@@ -163,6 +166,7 @@ class SuratController extends Controller
             "method" => "PUT",
             "data" => (object) [
                 "nama_surat" => $surat->nama_surat,
+                "singkatan_surat" => $surat->singkatan_nama_surat,
                 "gambar" => $gambar,
                 "pendukungFields" => $surat->fields->pluck('nama_field')->toArray(),
                 "lampiranFields" => $surat->lampiransurat->map(fn($item) => $item->lampiran->id)->toArray(),
@@ -179,7 +183,8 @@ class SuratController extends Controller
         // Validasi input data
         $validated = request()->validate([
             "nama_surat" => "required|min:3|max:50",
-            "gambar" => "file|image|max:2024",
+            "singkatan_surat" => "required|min:3|max:8",
+            "gambar" => "required|file|image|max:2024",
             "pendukungFields" => "array", // Validasi array pendukungFields
             "pendukungFields.*" => "nullable|string|max:255", // Validasi setiap field
             "lampiranFields" => "array", // Validasi array lampiranFields
@@ -191,14 +196,14 @@ class SuratController extends Controller
         try {
             $surat = SuratModel::findOrFail($id); // Mencari Surat berdasarkan ID
             $surat->nama_surat = $validated['nama_surat']; // Update nama_surat
-
+            $surat->singkatan_nama_surat = $validated['singkatan_surat'];
             // Cek jika ada gambar baru, hapus gambar lama dan simpan gambar baru
             if (request()->hasFile('gambar')) {
                 if ($surat->gambar && file_exists(storage_path('app/private/surat/' . $surat->gambar))) {
                     unlink(storage_path('app/private/surat/' . $surat->gambar)); // Hapus gambar lama
                 }
                 $file = request()->file('gambar');
-                $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
+                $randomName = 'surat/' . uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('surat', $randomName, ['disk' => 'private']);
                 $surat->gambar = $randomName; // Update nama gambar
             }
@@ -266,7 +271,7 @@ class SuratController extends Controller
             ->addIndexColumn()
             ->addColumn('gambar', function ($surat) {
                 $gambarUrl = $surat->gambar
-                    ? url("/c/private-image?path=surat/$surat->gambar")
+                    ? url("/c/private-image?path=$surat->gambar")
                     : asset("assets/image/default-2.png");
 
                 return '<img src="' . $gambarUrl . '" alt="Gambar Surat" width="50">';
