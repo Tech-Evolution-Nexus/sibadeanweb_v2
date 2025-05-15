@@ -234,7 +234,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         // Hapus token dari user yang sedang login
-        $request->user()->currentAccessToken()->delete();
+            $request->user()->currentAccessToken()->delete();
         return ResponseHelper::success(null, 'Berhasil logout', 200);
     }
 

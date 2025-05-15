@@ -111,7 +111,7 @@ class PengajuanMasyarakatController extends Controller
 
         $pengajuan->update([
             "status" => $status,
-            "keterangan_di_tolak" => request()->keterangan,
+            "keterangan_ditolak" => request()->keterangan,
         ]);
 
         return ResponseHelper::success(
