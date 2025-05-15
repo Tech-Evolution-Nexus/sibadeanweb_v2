@@ -25,6 +25,7 @@ class User extends Authenticatable
         "masa_jabatan_selesai",
         "role",
         "status",
+        "no_hp",
         "fcm_token"
     ];
 
