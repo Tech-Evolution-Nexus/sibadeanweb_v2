@@ -109,7 +109,8 @@ class AuthController extends Controller
             "phone" => "required|numeric",
             "email" => "required|email|unique:users,email",
             "password" => "required|min:6",
-            "kk_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048" // Validasi gambar KK
+            "kk_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048", // Validasi gambar KK
+            "ktp_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048" // Validasi gambar KTP
         ]);
 
         // Jika validasi gagal, kembalikan pesan error
