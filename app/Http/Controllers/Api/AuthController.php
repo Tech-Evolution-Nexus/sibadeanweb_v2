@@ -297,7 +297,7 @@ class AuthController extends Controller
 
 public function getVerifikasiMasyarakat ()
 {
-$kartuKeluarga=auth()->user()->masyarakat()->kartuKeluarga;
+$kartuKeluarga = auth()->user()->masyarakat()->kartuKeluarga;
 $masyarakat=MasyarakatModel::whereHas('kartuKeluarga',function($query)use($kartuKeluarga){
 $query->where('rt',$kartuKeluarga->rt)->where('rw',$kartuKeluarga->rw);
 
@@ -311,6 +311,11 @@ public function postVerifikasiMasyarakat ($idUser)
 {
 User::find($idUser)->update(['status'=>request('status')]);
 return ResponseHelper::success([]);
+}
+public function verifikasiDetailMasyarakat ($idUser)
+{
+$masyarakat = MasyarakatModel::where("id_user",$idUser)->with(['user','kartuKeluarga'])->first();
+return ResponseHelper::success($masyarakat);
 }
 
 }

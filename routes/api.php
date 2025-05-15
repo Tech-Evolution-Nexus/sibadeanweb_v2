@@ -43,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/updategambarktp', [ProfileControllerApi::class, 'updatektpgambar']);
 Route::get('/verifikasi',[AuthController::class,'getVerifikasiMasyarakat']);
 Route::post('/verifikasi/{idUser}',[AuthController::class,'postVerifikasiMasyarakat']);
+Route::get('/verifikasi/{idUser}',[AuthController::class,'verifikasiDetailMasyarakat']);
     // Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUserData']);
     Route::get('/riwayat-pengajuan', [PengajuanController::class, 'getRiwayat']);
     Route::get('/riwayat-pengajuan-detail/{idPengajuan}', [PengajuanController::class, 'getRiwayatDetail']);
