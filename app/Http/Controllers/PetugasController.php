@@ -6,6 +6,7 @@ use App\Models\Petugas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
@@ -34,11 +35,22 @@ class PetugasController extends Controller
      */
     public function create()
     {
+        $data = new Petugas();
+        // dd();
         return view("admin.petugas.form", [
             "title" => "Tambah petugas",
             "action_form" => route("petugas.store"),
             "method" => "POST",
-            "data" => new User()
+            "data" => (object)[
+                "nip" => "",
+                "nama" => "",
+                "user" => (object)[
+                    "email" => "",
+                    "role" => "",
+                    "status" => "",
+                    "no_hp" => "",
+                ]
+            ]
         ]);
     }
 
@@ -50,11 +62,14 @@ class PetugasController extends Controller
             "email" => "required|email|unique:users,email",
             "password" => "required|min:6",
             "role" => "required",
+            "nohp" => "required|string|min:11|max:13",
         ]);
 
         // Check if a 'lurah' already exists
         if ($validated['role'] == 'lurah' && User::where('role', 'lurah')->exists()) {
-            return back()->withErrors("Role 'lurah' sudah ada, tidak bisa menambah petugas baru dengan role tersebut.");
+            return back()->withErrors([
+                'errorvalidasi' => "Role 'lurah' sudah ada, tidak bisa menambah petugas baru dengan role tersebut."
+            ]);
         }
 
         DB::beginTransaction();
@@ -62,8 +77,9 @@ class PetugasController extends Controller
             // Save to users table
             $user = User::create([
                 "email" => $validated["email"],
-                "password" => bcrypt($validated["password"]),
+                "password" => Hash::make($validated["password"]),
                 "role" => $validated["role"],
+                "no_hp" => $validated["nohp"],
                 "status" => 1,
             ]);
 
@@ -79,7 +95,9 @@ class PetugasController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Gagal simpan petugas: " . $e->getMessage());
-            return back()->withErrors("Terjadi kesalahan: " . $e->getMessage());
+            return back()->withErrors([
+                'errorvalidasi' => "errordb"
+            ]);
         }
     }
 
@@ -131,7 +149,9 @@ class PetugasController extends Controller
             $validated['role'] === 'lurah' &&
             User::where('role', 'lurah')->where('id', '!=', $petugas->id_user)->exists()
         ) {
-            return back()->withErrors("Role 'lurah' sudah ada. Tidak boleh ada lebih dari satu petugas dengan role tersebut.");
+            return back()->withErrors([
+                'errorvalidasi' => "Role 'lurah' sudah ada, tidak bisa menambah petugas baru dengan role tersebut."
+            ]);
         }
 
         // Enkripsi password jika ada input
@@ -148,6 +168,7 @@ class PetugasController extends Controller
                 'email' => $validated['email'],
                 'password' => $validated['password'] ?? $petugas->user->password,
                 'role' => $validated['role'],
+                'no_hp' => $validated['nohp'],
                 'status' => $validated['status'],
             ]);
 
@@ -162,7 +183,9 @@ class PetugasController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Gagal update petugas: " . $e->getMessage());
-            return back()->withErrors("Terjadi kesalahan: " . $e->getMessage());
+            return back()->withErrors([
+                'errorvalidasi' => "errordb"
+            ]);
         }
     }
 

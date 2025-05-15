@@ -20,12 +20,12 @@
                     {{-- <label
                         class="image-upload rounded mt-2 flex flex-col justify-center items-center border-dashed border p-4 cursor-pointer aspect-video relative">
                         <img src="{{$data->data->gambar ? $data->data->gambar : asset('assets/image/default-2.png')}}"
-                            class="absolute inset-0 w-full h-full object-cover" alt="">
-                        <input :value="`<?= old('gambar', $data->data->gambar ?? '') ?>`" type="file"
-                            class="hidden image-upload-file" accept="image/*" placeholder="gambar" name="gambar"
-                            id="gambar">
-                        <i class="fa fa-image fs-1 text-gray-500"></i>
-                        <span class="text-gray-500">Upload File</span>
+                    class="absolute inset-0 w-full h-full object-cover" alt="">
+                    <input :value="`<?= old('gambar', $data->data->gambar ?? '') ?>`" type="file"
+                        class="hidden image-upload-file" accept="image/*" placeholder="gambar" name="gambar"
+                        id="gambar">
+                    <i class="fa fa-image fs-1 text-gray-500"></i>
+                    <span class="text-gray-500">Upload File</span>
                     </label> --}}
                     <x-file-upload :name="'gambar'" :label="'Cover'"
                         :defaultImage="$data->data->gambar ? $data->data->gambar : asset('assets/image/default-2.png')" />
@@ -36,7 +36,7 @@
             </div>
 
             <div class="mb-2 ms-md-3">
-                <x-input-label for="judul" :value="__('J    udul')" />
+                <x-input-label for="judul" :value="__('Judul')" />
                 <x-text-input name="judul" id="judul" class="block mt-1 w-full"
                     :value=" old('judul', $data->data->judul) " type="text" placeholder="judul" />
                 <x-input-error :messages="$errors->get('judul')" class="mt-2 text-red-500 text-xs" />
@@ -74,7 +74,7 @@
     @slot("script")
     <script src="https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js"></script>
     <script type="module">
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const kontenEditor = document.querySelector("#konten");
             const keteranganEditor = document.querySelector("#keterangan");
 
