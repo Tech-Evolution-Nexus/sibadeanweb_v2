@@ -58,7 +58,7 @@ class BeritaController extends Controller
             "slug" => "required|min:3|unique:berita,slug",
             "keterangan" => "required|min:3",
             "konten" => "required|min:3",
-            "gambar" => "file|image|max:2024",
+            "gambar" => "required|file|image|max:2024",
         ]);
 
         $dataBerita = [
@@ -70,7 +70,7 @@ class BeritaController extends Controller
 
         if (request()->hasFile('gambar')) {
             $file = request()->file('gambar');
-            $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
+            $randomName = 'berita/' . uniqid() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('berita', $randomName, ['disk' => 'private']);
             $dataBerita['gambar'] = $randomName;
         }
@@ -124,11 +124,12 @@ class BeritaController extends Controller
 
         $validated = request()->validate(
             [
+
                 "judul" => "required|min:3|unique:berita,judul,$id",
                 "slug" => "required|min:3|unique:berita,slug,$id",
                 "keterangan" => "required|min:3",
                 "konten" => "required|min:3",
-                "gambar" => "file|image|max:2024", // Validasi foto (optional)
+                "gambar" => "required|file|image|max:2024", // Validasi foto (optional)
             ]
         );
 
@@ -154,7 +155,7 @@ class BeritaController extends Controller
 
                 // Menyimpan gambar yang baru
                 $file = request()->file('gambar');
-                $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
+                $randomName = 'berita/' . uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('berita', $randomName, ['disk' => 'private']);
                 $dataBerita->gambar = $randomName;
             }
@@ -192,7 +193,7 @@ class BeritaController extends Controller
             ->addIndexColumn()
             ->addColumn('gambar', function ($surat) {
                 $gambarUrl = $surat->gambar
-                    ? url("/c/private-image?path=berita/$surat->gambar")
+                    ? url("/c/private-image?path=$surat->gambar")
                     : asset("assets/image/default-2.png");
 
                 return '<img src="' . $gambarUrl . '" alt="Gambar Surat" width="50">';

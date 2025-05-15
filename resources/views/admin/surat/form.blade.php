@@ -59,7 +59,20 @@
                             required />
                         <x-input-error :messages="$errors->get('nama_surat')" class="mt-2 text-red-500 text-xs" />
                     </div>
+                    <div class="mt-4">
+                        <x-input-label for="singkatan_surat" :value="'Singkatan Surat'" />
+                        <x-text-input
+                            name="singkatan_surat"
+                            id="singkatan_surat"
+                            type="text"
+                            :value="old('singkatan_surat', $data->data->singkatan_surat)"
+                            class="block mt-1 w-full"
+                            placeholder="Singkatan Surat"
+                            required />
+                        <x-input-error :messages="$errors->get('singkatan_surat')" class="mt-2 text-red-500 text-xs" />
+                    </div>
                 </div>
+
 
                 <!-- Informasi Data Pendukung -->
                 <div class="my-6">
