@@ -45,7 +45,7 @@
                     </div>
                     <div>
                         <label for="judul_fitur" class="block text-sm font-medium text-gray-700">Judul Fitur:</label>
-                        <input type="text" value="{{ $value->about_title }}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="judul_fitur" name="judul_fitur">
+                        <input type="text" value="{{ $value->judul_fitur }}" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" id="judul_fitur" name="judul_fitur">
                     </div>
                     <div>
                         <label for="deskripsi_tentang" class="block text-sm font-medium text-gray-700">Deskripsi Tentang Badean:</label>
@@ -54,7 +54,7 @@
 
                     <div>
                         <label for="deskripsi_fitur" class="block text-sm font-medium text-gray-700">Deskripsi Fitur:</label>
-                        <textarea id="deskripsi_fitur" name="deskripsi_fitur" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->about_description }}</textarea>
+                        <textarea id="deskripsi_fitur" name="deskripsi_fitur" rows="4" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->deskripsi_fitur }}</textarea>
                     </div>
                         <div class=" mb-2 mt-4">
                         <label for="title_fitur_1" class="block text-sm font-medium text-gray-700">Judul Fitur 1:</label>

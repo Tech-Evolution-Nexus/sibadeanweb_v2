@@ -61,10 +61,12 @@ class TentangController extends Controller
             'judul_tentang.string' => 'Judul Tentang harus berupa huruf dan angka',
             'judul_tentang.max' => 'Judul Tentang tidak boleh lebih dari 20 karakter',
             'deskripsi_tentang.max' => 'deskripsi_home tidak boleh lebih dari 150 karakter.',
-            'deskripsi_fitur.max' => 'Kecamatan tidak boleh lebih dari 150 karakter.',
             'judul_fitur.required' => 'Judul Fitur harus diisi',
             'judul_fitur.string' => 'Judul Fitur harus berupa huruf dan angka',
             'judul_fitur.max' => 'Judul Fitur tidak boleh lebih dari 20 karakter',
+            'deskripsi_fitur.required' => 'Deskripsi Fitur tidak boleh kosong',
+            'deskripsi_fitur.string' => 'Deskripsi Fitur harus berupa huruf dan angka',
+            'deskripsi_fitur.max' => 'Deskripsi Fitur tidak boleh lebih dari 150 karakter.',
             'title_fitur_1.required' => 'Title Fitur 1 harus diisi',
             'title_fitur_1.string' => 'Title Fitur 1 harus berupa huruf dan angka',
             'title_fitur_1.max' => 'Title Fitur 1 tidak boleh lebih dari 25 karakter',
@@ -144,15 +146,29 @@ class TentangController extends Controller
             ]);
 
 
-            FiturUtama::where("landing_id",$id)->delete();
+            FiturUtama::where("landing_id", $id)->delete();
 
-            FiturUtama::create([
-                "title" =>request()->title_fitur_1,
-                "icon" => request()->img_fitur_1,
-                "description" => request()->desc_fitur_1,
-                "landing_id" => $id
+            $iconName1 = "img_fitur_1";
 
-            ]);
+            if ($request->hasFile($iconName1)) {
+                // Hapus file lama jika ada
+                if (isset($tentang->$iconName1) && file_exists(public_path('assets/images/' . $tentang->$iconName1))) {
+                    unlink(public_path('assets/images/' . $tentang->$iconName1));
+                }
+
+                // Simpan file baru
+                $imageFile = $request->file("img_fitur_1");
+                $imageName = uniqid() . '.' . $request->$imageFile->extension();
+                $imageFile->move(public_path('assets/images/'), $imageName);
+
+                FiturUtama::create([
+                    "title" => request()->title_fitur_1,
+                    "icon" => $imageName,
+                    "description" => request()->desc_fitur_1,
+                    "landing_id" => $id
+                ]);
+            }
+
 
             FiturUtama::create([
                 "title" => request()->title_fitur_2,
