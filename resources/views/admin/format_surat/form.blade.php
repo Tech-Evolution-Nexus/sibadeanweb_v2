@@ -97,7 +97,7 @@
                                     {
                                         marker: "{",
                                         feed: [
-                                            ...fields,
+                                            fields,
                                             "{nama_surat},{no_surat}", "{nama}", "{nik}", "{tempat_lahir}", "{tanggal_lahir}",
                                             "{jenis_kelamin}", "{pekerjaan}", "{agama}", "{status_perkawinan}",
                                             "{kewarganegaraan}", "{pendidikan}", "{alamat}", "{rw}", "{nama_bapak}",
