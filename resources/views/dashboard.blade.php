@@ -49,11 +49,11 @@
         const performanceChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'],
+                labels: @json($chart["labels"]),
                 datasets: [
                     {
                         label: 'Surat Masuk',
-                        data: [12, 15, 9, 11, 13],
+                        data: @json($chart["suratMasukData"]),
                         borderColor: '#3b82f6',
                         backgroundColor: 'rgba(59, 130, 246, 0.1)',
                         tension: 0.3,
@@ -61,7 +61,7 @@
                     },
                     {
                         label: 'Surat Keluar',
-                        data: [8, 10, 5, 7, 9],
+                        data: @json($chart["suratKeluarData"]),
                         borderColor: '#10b981',
                         backgroundColor: 'rgba(16, 185, 129, 0.1)',
                         tension: 0.3,
