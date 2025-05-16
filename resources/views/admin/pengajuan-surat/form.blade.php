@@ -44,13 +44,17 @@
                             <span class="font-medium text-gray-900">{{ $value }}</span>
                         </div>
                     @endforeach
-                    @foreach ($data->pengajuan->lampiran as $lampiran)
-                        <div class="flex flex-col ">
-                            <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
-                            <img class="w-full aspect-video"
-                                src="{{route("private.image")}}?path={{ $lampiran->pivot->gambar }}" alt="">
+                    <div class="md:ol-span-2">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                            @foreach ($data->pengajuan->lampiran as $lampiran)
+                                <div class="flex flex-col ">
+                                    <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
+                                    <img class="w-full aspect-video"
+                                        src="{{route("private.image")}}?path={{ $lampiran->pivot->gambar }}" alt="">
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
+                    </div>
                 </div>
             </div>
 
