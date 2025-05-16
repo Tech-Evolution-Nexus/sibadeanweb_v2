@@ -84,7 +84,7 @@ class PengajuanSuratController extends Controller
         </style>";
 
         $html .= $data->surat->format_surat;
-        dd($data->surat);
+        // dd($data->surat);
         $this->replaceValue($html, $data);
         $dompdf = new Dompdf();
         $dompdf->loadHtml($html);
