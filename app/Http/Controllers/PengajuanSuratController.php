@@ -15,19 +15,19 @@ class PengajuanSuratController extends Controller
      */
     public function index()
     {
-        $status =  match (request()->status ?? "menunggu") {
+        $status = match (request()->status ?? "menunggu") {
             "selesai" => "selesai",
             "menunggu" => "di_terima_rw",
-            "di_terima_rt" =>"di_terima_rt",
+            "di_terima_rt" => "di_terima_rt",
         };
         $anggotaKeluarga = PengajuanSuratModel::where("status", $status)->orderBy("created_at", "desc")->get();
 
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "anggota_keluarga" => $anggotaKeluarga
         ];
 
         if (request()->ajax()) {
-            return $this->dataTable($anggotaKeluarga,$status);
+            return $this->dataTable($anggotaKeluarga, $status);
         }
         return view("admin.pengajuan-surat.pengajuan", $params);
     }
@@ -38,9 +38,9 @@ class PengajuanSuratController extends Controller
             return abort(404);
         }
 
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "title" => "Pengajuan Surat",
-            "action_form"=> route("pengajuan-surat.update",$id),
+            "action_form" => route("pengajuan-surat.update", $id),
             "pengajuan" => $pengajuan
         ];
 
@@ -48,7 +48,7 @@ class PengajuanSuratController extends Controller
     }
     public function updateStatus($id)
     {
-        $pengajuan =     PengajuanSuratModel::find($id);
+        $pengajuan = PengajuanSuratModel::find($id);
 
         if (!$pengajuan) {
             return redirect()->back()->with("error", "data tidak ditemukan");
@@ -58,7 +58,8 @@ class PengajuanSuratController extends Controller
         return redirect()->route("pengajuan-surat.index")->with("success", "Pengajuan berhasil disetujui");
     }
 
-    public function download($id) {
+    public function download($id)
+    {
         $data = PengajuanSuratModel::find($id);
         $html = "<style>
         @page { margin:10px 50px; }
@@ -82,20 +83,20 @@ class PengajuanSuratController extends Controller
         }
         </style>";
 
-$html .= $data->surat->format_surat;
-$this->replaceValue($html, $data);
-$dompdf = new Dompdf();
-$dompdf->loadHtml($html);
-$dompdf->setPaper('A4', 'portrait');
-$options = $dompdf->getOptions();
-$options->set('isHtml5ParserEnabled', true);
-$options->set('isRemoteEnabled', true);
-$dompdf->setOptions($options);
-$dompdf->render();
-$dompdf->stream($data->nama_surat . ".pdf", [
-    "Attachment" => false // Ubah ke false jika ingin ditampilkan di browser
-]);
-}
+        $html .= $data->surat->format_surat;
+        $this->replaceValue($html, $data);
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $options = $dompdf->getOptions();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+        $dompdf->setOptions($options);
+        $dompdf->render();
+        $dompdf->stream($data->nama_surat . ".pdf", [
+            "Attachment" => true // Ubah ke false jika ingin ditampilkan di browser
+        ]);
+    }
     private function replaceValue(&$html, $data)
     {
         $noSurat = $data->nomor_surat;
@@ -161,18 +162,18 @@ $dompdf->stream($data->nama_surat . ".pdf", [
         // }
     }
 
-    public function dataTable($data,$status)
+    public function dataTable($data, $status)
     {
         return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('action', function ($row)use($status) {
+            ->addColumn('action', function ($row) use ($status) {
                 $btn = '<div class="row flex">';
                 $btn .= '<a href="' . route('pengajuan-surat.show', $row->id) . '" class="btn-show ' . ($status == 'selesai' ? '' : 'rounded-md') . '"><i class="fa fa-info"></i></a>';
 
-                   if($status === "selesai"){
-                       $btn .= ' <a href="' . route('pengajuan-surat.download', $row->id) . '" class="btn-edit rounded-md rounded-s-none"><i class="fa fa-download"></i></a>';
-                   }
-                   $message = "Apakah anda yakin menghapus data $row->nama_lengkap?";
+                if ($status === "selesai") {
+                    $btn .= ' <a href="' . route('pengajuan-surat.download', $row->id) . '" class="btn-edit rounded-md rounded-s-none"><i class="fa fa-download"></i></a>';
+                }
+                $message = "Apakah anda yakin menghapus data $row->nama_lengkap?";
                 //    $btn .= "<button class='btn-delete' x-data x-on:click=\"\$dispatch('open-modal', {name: 'delete'}), message= '$message', url= '" . route("anggota-keluarga.destroy", [$row->no_kk, $row->nik]) . "'\"><i class='fa fa-trash'></i></button>";
                 $btn .= '</div>';
                 return $btn;
@@ -192,21 +193,21 @@ $dompdf->stream($data->nama_surat . ".pdf", [
                 return $row->masyarakat->kartuKeluarga->rt;
             })
             ->addColumn("created_at", function ($row) {
-                return Helpers::formatDate($row->created_at,true);
+                return Helpers::formatDate($row->created_at, true);
             })
             ->addColumn("status", function ($row) {
-                $classStatus = str_contains("tolak",$row->status)?"bg-red-500 text-white":"bg-green-500 text-white";
+                $classStatus = str_contains("tolak", $row->status) ? "bg-red-500 text-white" : "bg-green-500 text-white";
                 $status = match ($row->status) {
-                     "di_terima_rw"=> "Disetujui Rw",
-                     "di_terima_rt"=> "Disetujui Rt",
-                     "selesai"=> "Selesai",
-                     "di_tolak_rw"=> "Ditolak Rw",
-                     "di_tolak_rt"=> "Ditolak Rt",
-                     "dibatalkan"=> "Dibatalkan",
+                    "di_terima_rw" => "Disetujui Rw",
+                    "di_terima_rt" => "Disetujui Rt",
+                    "selesai" => "Selesai",
+                    "di_tolak_rw" => "Ditolak Rw",
+                    "di_tolak_rt" => "Ditolak Rt",
+                    "dibatalkan" => "Dibatalkan",
                 };
                 return "<span class='px-2 py-1 rounded-full {$classStatus}'>{$status}</span>";
             })
-            ->rawColumns(['action',"status"])
+            ->rawColumns(['action', "status"])
             ->make(true);
     }
 }
