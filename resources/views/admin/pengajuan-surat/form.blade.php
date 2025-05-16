@@ -48,7 +48,7 @@
                         <div class="flex flex-col md:col-span-2">
                             <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
                             <img class="w-full aspect-video"
-                                src="{{route(" private.image")}}?path={{ $lampiran->pivot->gambar }}" alt="">
+                                src="{{route("private.image")}}?path={{ $lampiran->pivot->gambar }}" alt="">
                         </div>
                     @endforeach
                 </div>
