@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Http\Request;
@@ -23,7 +24,6 @@ class AuthController extends Controller
         $nik = request()->nik;
         $user = User::all();
         return response()->json($user);
-
     }
     public function login(Request $request)
     {
@@ -299,7 +299,6 @@ class AuthController extends Controller
         } else {
             return ResponseHelper::error('Terjadi kesalahan saat reset password', 500);
         }
-
     }
 
     public function getVerifikasiMasyarakat()
@@ -336,5 +335,18 @@ class AuthController extends Controller
             ->first();
         return ResponseHelper::success($masyarakat);
     }
-
+    public function cekuser(Request $request)
+    {
+        $user = $request->user();
+        return ResponseHelper::success([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->masyarakat->nama_lengkap,
+                'email' => $user->email,
+                'role' => $user->role,
+                'masyarakat' => $user->masyarakat
+            ]
+        ], 'Login Sukses');
+        // return ResponseHelper::success($user);
+    }
 }
