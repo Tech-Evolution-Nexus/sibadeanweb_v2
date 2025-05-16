@@ -46,8 +46,8 @@
                     @endforeach
                     @foreach ($data->pengajuan->lampiran as $lampiran)
                         <div class="flex flex-col">
-                            <span class="text-gray-500">{{ $label }}</span>
-                            <span class="font-medium text-gray-900">{{ $value }}</span>
+                            <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
+                            <span class="font-medium text-gray-900">{{ $lampiran->pivot->gambar }}</span>
                         </div>
                     @endforeach
                 </div>

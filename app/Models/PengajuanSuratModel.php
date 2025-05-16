@@ -30,6 +30,7 @@ class PengajuanSuratModel extends Model
     {
         return $this->belongsToMany(LampiranModel::class, "lampiran_pengajuan", "id_pengajuan", "id")->withPivot("gambar");
     }
+
     public function fieldValues()
     {
         return $this->hasMany(FieldValue::class, 'id_pengajuan');
