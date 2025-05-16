@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PengajuanSuratModel;
+use App\Models\User;
 use Dompdf\Dompdf;
 use Helpers;
 use Yajra\DataTables\DataTables;
@@ -150,6 +151,13 @@ class PengajuanSuratController extends Controller
         $html = str_replace("{desa}", Helpers::pengaturan()->kelurahan ?? "", $html);
         $html = str_replace("{kabupaten}", Helpers::pengaturan()->kabupaten ?? "", $html);
         $html = str_replace("{tanggal_pengajuan}", Helpers::formatDate($data->created_at) ?? "", $html);
+
+
+        $lurah = User::where("role", "lurah")->where("status", 1)->whereNotNull("masa_jabatan_mulai")->first();
+        // lurah
+        $html = str_replace("{nama_lurah}", $lurah->petugas->nama ?? "", $html);
+        $html = str_replace("{nip_lurah}", $lurah->petugas->nip ?? "", $html);
+        $html = str_replace("{jabatan_lurah}", "Lurah" ?? "", $html);
 
 
         // foreach ($data->fields as $field) {

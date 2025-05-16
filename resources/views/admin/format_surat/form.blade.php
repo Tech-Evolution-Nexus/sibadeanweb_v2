@@ -80,7 +80,7 @@
             document.addEventListener("DOMContentLoaded", function () {
                 if (document.querySelector('.konten')) {
                     const kontenEditor = document.querySelector("#konten");
-
+                    const fields = @json("data")['fields'];
                     if (kontenEditor) {
                         ClassicEditor.create(kontenEditor, {
                             plugins: [Mention, HtmlEmbed, Heading, Essentials, Paragraph, Bold, Italic, Font, Alignment, Image, ImageUpload, TableColumnResize, TableToolbar, Table, Indent, HorizontalLine, Underline],
@@ -97,6 +97,7 @@
                                     {
                                         marker: "{",
                                         feed: [
+                                            ...fields,
                                             "{nama_surat},{no_surat}", "{nama}", "{nik}", "{tempat_lahir}", "{tanggal_lahir}",
                                             "{jenis_kelamin}", "{pekerjaan}", "{agama}", "{status_perkawinan}",
                                             "{kewarganegaraan}", "{pendidikan}", "{alamat}", "{rw}", "{nama_bapak}",
@@ -105,7 +106,7 @@
                                             "{pendidikan_bapak}", "{alamat_bapak}", "{nama_ibu}", "{nik_ibu}", "{tempat_lahir_ibu}",
                                             "{tanggal_lahir_ibu}", "{jenis_kelamin_ibu}", "{pekerjaan_ibu}", "{agama_ibu}",
                                             "{status_perkawinan_ibu}", "{kewarganegaraan_ibu}", "{pendidikan_ibu}", "{alamat_ibu}",
-                                            "{rt}", "{kecamatan}", "{desa}", "{kabupaten}", "{tanggal_pengajuan}"
+                                            "{rt}", "{kecamatan}", "{desa}", "{kabupaten}", "{tanggal_pengajuan}", "{nama_lurah}", "{nip_lurah}", "{jabatan_lurah}",
                                         ],
                                         minimumCharacters: 0
                                     }

@@ -15,8 +15,11 @@ class FormatSuratController extends Controller
     public function edit($id)
     {
         $surat = SuratModel::find($id);
+        $fields = "{" . implode("}{", $surat->fields()->pluck("nama_field")) . "}";
+        dd($fields);
         $params["data"] = (object) [
             "surat" => $surat,
+            "fields" => $fields,
             "action_form" => route('format-surat.update', $id)
         ];
         return view("admin.format_surat.form", $params);
@@ -25,8 +28,8 @@ class FormatSuratController extends Controller
     {
         $surat = SuratModel::find($id);
         $surat->update([
-            "format_surat"=>request()->format_surat
+            "format_surat" => request()->format_surat
         ]);
-        return redirect()->route("format-surat.index")->with("success","Format surat berhasil diupdate");
+        return redirect()->route("format-surat.index")->with("success", "Format surat berhasil diupdate");
     }
 }
