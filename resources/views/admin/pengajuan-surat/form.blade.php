@@ -47,7 +47,8 @@
                     @foreach ($data->pengajuan->lampiran as $lampiran)
                         <div class="flex flex-col md:col-span-2">
                             <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
-                            <img src="{{route(" private.image")}}?path={{ $lampiran->pivot->gambar }}" alt="">
+                            <img class="w-full aspect-video"
+                                src="{{route(" private.image")}}?path={{ $lampiran->pivot->gambar }}" alt="">
                         </div>
                     @endforeach
                 </div>
