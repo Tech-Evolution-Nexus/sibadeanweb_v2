@@ -26,6 +26,7 @@
                         $fields = [
                             'Nama Surat' => $data->pengajuan->surat->nama_surat ?? "-",
                             'No Surat' => $data->pengajuan->nomor_surat ?? "-",
+                            'Keterangan' => $data->pengajuan->keterangan ?? "-",
                             'Nama' => $data->pengajuan->masyarakat->nama_lengkap ?? "-",
                             'Jenis Kelamin' => $data->pengajuan->masyarakat->jenis_kelamin ?? "-",
                             'NIK' => $data->pengajuan->masyarakat->nik ?? "-",

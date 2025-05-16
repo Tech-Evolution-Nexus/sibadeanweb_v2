@@ -128,7 +128,12 @@ class AuthController extends Controller
         // Cek apakah no_kk sudah ada, jika belum, buat baru
         $kk = KartuKeluargaModel::firstOrCreate(
             ['no_kk' => $request->no_kk],
-            ['alamat' => $request->alamat, 'rt' => 1, 'rw' => 1, 'kk_gambar' => $kkGambarPath]
+            [
+                'alamat' => $request->alamat,
+                'rt' => 1,
+                'rw' => 1,
+                'kk_gambar' => $kkGambarPath
+            ]
         );
 
         // Buat user baru dengan password yang aman
@@ -136,6 +141,7 @@ class AuthController extends Controller
             'name' => $request->nama_lengkap,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            "asal_Data" => "register"
         ]);
 
         // Buat masyarakat terkait user
@@ -234,7 +240,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         // Hapus token dari user yang sedang login
-            $request->user()->currentAccessToken()->delete();
+        $request->user()->currentAccessToken()->delete();
         return ResponseHelper::success(null, 'Berhasil logout', 200);
     }
 
@@ -299,14 +305,24 @@ class AuthController extends Controller
     public function getVerifikasiMasyarakat()
     {
         $kartuKeluarga = auth()->user()->masyarakat->kartuKeluarga;
-        $masyarakat = MasyarakatModel::whereHas('kartuKeluarga', function ($query) use ($kartuKeluarga) {
+        $verifikasiMenunggu = MasyarakatModel::whereHas('kartuKeluarga', function ($query) use ($kartuKeluarga) {
             $query->where('rt', $kartuKeluarga->rt)->where('rw', $kartuKeluarga->rw);
-
-
         })->whereHas('user', function ($query) {
             $query->where('status', 0);
+            $query->where('asal_data', "register");
         })->get();
-        return ResponseHelper::success($masyarakat);
+        $verifikasiSelesai = MasyarakatModel::whereHas('kartuKeluarga', function ($query) use ($kartuKeluarga) {
+            $query->where('rt', $kartuKeluarga->rt)->where('rw', $kartuKeluarga->rw);
+        })->whereHas('user', function ($query) {
+            $query->where('status', 1);
+            $query->where('asal_data', "register");
+        })->get();
+
+        $params = [
+            "verifikasiMenunggu" => $verifikasiMenunggu,
+            "verifikasiSelesai" => $verifikasiSelesai,
+        ];
+        return ResponseHelper::success($params);
     }
     public function postVerifikasiMasyarakat($idUser)
     {
