@@ -9,28 +9,32 @@
         <!-- Main Statistics -->
         <div class="grid md:grid-cols-2 sm:grid-cols-2 grid-cols-1 gap-6 mb-8">
             <!-- Surat Masuk -->
-            <article class="flex items-center justify-between p-6 rounded-md bg-blue-50 shadow  transition">
-                <div>
-                    <h3 class="text-lg font-semibold text-blue-800">Surat Masuk</h3>
-                    <p class="text-4xl font-bold text-blue-900 mt-2">{{ $suratMasuk }}</p>
-                    <p class="text-sm text-blue-600 mt-1">Hari ini</p>
-                </div>
-                <div class="bg-blue-100 text-blue-600 p-4 rounded-full text-2xl">
-                    <i class="fa-solid fa-envelope"></i>
-                </div>
-            </article>
+            <a href="{{route("pengajuan-surat.index")}}">
+                <article class="flex items-center justify-between p-6 rounded-md bg-blue-50 shadow  transition">
+                    <div>
+                        <h3 class="text-lg font-semibold text-blue-800">Surat Masuk</h3>
+                        <p class="text-4xl font-bold text-blue-900 mt-2">{{ $suratMasuk }}</p>
+                        <p class="text-sm text-blue-600 mt-1">Hari ini</p>
+                    </div>
+                    <div class="bg-blue-100 text-blue-600 p-4 rounded-full text-2xl">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                </article>
+            </a>
 
             <!-- Surat Keluar -->
-            <article class="flex items-center justify-between p-6 rounded-md bg-green-50 shadow  transition">
-                <div>
-                    <h3 class="text-lg font-semibold text-green-800">Surat Keluar</h3>
-                    <p class="text-4xl font-bold text-green-900 mt-2">{{ $suratKeluar }}</p>
-                    <p class="text-sm text-green-600 mt-1">Hari ini</p>
-                </div>
-                <div class="bg-green-100 text-green-600 p-4 rounded-full text-2xl">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </div>
-            </article>
+            <a href="{{route("surat-keluar.index")}}">
+                <article class="flex items-center justify-between p-6 rounded-md bg-green-50 shadow  transition">
+                    <div>
+                        <h3 class="text-lg font-semibold text-green-800">Surat Keluar</h3>
+                        <p class="text-4xl font-bold text-green-900 mt-2">{{ $suratKeluar }}</p>
+                        <p class="text-sm text-green-600 mt-1">Hari ini</p>
+                    </div>
+                    <div class="bg-green-100 text-green-600 p-4 rounded-full text-2xl">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </div>
+                </article>
+            </a>
         </div>
 
         <!-- Statistik Surat -->

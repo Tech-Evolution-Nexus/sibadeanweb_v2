@@ -90,6 +90,8 @@ class PengajuanMasyarakatController extends Controller
                 ["message" => "Status Pengajuan berhasil diupdate", "error" => $validated->errors()]
             );
         }
+
+        $pengaturan = Helpers::pengaturan();
         $userAprove = auth()->user();
         $role = $userAprove->role;
         $statusPengajuan = request()->status;
@@ -107,6 +109,9 @@ class PengajuanMasyarakatController extends Controller
                 "ditolak" => "di_tolak_rt",
                 "disetujui" => "di_terima_rt",
             };
+            if (!$pengaturan->hasRw) {
+                $status = "di_terima_rw";
+            }
         }
 
         $pengajuan->update([
