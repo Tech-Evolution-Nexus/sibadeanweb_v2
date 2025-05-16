@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\PengajuanController;
 use App\Http\Controllers\Api\PengajuanControllerApi;
 use App\Http\Controllers\Api\PengajuanMasyarakatController;
 use App\Http\Controllers\Api\SuratControllerApi;
+use App\Http\Controllers\Api\SuraKeluarController;
 use App\Http\Controllers\Api\ProfileControllerApi;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +65,11 @@ Route::get('/verifikasi/{idUser}',[AuthController::class,'verifikasiDetailMasyar
 
     Route::get('/ubhemail', [ProfileControllerApi::class, 'ubhEmail']);
     Route::post('/ubhPass', [ProfileControllerApi::class, 'ubhPass']);
+
 });
     Route::post('/ocr-api', [Ocrtest::class, 'ocrWithApi']);
+       
+Route::get('surat-keluar', [SuraKeluarController::class, 'apiIndex']);
+Route::get('surat-keluar/download/{filename}', [SuraKeluarController::class, 'apiDownload']);
 
+  
