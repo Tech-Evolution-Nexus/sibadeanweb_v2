@@ -15,7 +15,7 @@ class FormatSuratController extends Controller
     public function edit($id)
     {
         $surat = SuratModel::find($id);
-        $fields = "{" . implode("}{", $surat->fields()->pluck("nama_field")->toArray()) . "}";
+        $fields = count($surat->fields->toArray()) != 0 ? "{" . implode("}{", $surat->fields()->pluck("nama_field")->toArray()) . "}" : "";
         dd($fields);
         $params["data"] = (object) [
             "surat" => $surat,
