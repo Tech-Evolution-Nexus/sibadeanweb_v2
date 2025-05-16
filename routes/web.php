@@ -43,8 +43,6 @@ Route::get('/c/private-image', function () {
         }
         return response()->file($pathToFile);
     }
-
-    // Jika file tidak ditemukan, kembalikan error 404
     abort(404);
 })->name("private.image");
 Route::post("testimoni/store", function () { })->name("testimoni.store");
