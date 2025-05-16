@@ -18,7 +18,7 @@ use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RTController;
 use App\Http\Controllers\RWController;
-use App\Http\Controllers\SuraKeluarController;
+use App\Http\Controllers\Api\SuraKeluarController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\TentangController;
 use App\Http\Controllers\UserController;
