@@ -17,7 +17,7 @@ class SuratKeluarResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'nama_file' => url("/c/private-image?path=$this->nama_file") ?? $this->nama_file,
+            'nama_file' => url("/c/private-image?path=surat_keluar/$this->nama_file") ?? $this->nama_file,
             'exp_date' => $this->exp_date,
         ];
     }
