@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\SuratKeluarResource;
 use App\Models\SuratKeluarModel;
 
 use App\Http\Controllers\Controller;
@@ -13,7 +14,7 @@ class SuraKeluarController extends Controller
     public function index()
     {
         $suratkeluar = SuratKeluarModel::get();
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "suratkeluar" => $suratkeluar
         ];
 
@@ -25,11 +26,11 @@ class SuraKeluarController extends Controller
 
     public function create()
     {
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "title" => "Tambah surat keluar",
             "action_form" => route("surat-keluar.store"),
             "method" => "POST",
-            "data" => (object)[
+            "data" => (object) [
                 "title" => "",
                 "nama_file" => "",
                 "exp_date" => "",
@@ -76,14 +77,14 @@ class SuraKeluarController extends Controller
     public function edit($id)
     {
         $surat = SuratKeluarModel::find($id);
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "title" => "Ubah Surat",
             "action_form" => route("surat-keluar.update", $id),
             "method" => "PUT",
-            "data" => (object)[
+            "data" => (object) [
                 "title" => $surat->title,
                 "nama_file" => $surat->nama_file,
-                "exp_date" =>  $surat->exp_date,
+                "exp_date" => $surat->exp_date,
             ]
         ];
         return view("admin.surat-keluar.form", $params);
@@ -113,9 +114,10 @@ class SuraKeluarController extends Controller
 
             if (request()->hasFile('nama_file')) {
                 if ($surat->nama_file && $surat->nama_file !== 'default.pdf') {
-                   $oldPath = storage_path('app/private/surat-keluar/' . $surat->nama_file);
+                    $oldPath = storage_path('app/private/surat-keluar/' . $surat->nama_file);
 
-                    if (file_exists($oldPath)) unlink($oldPath);
+                    if (file_exists($oldPath))
+                        unlink($oldPath);
                 }
 
                 $file = request()->file('nama_file');
@@ -190,11 +192,11 @@ class SuraKeluarController extends Controller
     public function apiIndex()
     {
         $now = now()->format('Y-m-d');
-        $suratkeluar = SuratKeluarModel::whereDate('exp_date', '>=', $now)->get();
+        $suratkeluar = SuratKeluarModel::orderBy("exp_date", "desc")->get();
 
         return response()->json([
             "status" => "success",
-            "suratkeluar" => $suratkeluar,
+            "suratkeluar" => SuratKeluarResource::collection($suratkeluar),
         ]);
     }
 
