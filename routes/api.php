@@ -69,4 +69,4 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/ocr-api', [Ocrtest::class, 'ocrWithApi']);
 
 Route::get('surat-keluar', [SuraKeluarController::class, 'apiIndex']);
-Route::get('surat-keluar/download/{filename}', [SuraKeluarController::class, 'apiDownload']);
+Route::get('/surat-keluar/download/{namaFile}', [SuraKeluarController::class, 'download']);
