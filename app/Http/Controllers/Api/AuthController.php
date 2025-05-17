@@ -315,7 +315,7 @@ class AuthController extends Controller
         $verifikasiSelesai = MasyarakatModel::whereHas('kartuKeluarga', function ($query) use ($kartuKeluarga) {
             $query->where('rt', $kartuKeluarga->rt)->where('rw', $kartuKeluarga->rw);
         })->whereHas('user', function ($query) {
-            $query->where('status', 1);
+            $query->whereIn('status', [1, -1]);
             $query->where('asal_data', "register");
         })
             ->with(['user', 'kartuKeluarga'])
