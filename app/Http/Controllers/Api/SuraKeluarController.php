@@ -176,16 +176,16 @@ class SuraKeluarController extends Controller
             ->make(true);
     }
 
-    // public function download($filename)
-    // {
-    //     $path = storage_path("app/private/surat-keluar/" . $filename);
+    public function download($filename)
+    {
+        $path = storage_path("app/private/surat-keluar/" . $filename);
 
-    //     if (!file_exists($path)) {
-    //         abort(404);
-    //     }
+        if (!file_exists($path)) {
+            abort(404);
+        }
 
-    //     return response()->download($path);
-    // }
+        return response()->download($path);
+    }
 
     // ======= API untuk mobile warga RT/RW ========
 
@@ -199,7 +199,7 @@ class SuraKeluarController extends Controller
             "suratkeluar" => SuratKeluarResource::collection($suratkeluar),
         ]);
     }
-public function apiDownload($filename)
+   public function apiDownload($filename)
 {
     $path = storage_path("app/private/surat-keluar/" . $filename);
 
@@ -210,7 +210,7 @@ public function apiDownload($filename)
         ], 404);
     }
 
-    // Gunakan response()->file untuk membuka inline
+    // Response file dibuka inline di browser atau aplikasi pembaca PDF
     return response()->file($path, [
         'Content-Type' => 'application/pdf',
         'Content-Disposition' => 'inline; filename="'.$filename.'"'

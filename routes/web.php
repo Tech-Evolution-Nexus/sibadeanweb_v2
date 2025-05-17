@@ -93,6 +93,18 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
 
     Route::get("/tentang", [TentangController::class, 'index'])->name('tentang.index');
 });
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+Route::get('/c/private-image', function (Request $request) {
+    $path = $request->query('path'); // contoh: "surat_keluar/6826cd3b370f7.pdf"
+    $fullPath = storage_path('app/private/' . $path); // karena file ada di storage/app/private/surat_keluar
 
+    if (!file_exists($fullPath)) {
+        abort(404, 'File tidak ditemukan');
+    }
 
+    return Response::file($fullPath, [
+        'Content-Type' => 'application/pdf',
+    ]);
+});
 require __DIR__ . '/auth.php';
