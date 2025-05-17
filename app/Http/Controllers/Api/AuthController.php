@@ -309,13 +309,17 @@ class AuthController extends Controller
         })->whereHas('user', function ($query) {
             $query->where('status', 0);
             $query->where('asal_data', "register");
-        })->get();
+        })
+            ->with(['user', 'kartuKeluarga'])
+            ->get();
         $verifikasiSelesai = MasyarakatModel::whereHas('kartuKeluarga', function ($query) use ($kartuKeluarga) {
             $query->where('rt', $kartuKeluarga->rt)->where('rw', $kartuKeluarga->rw);
         })->whereHas('user', function ($query) {
             $query->where('status', 1);
             $query->where('asal_data', "register");
-        })->get();
+        })
+            ->with(['user', 'kartuKeluarga'])
+            ->get();
 
         $params = [
             "verifikasiMenunggu" => $verifikasiMenunggu,

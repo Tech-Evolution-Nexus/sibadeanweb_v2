@@ -23,6 +23,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-gray-700 text-sm">
 
                     @php
+                        $customFields = $data->pengajuan->fieldValues;
+                        $formatFields = [];
+                        foreach ($customFields as $field) {
+                            $formatFields[strtoupper($field->field->nama_field)] = $field->value;
+                        }
                         $fields = [
                             'Nama Surat' => $data->pengajuan->surat->nama_surat ?? "-",
                             'No Surat' => $data->pengajuan->nomor_surat ?? "-",
