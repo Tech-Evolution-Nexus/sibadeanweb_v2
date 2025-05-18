@@ -15,7 +15,7 @@ class BeritaController extends Controller
     {
 
         $berita = BeritaModel::orderBy("created_at", "desc")->get();
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "berita" => $berita
         ];
 
@@ -32,11 +32,11 @@ class BeritaController extends Controller
     public function create()
     {
 
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "title" => "Tambah Berita",
             "action_form" => route("berita.store"),
             "method" => "POST",
-            "data" => (object)[
+            "data" => (object) [
                 "judul" => "",
                 "slug" => "",
                 "keterangan" => "",
@@ -99,11 +99,11 @@ class BeritaController extends Controller
         $berita = BeritaModel::find($id);
 
         $fotoBerita = $berita->gambar ? url("/c/private-image?path=berita/$berita->gambar") : asset("assets/image/default-2.png");
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "title" => "Ubah Berita",
             "action_form" => route("berita.update", $id),
             "method" => "PUT",
-            "data" => (object)[
+            "data" => (object) [
                 "judul" => $berita->judul,
                 "slug" => $berita->slug,
                 "keterangan" => $berita->keterangan,
@@ -193,7 +193,7 @@ class BeritaController extends Controller
             ->addIndexColumn()
             ->addColumn('gambar', function ($surat) {
                 $gambarUrl = $surat->gambar
-                    ? url("/c/private-image?path=$surat->gambar")
+                    ? url("/c/private-image?path=berita/$surat->gambar")
                     : asset("assets/image/default-2.png");
 
                 return '<img src="' . $gambarUrl . '" alt="Gambar Surat" width="50">';
