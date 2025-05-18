@@ -28,7 +28,7 @@
 
 
     <x-modal :name="'preview'" :maxWidth="'2xl'" >
-        <iframe :src="previewPdf" id="frame" width="100%" height="600px" frameborder="0"></iframe>
+        <iframe :src="previewPdf" id="frame" width="100%" height="600px" frameborder="0" style="height:80vh;"></iframe>
        <!-- <button class='px-4 py-2 border bg-white fixed top-5 left-5'
                             x-data
                             x-on:click="$dispatch('close-modal', {name: 'preview'}); previewPdf = '{$path}'">
