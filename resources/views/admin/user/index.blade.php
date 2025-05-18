@@ -50,7 +50,7 @@
                             data: 'masa_jabatan',
                             name: 'Masa Jabatan',
                             render: function (data, type, row) {
-                                return row.masa_jabatan_mulai + ' - ' + row.masa_jabatan_selesai;
+                                return (row.masa_jabatan_mulai ?? "") + ' - ' + (row.masa_jabatan_selesai ??"");
                             }
                         },
                         { data: 'action', name: 'Aksi', orderable: false, searchable: false },
