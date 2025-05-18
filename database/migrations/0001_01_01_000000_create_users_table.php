@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('fcm_token')->unique()->nullable();
             $table->boolean("status")->default(0);
             $table->string("avatar")->default("default.png");
+            $table->string("no_hp")->nullable();
             $table->enum("role", ["rt", "rw", "masyarakat", "admin", "lurah"])->default("masyarakat");
             $table->timestamp("masa_jabatan_mulai")->nullable();
             $table->timestamp("masa_jabatan_selesai")->nullable();
