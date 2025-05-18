@@ -335,7 +335,7 @@ class AuthController extends Controller
             $user->update(['status' => request('status')]);
             $status = request('status') == 1 ? '*BERHASIL DISETUJUI*' : '*TIDAK DISTUJUI*';
 
-            HelpersNotificationHelper::sendFonnte($user->no_hp, "Data anda telah diverifikasi dengan status: $status");
+            $user->no_hp ? HelpersNotificationHelper::sendFonnte($user->no_hp, "Data anda telah diverifikasi dengan status: $status") : "";
 
             return ResponseHelper::success($user);
         } catch (\Throwable $th) {
