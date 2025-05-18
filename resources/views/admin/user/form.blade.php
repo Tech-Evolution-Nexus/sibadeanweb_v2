@@ -90,7 +90,7 @@
 
             <!-- Tombol -->
             <div class="flex md:justify-end md:flex-row flex-col-reverse mt-8 gap-4">
-                <a href="{{ route('user.index') }}"
+                <a href="{{ route('users.index') }}"
                     class="px-4 md:w-auto w-full py-2 bg-slate-200 text-center rounded-md text-gray-900">Kembali</a>
                 <button type="submit"
                     class="px-4 md:w-auto w-full py-2 bg-[--primary] rounded-md text-white">Simpan</button>
