@@ -42,7 +42,7 @@
                     }],
                     columns: [
                         { data: 'DT_RowIndex', name: 'DT_RowIndex' },
-                        { data: 'name', name: 'Nama' },
+                        { data: 'nama_lengkap', name: 'Nama' },
                         { data: 'email', name: 'Email' },
                         { data: 'role', name: 'Role' },
                         { data: 'status', name: 'Status' },

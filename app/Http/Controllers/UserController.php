@@ -119,6 +119,9 @@ class UserController extends Controller
                     </form>
                     </div>';
             })
+                ->addColumn('nama_lengkap', function ($row) {
+                return $row->masyarakat->nama_lengkap;
+            })
             ->rawColumns(["action"])
             ->make(true);
     }
