@@ -19,7 +19,7 @@ class BeritaResource extends JsonResource
             'judul' => $this->judul,
             'keterangan' => $this->keterangan,
             'konten' => $this->konten,
-            'gambar' => url("/c/private-image?path=berita/$this->gambar") ?? $this->gambar,
+            'gambar' => url("/c/private-image?path=berita/$this->gambar") ?? 'https://dummyimage.com/80x80/f2f2f2/555555&text=No+Image',
             "created_at" => $this->created_at
         ];
     }
