@@ -224,6 +224,9 @@ class PetugasController extends Controller
     {
         return DataTables::of($data)
             ->addIndexColumn()
+            ->addColumn('status', function ($row) {
+                return $row->status == 1 ? 'Aktif' : 'Nonaktif';
+            })
             ->addColumn('action', function ($row) {
                 return '<div class="row flex">
                     <a href="' . route("petugas.edit", $row->id) . '" class="btn-edit">Edit</a>

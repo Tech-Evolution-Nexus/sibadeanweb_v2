@@ -64,7 +64,7 @@ class SuraKeluarController extends Controller
 
         if (request()->hasFile('nama_file')) {
             $pdfFile = request()->file('nama_file');
-            $pdfName = uniqid() . '.' . $pdfFile->getClientOriginalExtension();
+            $pdfName = "surat-keluar/" . uniqid() . '.' . $pdfFile->getClientOriginalExtension();
             $pdfFile->storeAs('surat-keluar', $pdfName, ['disk' => 'private']);
             $dataSurat['nama_file'] = $pdfName;
         }
@@ -121,7 +121,7 @@ class SuraKeluarController extends Controller
                 }
 
                 $file = request()->file('nama_file');
-                $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
+                $randomName = "surat-keluar/" . uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('surat-keluar', $randomName, ['disk' => 'private']);
                 $surat->nama_file = $randomName;
             }
@@ -152,7 +152,7 @@ class SuraKeluarController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 $btn = '<div class="row flex">';
-                $path = "/c/private-image?path=surat-keluar/$row->nama_file";
+                $path = "/c/private-image?path=$row->nama_file";
                 $btn .= "<button class='btn-show'
                             x-data
                             x-on:click=\"\$dispatch('open-modal', {name: 'preview'}); previewPdf = '{$path}'\">
@@ -170,7 +170,6 @@ class SuraKeluarController extends Controller
                 $btn .= '</div>';
 
                 return $btn;
-
             })
             ->rawColumns(['gambar', 'action'])
             ->make(true);
@@ -199,23 +198,21 @@ class SuraKeluarController extends Controller
             "suratkeluar" => SuratKeluarResource::collection($suratkeluar),
         ]);
     }
-   public function apiDownload($filename)
-{
-    $path = storage_path("app/private/surat-keluar/" . $filename);
+    public function apiDownload($filename)
+    {
+        $path = storage_path("app/private/surat-keluar/" . $filename);
 
-    if (!file_exists($path)) {
-        return response()->json([
-            "status" => "error",
-            "message" => "File surat tidak ditemukan",
-        ], 404);
+        if (!file_exists($path)) {
+            return response()->json([
+                "status" => "error",
+                "message" => "File surat tidak ditemukan",
+            ], 404);
+        }
+
+        // Response file dibuka inline di browser atau aplikasi pembaca PDF
+        return response()->file($path, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $filename . '"'
+        ]);
     }
-
-    // Response file dibuka inline di browser atau aplikasi pembaca PDF
-    return response()->file($path, [
-        'Content-Type' => 'application/pdf',
-        'Content-Disposition' => 'inline; filename="'.$filename.'"'
-    ]);
-}
-
-
 }

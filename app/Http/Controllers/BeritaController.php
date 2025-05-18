@@ -98,7 +98,7 @@ class BeritaController extends Controller
 
         $berita = BeritaModel::find($id);
 
-        $fotoBerita = $berita->gambar ? url("/c/private-image?path=berita/$berita->gambar") : asset("assets/image/default-2.png");
+        $fotoBerita = $berita->gambar ? url("/c/private-image?path=$berita->gambar") : asset("assets/image/default-2.png");
         $params["data"] = (object) [
             "title" => "Ubah Berita",
             "action_form" => route("berita.update", $id),
@@ -124,12 +124,11 @@ class BeritaController extends Controller
 
         $validated = request()->validate(
             [
-
                 "judul" => "required|min:3|unique:berita,judul,$id",
                 "slug" => "required|min:3|unique:berita,slug,$id",
                 "keterangan" => "required|min:3",
                 "konten" => "required|min:3",
-                "gambar" => "required|file|image|max:2024", // Validasi foto (optional)
+                "gambar" => "nullable|file|image|max:2024", // Validasi foto (optional)
             ]
         );
 
@@ -193,7 +192,7 @@ class BeritaController extends Controller
             ->addIndexColumn()
             ->addColumn('gambar', function ($surat) {
                 $gambarUrl = $surat->gambar
-                    ? url("/c/private-image?path=berita/$surat->gambar")
+                    ? url("/c/private-image?path=$surat->gambar")
                     : asset("assets/image/default-2.png");
 
                 return '<img src="' . $gambarUrl . '" alt="Gambar Surat" width="50">';

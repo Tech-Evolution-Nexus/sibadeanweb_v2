@@ -7,7 +7,7 @@
             <div class="flex">
                 <h1 class="text-2xl font-bold">RT</h1>
                 <a href="{{route("rt.create", $data->rw)}}"
-                    class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah RW</a>
+                    class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah RT</a>
             </div>
         </div>
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
