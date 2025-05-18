@@ -97,7 +97,7 @@ class KartuKeluargaController extends Controller
             $file = request()->file('foto_kartu_keluarga');
             $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('kartu_keluarga', $randomName, ['disk' => 'private']);
-            $dataKK['kk_gambar'] = $randomName;
+            $dataKK['kk_gambar'] = "kartu_keluarga/" . $randomName;
         }
 
         // Menyimpan data kartu keluarga
@@ -189,12 +189,12 @@ class KartuKeluargaController extends Controller
             $dataKK->rt = $validated['rt'];
             $dataKK->rw = $validated['rw'];
             // $dataKK->kk_tgl = $validated['tanggal_kk'];
-            $oldImagePath = storage_path('app/private/kartu_keluarga/' . $dataKK->kk_gambar);
+            $oldImagePath = storage_path('app/private/' . $dataKK->kk_gambar);
             // Jika ada file foto kartu keluarga baru
             if (request()->hasFile('foto_kartu_keluarga')) {
                 // Menghapus gambar lama jika ada
                 if ($dataKK->kk_gambar) {
-                    $oldImagePath = storage_path('app/private/kartu_keluarga/' . $dataKK->kk_gambar);
+                    $oldImagePath = storage_path('app/private/' . $dataKK->kk_gambar);
                     if (file_exists($oldImagePath) && $dataKK->kk_gambar != "default-2.png") {
                         unlink($oldImagePath); // Menghapus file gambar lama
                     }
@@ -204,7 +204,7 @@ class KartuKeluargaController extends Controller
                 $file = request()->file('foto_kartu_keluarga');
                 $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('kartu_keluarga', $randomName, ['disk' => 'private']);
-                $dataKK->kk_gambar = $randomName;
+                $dataKK->kk_gambar = "kartu_keluarga/" . $randomName;
             }
 
             // Menyimpan data kartu keluarga yang telah diperbarui
