@@ -13,8 +13,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where("role", "!=", "admin")->where("status", 1)->orderBy("created_at", "desc")->get();
-
+        $users = User::where("role", "!=", "admin")->with("masyarakat")->where("status", 1)->orderBy("created_at", "desc")->get();
+dd($user->toArray());
         if (request()->ajax()) {
             return $this->dataTable($users);
         }
