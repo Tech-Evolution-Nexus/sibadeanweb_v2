@@ -190,7 +190,10 @@ class AnggotaKeluargaController extends Controller
      */
     public function destroy($no_kk, string $id)
     {
-        //
+        $masyarakat = MasyarakatModel::find($id);
+        if(!$masyarakat) return abort(404);
+        $masyarakat->delete();
+        return redirect()->back()->with("success","Berhasil menghapus anggota keluarga");
     }
 
     public function dataTable($data)

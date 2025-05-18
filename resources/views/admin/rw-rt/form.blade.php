@@ -35,7 +35,7 @@ t<x-app-layout :title="$data->title">
                     <x-input-error :messages="$errors->get('nama_lengkap')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div class=" ">
-                    <x-input-label for="alamat" :value="__('AlaRmat')" />
+                    <x-input-label for="alamat" :value="__('Alamat')" />
                     <x-text-input type="text" disabled class="block mt-1 w-full bg-slate-100" placeholder="-"
                         name="alamat" id="alamat" />
                     <x-input-error :messages="$errors->get('alamat')" class="mt-2 text-red-500 text-xs" />
