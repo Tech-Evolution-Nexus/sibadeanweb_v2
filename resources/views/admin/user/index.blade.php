@@ -4,8 +4,8 @@
             <div class="text-sm">Dashboard / User</div>
             <div class="flex">
                 <h1 class="text-2xl font-bold">User</h1>
-                <a href="{{ route('users.create') }}"
-                    class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah User</a>
+                <!-- <a href="{{ route('users.create') }}"
+                    class="px-4 py-2 bg-[--primary] rounded-md text-white ms-auto">Tambah User</a> -->
             </div>
         </div>
 
@@ -21,7 +21,6 @@
                         <th>Email</th>
                         <th>Role</th>
                         <th>Status</th>
-                        <th>Masa Jabatan</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -38,7 +37,7 @@
                     ajax: "{{ route('users.index') }}",
                     columnDefs: [{
                         width: 200,
-                        targets: 6
+                        targets: 5
                     }],
                     columns: [
                         { data: 'DT_RowIndex', name: 'DT_RowIndex' },
@@ -46,13 +45,13 @@
                         { data: 'email', name: 'Email' },
                         { data: 'role', name: 'Role' },
                         { data: 'status', name: 'Status' },
-                        {
-                            data: 'masa_jabatan',
-                            name: 'Masa Jabatan',
-                            render: function (data, type, row) {
-                                return (row.masa_jabatan_mulai ?? "") + ' - ' + (row.masa_jabatan_selesai ??"");
-                            }
-                        },
+                        // {
+                        //     data: 'masa_jabatan',
+                        //     name: 'Masa Jabatan',
+                        //     render: function (data, type, row) {
+                        //         return (row.masa_jabatan_mulai ?? "") + ' - ' + (row.masa_jabatan_selesai ??"");
+                        //     }
+                        // },
                         { data: 'action', name: 'Aksi', orderable: false, searchable: false },
                     ]
                 });

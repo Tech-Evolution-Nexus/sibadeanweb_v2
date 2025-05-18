@@ -131,7 +131,7 @@ class KartuKeluargaController extends Controller
         $pengaturan = auth()->user()->pengaturan();
         $kartuKeluarga = KartuKeluargaModel::find($id);
         $masyarakat = $kartuKeluarga->kepalaKeluarga;
-        $fotoKK = $kartuKeluarga->kk_gambar ? url("/c/private-image?path=kartu_keluarga/$kartuKeluarga->kk_gambar") : asset("assets/image/default-2.png");
+        $fotoKK = $kartuKeluarga->kk_gambar ? url("/c/private-image?path$kartuKeluarga->kk_gambar") : asset("assets/image/default-2.png");
         $params["data"] = (object)[
             "title" => "Ubah Kartu Keluarga",
             "action_form" => route("kartu-keluarga.update", $id),

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\NotificationHelper;
 use App\Http\Resources\BeritaResource;
 use App\Http\Resources\SuratResource;
 use App\Models\BeritaModel;
@@ -51,16 +52,32 @@ class PengajuanControllerApi extends Controller
             $pengantarPath = $request->file('pengantar_rt')->store('pengantar_rt', 'public');
         }
 
+        $dataRt = $data->kartuKeluarga->rt ?? null;
+        $dataRw = $data->kartuKeluarga->rw ?? null;
+
         // 4. Tentukan status berdasarkan role dan pengantar
-        if ($userRole === 'masyarakat') {
+
+
+        if ($userRole === 'masyarakat' || $userRole === 'rw') {
             $status = $pengantarPath ? 'di_terima_rt' : 'pending';
+
+            if ($pengantarPath) {
+                // kalau ada pengantar, cari berdasarkan RT & role rt
+                $data2 = $this->getKartuKeluargaByRoleAndField('rw', $dataRw, 'rw');
+            } else {
+                // kalau gak ada pengantar, cari berdasarkan RW & role rw
+                $data2 = $this->getKartuKeluargaByRoleAndField('rt', $dataRt, 'rt');
+            }
         } elseif ($userRole === 'rt') {
             $status = 'di_terima_rt';
-        } elseif ($userRole === 'rw') {
-            $status = $pengantarPath ? 'di_terima_rt' : 'pending';
+            // rt selalu cari berdasarkan RW & role rw
+            $data2 = $this->getKartuKeluargaByRoleAndField('rw', $dataRw, 'rw');
         } else {
-            $status = 'pending';
+            return response()->json([
+                'message' => 'Role tidak ditemukan'
+            ], 404);
         }
+
 
         // 5. Simpan data pengajuan surat
         $pengajuan = PengajuanSuratModel::create([
@@ -97,26 +114,24 @@ class PengajuanControllerApi extends Controller
                 ]);
             }
         }
-
-        // 8. Kirim notifikasi FCM (opsional)
-        try {
-            $fcmToken = 'elmt0uOhS0O3Ze4EdOcz1N:APA91bFp6dvxMq3JkQV7Ayxtf_dkNPu2OU9545EUPnceG0pSkKmlXBApxtdVC8cgZMQq5juDlHGFHSLcKiRxkxxzsvVsbdUxEO8lj8epG_jkiL0l1__66QY'; // Ambil dari DB atau request jika tersedia
-
-            $factory = (new Factory)->withServiceAccount(base_path('firebase.json'));
-            $messaging = $factory->createMessaging();
-
-            $message = CloudMessage::withTarget('token', $fcmToken)
-                ->withNotification(Notification::create('Pengajuan Baru', 'Ada pengajuan surat baru yang masuk.'));
-
-            $messaging->send($message);
-        } catch (\Throwable $e) {
-            \Log::error('FCM Error: ' . $e->getMessage());
+        if ($data2) {
+            NotificationHelper::sendFcm($data2->user->fcm_token, 'Pengajuan Baru', 'Ada pengajuan surat baru yang masuk.');
         }
+
 
         // 9. Response
         return response()->json([
             'message' => 'Pengajuan berhasil disimpan.',
             'data' => $pengajuan
         ], 201);
+    }
+    function getKartuKeluargaByRoleAndField($field, $value, $role)
+    {
+        return KartuKeluargaModel::where($field, $value)
+            ->whereHas('masyarakat.user', function ($query) use ($role) {
+                $query->where('role', $role);
+            })
+            ->with('masyarakat.user')
+            ->first();
     }
 }

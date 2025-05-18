@@ -159,7 +159,7 @@ class SuratController extends Controller
     {
         $surat = SuratModel::with('fields', 'lampiransurat.lampiran')->where('id', $id)->first();
         $lampiranList = LampiranModel::all();
-        $gambar = $surat->gambar ? url("/c/private-image?path=surat/$surat->gambar") : asset("assets/image/default-2.png");
+        $gambar = $surat->gambar ? url("/c/private-image?path=$surat->gambar") : asset("assets/image/default-2.png");
         $params = (object) [
             "title" => "Ubah Surat",
             "action_form" => route("surat.update", $id),
@@ -184,7 +184,7 @@ class SuratController extends Controller
         $validated = request()->validate([
             "nama_surat" => "required|min:3|max:50",
             "singkatan_surat" => "required|min:3|max:8",
-            "gambar" => "required|file|image|max:2024",
+            "gambar" => "nullable|file|image|max:2024",
             "pendukungFields" => "array", // Validasi array pendukungFields
             "pendukungFields.*" => "nullable|string|max:255", // Validasi setiap field
             "lampiranFields" => "array", // Validasi array lampiranFields
@@ -207,7 +207,7 @@ class SuratController extends Controller
                 $file->storeAs('surat', $randomName, ['disk' => 'private']);
                 $surat->gambar = $randomName; // Update nama gambar
             }
-            $surat->singkata_nama_surat = implode('', array_map(function ($word) {
+            $surat->singkatan_nama_surat = implode('', array_map(function ($word) {
                 return ctype_alpha($word[0]) ? strtoupper($word[0]) : '';
             }, explode(' ', $validated['nama_surat'])));
 
@@ -260,7 +260,7 @@ class SuratController extends Controller
         }
         $surat->delete();
 
-        return redirect()->back()->with('success', 'Berita berhasil diperbarui');
+        return redirect()->back()->with('success', 'surat berhasil dihapus');
     }
 
 

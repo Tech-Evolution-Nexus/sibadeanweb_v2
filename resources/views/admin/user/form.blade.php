@@ -22,7 +22,7 @@
                 <!-- Nama -->
                 <div>
                     <x-input-label for="name" :value="__('Nama Lengkap')" />
-                    <x-text-input :value="old('name', $data->name)" type="text" class="block mt-1 w-full"
+                    <x-text-input :value="old('name', $data->masyarakat->nama_lengkap)" type="text" class="block mt-1 w-full"
                         placeholder="Nama Lengkap" name="name" id="name" required />
                     <x-input-error :messages="$errors->get('name')" class="mt-2 text-red-500 text-xs" />
                 </div>
@@ -44,33 +44,21 @@
                     <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-500 text-xs" />
                 </div>
 
-                <!-- Role -->
-                <div>
-                    <x-input-label for="role" :value="__('Role')" />
-                    <select name="role" id="role" class="block w-full mt-1 p-2 border border-gray-300 rounded-md">
-                        <option value="">Pilih Role</option>
-                        <option value="admin" {{ old('role', $data->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                        <option value="petugas" {{ old('role', $data->role) == 'petugas' ? 'selected' : '' }}>Petugas
-                        </option>
-                        <option value="user" {{ old('role', $data->role) == 'user' ? 'selected' : '' }}>User</option>
-                    </select>
-                    <x-input-error :messages="$errors->get('role')" class="mt-2 text-red-500 text-xs" />
-                </div>
 
                 <!-- Status -->
                 <div>
                     <x-input-label for="status" :value="__('Status')" />
                     <select name="status" id="status" class="block w-full mt-1 p-2 border border-gray-300 rounded-md">
                         <option value="">Pilih Status</option>
-                        <option value="aktif" {{ old('status', $data->status) == 'aktif' ? 'selected' : '' }}>Aktif
+                        <option value=1 {{ old('status', $data->status) == 1 ? 'selected' : '' }}>Aktif
                         </option>
-                        <option value="nonaktif" {{ old('status', $data->status) == 'nonaktif' ? 'selected' : '' }}>
+                        <option value=0 {{ old('status', $data->status) == 0 ? 'selected' : '' }}>
                             Nonaktif</option>
                     </select>
                     <x-input-error :messages="$errors->get('status')" class="mt-2 text-red-500 text-xs" />
                 </div>
 
-                <!-- Masa Jabatan -->
+                <!-- Masa Jabatan
                 <h6 class="font-bold mt-4 md:col-span-2 text-lg">Masa Jabatan</h6>
 
                 <div>
@@ -85,7 +73,7 @@
                     <x-text-input :value="old('masa_jabatan_selesai', $data->masa_jabatan_selesai)" type="date"
                         class="block mt-1 w-full" name="masa_jabatan_selesai" id="masa_jabatan_selesai" required />
                     <x-input-error :messages="$errors->get('masa_jabatan_selesai')" class="mt-2 text-red-500 text-xs" />
-                </div>
+                </div> -->
             </div>
 
             <!-- Tombol -->
