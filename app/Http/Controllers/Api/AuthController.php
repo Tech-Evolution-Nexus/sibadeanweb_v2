@@ -330,13 +330,18 @@ class AuthController extends Controller
     }
     public function postVerifikasiMasyarakat($idUser)
     {
-        $user = User::find($idUser);
-        $user->update(['status' => request('status')]);
-        $status = request('status') == 1 ? '*BERHASIL DISETUJUI*' : '*TIDAK DISTUJUI*';
+        try {
+            $user = User::find($idUser);
+            $user->update(['status' => request('status')]);
+            $status = request('status') == 1 ? '*BERHASIL DISETUJUI*' : '*TIDAK DISTUJUI*';
 
-        HelpersNotificationHelper::sendFonnte($user->no_hp, "Data anda telah diverifikasi dengan status: $status");
+            HelpersNotificationHelper::sendFonnte($user->no_hp, "Data anda telah diverifikasi dengan status: $status");
 
-        return ResponseHelper::success($user);
+            return ResponseHelper::success($user);
+        } catch (\Throwable $th) {
+            return ResponseHelper::error($th->getMessage());
+            //throw $th;
+        }
     }
     public function verifikasiDetailMasyarakat($idUser)
     {
