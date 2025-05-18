@@ -107,9 +107,9 @@ class SuratController extends Controller
         // Jika ada file foto Surat
         if (request()->hasFile('gambar')) {
             $file = request()->file('gambar');
-            $randomName = 'surat/' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $randomName =  uniqid() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('surat', $randomName, ['disk' => 'private']);
-            $dataSurat['gambar'] = $randomName;
+            $dataSurat['gambar'] = 'surat/' .$randomName;
         }
 
         // Menyimpan data Surat
@@ -199,13 +199,13 @@ class SuratController extends Controller
             $surat->singkatan_nama_surat = $validated['singkatan_surat'];
             // Cek jika ada gambar baru, hapus gambar lama dan simpan gambar baru
             if (request()->hasFile('gambar')) {
-                if ($surat->gambar && file_exists(storage_path('app/private/surat/' . $surat->gambar))) {
-                    unlink(storage_path('app/private/surat/' . $surat->gambar)); // Hapus gambar lama
+                if ($surat->gambar && file_exists(storage_path('app/private/' . $surat->gambar))) {
+                    unlink(storage_path('app/private/' . $surat->gambar)); // Hapus gambar lama
                 }
                 $file = request()->file('gambar');
-                $randomName = 'surat/' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $randomName =  uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('surat', $randomName, ['disk' => 'private']);
-                $surat->gambar = $randomName; // Update nama gambar
+                $surat->gambar ='surat/' . $randomName; // Update nama gambar
             }
             $surat->singkatan_nama_surat = implode('', array_map(function ($word) {
                 return ctype_alpha($word[0]) ? strtoupper($word[0]) : '';
@@ -254,7 +254,7 @@ class SuratController extends Controller
      */
     public function destroy(SuratModel $surat)
     {
-        $oldImagePath = storage_path('app/private/surat/' . $surat->gambar);
+        $oldImagePath = storage_path('app/private/' . $surat->gambar);
         if (file_exists($oldImagePath)) {
             unlink($oldImagePath); // Menghapus file gambar lama
         }

@@ -64,9 +64,9 @@ class SuraKeluarController extends Controller
 
         if (request()->hasFile('nama_file')) {
             $pdfFile = request()->file('nama_file');
-            $pdfName = "surat-keluar/" . uniqid() . '.' . $pdfFile->getClientOriginalExtension();
+            $pdfName =  uniqid() . '.' . $pdfFile->getClientOriginalExtension();
             $pdfFile->storeAs('surat-keluar', $pdfName, ['disk' => 'private']);
-            $dataSurat['nama_file'] = $pdfName;
+            $dataSurat['nama_file'] = "surat-keluar/" . $pdfName;
         }
 
         SuratKeluarModel::create($dataSurat);
@@ -114,16 +114,16 @@ class SuraKeluarController extends Controller
 
             if (request()->hasFile('nama_file')) {
                 if ($surat->nama_file && $surat->nama_file !== 'default.pdf') {
-                    $oldPath = storage_path('app/private/surat-keluar/' . $surat->nama_file);
+                    $oldPath = storage_path('app/private/' . $surat->nama_file);
 
                     if (file_exists($oldPath))
                         unlink($oldPath);
                 }
 
                 $file = request()->file('nama_file');
-                $randomName = "surat-keluar/" . uniqid() . '.' . $file->getClientOriginalExtension();
+                $randomName =  uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('surat-keluar', $randomName, ['disk' => 'private']);
-                $surat->nama_file = $randomName;
+                $surat->nama_file = "surat-keluar/" . $randomName;
             }
 
             $surat->save();
@@ -137,7 +137,7 @@ class SuraKeluarController extends Controller
     {
         $surat = SuratKeluarModel::findOrFail($id);
         if ($surat->nama_file && $surat->nama_file !== 'default.pdf') {
-            $filePath = storage_path('app/private/surat-keluar/' . $surat->nama_file);
+            $filePath = storage_path('app/private/' . $surat->nama_file);
             if (file_exists($filePath)) {
                 unlink($filePath);
             }
@@ -177,7 +177,7 @@ class SuraKeluarController extends Controller
 
     public function download($filename)
     {
-        $path = storage_path("app/private/surat-keluar/" . $filename);
+        $path = storage_path("app/private/" . $filename);
 
         if (!file_exists($path)) {
             abort(404);
@@ -200,7 +200,7 @@ class SuraKeluarController extends Controller
     }
     public function apiDownload($filename)
     {
-        $path = storage_path("app/private/surat-keluar/" . $filename);
+        $path = storage_path("app/private/" . $filename);
 
         if (!file_exists($path)) {
             return response()->json([
