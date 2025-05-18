@@ -14,7 +14,6 @@ class UserController extends Controller
     public function index()
     {
         $users = User::where("role", "!=", "admin")->with("masyarakat")->where("status", 1)->orderBy("created_at", "desc")->get();
-dd($users->toArray());
         if (request()->ajax()) {
             return $this->dataTable($users);
         }
@@ -122,7 +121,7 @@ dd($users->toArray());
             ->addColumn('nama_lengkap', function ($row) {
                 return $row->masyarakat->nama_lengkap;
             })
-            ->rawColumns(["action"])
+            ->rawColumns(["action","nama_lengkap"])
             ->make(true);
     }
 }
