@@ -2,7 +2,7 @@
     <div class="md:px-12 px-6 md:py-10 py-5">
         <div class="mb-10">
             <div class="text-sm">
-                Dashboard / <a class="hover:underline" href="{{ route('user.index') }}">User</a> / {{ $title }}
+                Dashboard / <a class="hover:underline" href="{{ route('users.index') }}">User</a> / {{ $title }}
             </div>
             <div class="flex">
                 <h1 class="text-2xl font-bold">{{ $title }}</h1>
