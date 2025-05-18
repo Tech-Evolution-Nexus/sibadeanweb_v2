@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
@@ -13,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where("role", "!=", "admin")->with("masyarakat")->where("status", 1)->orderBy("created_at", "desc")->get();
+        $users = User::whereNotIn("role", ["admin", "petugas", "lurah"])->with("masyarakat")->where("status", 1)->orderBy("created_at", "desc")->get();
         if (request()->ajax()) {
             return $this->dataTable($users);
         }
@@ -43,13 +44,13 @@ class UserController extends Controller
             "name" => "required|min:3|max:50",
             "email" => "required|email|unique:users,email",
             "password" => "required|min:6",
-            "role" => "required",
             "status" => "required",
             "masa_jabatan_mulai" => "required|date",
             "masa_jabatan_selesai" => "required|date|after:masa_jabatan_mulai"
         ]);
 
         $validated["password"] = bcrypt($validated["password"]);
+        $validated["role"] = "user";
         User::create($validated);
         return redirect()->route("users.index")->with("success", "User berhasil ditambahkan");
     }
@@ -75,16 +76,15 @@ class UserController extends Controller
         $validated = $request->validate([
             "name" => "required|min:3|max:50",
             "email" => "required|email|unique:users,email," . $user->id,
-            "role" => "required",
             "status" => "required",
-            "masa_jabatan_mulai" => "required|date",
-            "masa_jabatan_selesai" => "required|date|after:masa_jabatan_mulai"
+            // "masa_jabatan_mulai" => "required|date",
+            // "masa_jabatan_selesai" => "required|date|after:masa_jabatan_mulai"
         ]);
 
         if ($request->filled("password")) {
-            $validated["password"] = bcrypt($request->password);
+            $validated["password"] = Hash::make($request->password);
         }
-
+        $validated["role"] = "masyarakat";
         $user->update($validated);
         return redirect()->route("users.index")->with("success", "User berhasil diperbarui");
     }
@@ -107,6 +107,9 @@ class UserController extends Controller
             ->addIndexColumn()
             ->addColumn('masa_jabatan', function ($row) {
                 return $row->masa_jabatan_mulai . ' - ' . $row->masa_jabatan_selesai;
+            })
+            ->addColumn('status', function ($row) {
+                return $row->status == 1 ? 'Aktif' : 'Nonaktif';
             })
             ->addColumn('action', function ($row) {
                 return '<div class="row flex">

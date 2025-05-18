@@ -3,7 +3,7 @@
         <div class="mb-10">
             <div class="text-sm">
                 Dashboard /
-                <a class="hover:underline" href="{{ route('surat.index') }}">Kartu keluarga</a> /
+                <a class="hover:underline" href="{{ route('surat.index') }}">Surat</a> /
                 {{ $data->title }}
             </div>
             <div class="flex">

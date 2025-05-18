@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\NotificationHelper as HelpersNotificationHelper;
 use Auth;
 use Illuminate\Http\Request;
 use App\Models\MasyarakatModel;
@@ -329,15 +330,20 @@ class AuthController extends Controller
     }
     public function postVerifikasiMasyarakat($idUser)
     {
-        User::find($idUser)->update(['status' => request('status')]);
-        return ResponseHelper::success([]);
+        $user = User::find($idUser);
+        $user->update(['status' => request('status')]);
+        $status = request('status') == 1 ? '*BERHASIL DISETUJUI*' : '*TIDAK DISTUJUI*';
+
+        HelpersNotificationHelper::sendFonnte($user->no_hp, "Data anda telah diverifikasi dengan status: $status");
+
+        return ResponseHelper::success($user);
     }
     public function verifikasiDetailMasyarakat($idUser)
     {
         $masyarakat = MasyarakatModel::where("id_user", $idUser)
             // ->with(['user', 'kartuKeluarga'])
             ->first();
-        return ResponseHelper::success($masyarakat);
+        return ResponseHelper::success([]);
     }
     public function cekuser(Request $request)
     {

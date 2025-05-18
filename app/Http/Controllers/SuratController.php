@@ -107,9 +107,9 @@ class SuratController extends Controller
         // Jika ada file foto Surat
         if (request()->hasFile('gambar')) {
             $file = request()->file('gambar');
-            $randomName = 'surat/' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $randomName =  uniqid() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('surat', $randomName, ['disk' => 'private']);
-            $dataSurat['gambar'] = $randomName;
+            $dataSurat['gambar'] = 'surat/' .$randomName;
         }
 
         // Menyimpan data Surat
@@ -159,7 +159,7 @@ class SuratController extends Controller
     {
         $surat = SuratModel::with('fields', 'lampiransurat.lampiran')->where('id', $id)->first();
         $lampiranList = LampiranModel::all();
-        $gambar = $surat->gambar ? url("/c/private-image?path=surat/$surat->gambar") : asset("assets/image/default-2.png");
+        $gambar = $surat->gambar ? url("/c/private-image?path=$surat->gambar") : asset("assets/image/default-2.png");
         $params = (object) [
             "title" => "Ubah Surat",
             "action_form" => route("surat.update", $id),
@@ -184,7 +184,7 @@ class SuratController extends Controller
         $validated = request()->validate([
             "nama_surat" => "required|min:3|max:50",
             "singkatan_surat" => "required|min:3|max:8",
-            "gambar" => "required|file|image|max:2024",
+            "gambar" => "nullable|file|image|max:2024",
             "pendukungFields" => "array", // Validasi array pendukungFields
             "pendukungFields.*" => "nullable|string|max:255", // Validasi setiap field
             "lampiranFields" => "array", // Validasi array lampiranFields
@@ -199,15 +199,15 @@ class SuratController extends Controller
             $surat->singkatan_nama_surat = $validated['singkatan_surat'];
             // Cek jika ada gambar baru, hapus gambar lama dan simpan gambar baru
             if (request()->hasFile('gambar')) {
-                if ($surat->gambar && file_exists(storage_path('app/private/surat/' . $surat->gambar))) {
-                    unlink(storage_path('app/private/surat/' . $surat->gambar)); // Hapus gambar lama
+                if ($surat->gambar && file_exists(storage_path('app/private/' . $surat->gambar))) {
+                    unlink(storage_path('app/private/' . $surat->gambar)); // Hapus gambar lama
                 }
                 $file = request()->file('gambar');
-                $randomName = 'surat/' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $randomName =  uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('surat', $randomName, ['disk' => 'private']);
-                $surat->gambar = $randomName; // Update nama gambar
+                $surat->gambar ='surat/' . $randomName; // Update nama gambar
             }
-            $surat->singkata_nama_surat = implode('', array_map(function ($word) {
+            $surat->singkatan_nama_surat = implode('', array_map(function ($word) {
                 return ctype_alpha($word[0]) ? strtoupper($word[0]) : '';
             }, explode(' ', $validated['nama_surat'])));
 
@@ -254,13 +254,13 @@ class SuratController extends Controller
      */
     public function destroy(SuratModel $surat)
     {
-        $oldImagePath = storage_path('app/private/surat/' . $surat->gambar);
+        $oldImagePath = storage_path('app/private/' . $surat->gambar);
         if (file_exists($oldImagePath)) {
             unlink($oldImagePath); // Menghapus file gambar lama
         }
         $surat->delete();
 
-        return redirect()->back()->with('success', 'Berita berhasil diperbarui');
+        return redirect()->back()->with('success', 'surat berhasil dihapus');
     }
 
 

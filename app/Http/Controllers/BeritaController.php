@@ -70,9 +70,9 @@ class BeritaController extends Controller
 
         if (request()->hasFile('gambar')) {
             $file = request()->file('gambar');
-            $randomName = 'berita/' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $randomName =  uniqid() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('berita', $randomName, ['disk' => 'private']);
-            $dataBerita['gambar'] = $randomName;
+            $dataBerita['gambar'] = 'berita/' . $randomName;
         }
 
         // Menyimpan data kartu keluarga
@@ -98,7 +98,7 @@ class BeritaController extends Controller
 
         $berita = BeritaModel::find($id);
 
-        $fotoBerita = $berita->gambar ? url("/c/private-image?path=berita/$berita->gambar") : asset("assets/image/default-2.png");
+        $fotoBerita = $berita->gambar ? url("/c/private-image?path=$berita->gambar") : asset("assets/image/default-2.png");
         $params["data"] = (object) [
             "title" => "Ubah Berita",
             "action_form" => route("berita.update", $id),
@@ -124,12 +124,11 @@ class BeritaController extends Controller
 
         $validated = request()->validate(
             [
-
                 "judul" => "required|min:3|unique:berita,judul,$id",
                 "slug" => "required|min:3|unique:berita,slug,$id",
                 "keterangan" => "required|min:3",
                 "konten" => "required|min:3",
-                "gambar" => "required|file|image|max:2024", // Validasi foto (optional)
+                "gambar" => "nullable|file|image|max:2024", // Validasi foto (optional)
             ]
         );
 
@@ -142,12 +141,12 @@ class BeritaController extends Controller
             $dataBerita->keterangan = $validated['keterangan'];
             $dataBerita->konten = $validated['konten'];
             // $dataBerita->kk_tgl = $validated['tanggal_kk'];
-            $oldImagePath = storage_path('app/private/berita/' . $dataBerita->gambar);
+            $oldImagePath = storage_path('app/private/' . $dataBerita->gambar);
             // Jika ada file foto kartu keluarga baru
             if (request()->hasFile('gambar')) {
                 // Menghapus gambar lama jika ada
                 if ($dataBerita->gambar) {
-                    $oldImagePath = storage_path('app/private/berita/' . $dataBerita->gambar);
+                    $oldImagePath = storage_path('app/private/' . $dataBerita->gambar);
                     if (file_exists($oldImagePath) && $dataBerita->gambar != "default-2.png") {
                         unlink($oldImagePath); // Menghapus file gambar lama
                     }
@@ -155,9 +154,9 @@ class BeritaController extends Controller
 
                 // Menyimpan gambar yang baru
                 $file = request()->file('gambar');
-                $randomName = 'berita/' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('berita', $randomName, ['disk' => 'private']);
-                $dataBerita->gambar = $randomName;
+                $dataBerita->gambar = 'berita/' .  $randomName;
             }
 
             // Menyimpan data kartu keluarga yang telah diperbarui
@@ -176,7 +175,7 @@ class BeritaController extends Controller
     public function destroy($id)
     {
         $BeritaModel = BeritaModel::findOrFail($id);
-        $oldImagePath = storage_path('app/private/berita/' . $BeritaModel->gambar);
+        $oldImagePath = storage_path('app/private/' . $BeritaModel->gambar);
         // dd($oldImagePath);
         if (file_exists($oldImagePath)) {
             unlink($oldImagePath); // Menghapus file gambar lama
@@ -193,7 +192,7 @@ class BeritaController extends Controller
             ->addIndexColumn()
             ->addColumn('gambar', function ($surat) {
                 $gambarUrl = $surat->gambar
-                    ? url("/c/private-image?path=berita/$surat->gambar")
+                    ? url("/c/private-image?path=$surat->gambar")
                     : asset("assets/image/default-2.png");
 
                 return '<img src="' . $gambarUrl . '" alt="Gambar Surat" width="50">';
