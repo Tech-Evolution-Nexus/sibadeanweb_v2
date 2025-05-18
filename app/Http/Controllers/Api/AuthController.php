@@ -335,7 +335,7 @@ class AuthController extends Controller
     public function verifikasiDetailMasyarakat($idUser)
     {
         $masyarakat = MasyarakatModel::where("id_user", $idUser)
-            ->with(['user', 'kartuKeluarga'])
+            // ->with(['user', 'kartuKeluarga'])
             ->first();
         return ResponseHelper::success($masyarakat);
     }
