@@ -80,7 +80,7 @@
             document.addEventListener("DOMContentLoaded", function () {
                 if (document.querySelector('.konten')) {
                     const kontenEditor = document.querySelector("#konten");
-                    const fields = @json("data")['fields'];
+                    const fields = @json($data->fields);
                     if (kontenEditor) {
                         ClassicEditor.create(kontenEditor, {
                             plugins: [Mention, HtmlEmbed, Heading, Essentials, Paragraph, Bold, Italic, Font, Alignment, Image, ImageUpload, TableColumnResize, TableToolbar, Table, Indent, HorizontalLine, Underline],
