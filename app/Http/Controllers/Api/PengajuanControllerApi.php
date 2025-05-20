@@ -123,7 +123,7 @@ class PengajuanControllerApi extends Controller
         return response()->json([
             'message' => 'Pengajuan berhasil disimpan.',
             'data' => $pengajuan
-        ], 201);
+        ], 200);
     }
     function getKartuKeluargaByRoleAndField($field, $value, $role)
     {
