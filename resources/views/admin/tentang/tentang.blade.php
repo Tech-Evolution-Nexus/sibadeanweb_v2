@@ -102,7 +102,7 @@
 
                 <div class="mt-6 text-right">
                     <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded shadow">
-                        Kirim
+                        Simpan
                     </button>
                 </div>
             </form>
