@@ -21,11 +21,26 @@ class Helpers
         return Carbon::parse($date)->translatedFormat('d F Y');
     }
 
-    static function getCountPengajuan(){
-        $countMenungguPengajuan = PengajuanSuratModel::where("status","di_terima_rw")->count();
-        $countPengajuan =PengajuanSuratModel::where("status","selesai")->orWhere("status","di_terima_rw")->count();
+    static function getCountPengajuan()
+    {
+        $countMenungguPengajuan = PengajuanSuratModel::where("status", "di_terima_rw")->count();
+        $countPengajuan = PengajuanSuratModel::where("status", "selesai")->orWhere("status", "di_terima_rw")->count();
 
-        return (object)["countMenungguPengajuan"=>$countMenungguPengajuan,"countPengajuan"=>$countPengajuan];
+        return (object) ["countMenungguPengajuan" => $countMenungguPengajuan, "countPengajuan" => $countPengajuan];
+    }
+
+    static function formatStatusPengajuan($status)
+    {
+        return match ($status) {
+            "pending" => "Menunggu Rt",
+            "di_terima_rt" => "Diterima oleh RT",
+            "di_tolak_rt" => "Ditolak oleh RT",
+            "di_terima_rw" => "Diterima oleh RW",
+            "di_tolak_rw" => "Ditolak oleh RW",
+            "selesai" => "Diterima oleh Lurah",
+            "di_tolak_lurah" => "Ditolak oleh Lurah",
+
+        };
     }
 }
 class ResponseHelper

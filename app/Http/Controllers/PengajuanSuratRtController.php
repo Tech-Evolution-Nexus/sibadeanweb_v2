@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HistoriPengajuan;
 use App\Models\PengajuanSuratModel;
 use Helpers;
 use Yajra\DataTables\DataTables;
@@ -15,7 +16,7 @@ class PengajuanSuratRtController extends Controller
     {
         $anggotaKeluarga = PengajuanSuratModel::where("status", "di_terima_rt")->orderBy("created_at", "desc")->get();
 
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "anggota_keluarga" => $anggotaKeluarga
         ];
 
@@ -26,23 +27,23 @@ class PengajuanSuratRtController extends Controller
     }
     public function show($id)
     {
-        $anggotaKeluarga = PengajuanSuratModel::where("status", "di_terima_rw")->where("id", $id)->first();
-        if (!$anggotaKeluarga) {
+        $pengajuan = PengajuanSuratModel::where("status", "di_terima_rw")->where("id", $id)->first();
+
+        if (!$pengajuan) {
             return abort(404);
-            # code...
         }
 
-        $params["data"] = (object)[
-            "title" => "Pengajuan Surat","action_form"=> route("pengajuan-surat.update",$id),
-            "pengajuan" => $anggotaKeluarga
+        $params["data"] = (object) [
+            "title" => "Pengajuan Surat",
+            "action_form" => route("pengajuan-surat.update", $id),
+            "pengajuan" => $pengajuan,
         ];
 
         return view("admin.pengajuan-surat.form", $params);
     }
     public function updateStatus($id)
     {
-        $pengajuan =     PengajuanSuratModel::find($id);
-
+        $pengajuan = PengajuanSuratModel::find($id);
         if (!$pengajuan) {
             return redirect()->back()->with("error", "data tidak ditemukan");
         }
@@ -59,9 +60,9 @@ class PengajuanSuratRtController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 $btn = '<div class="row flex">';
-                   $btn .= '<a href="' . route('pengajuan-surat.show', $row->id) . '" class="btn-show"><i class="fa fa-info"></i></a>';
-                  // $btn .= ' <a href="' . route('anggota-keluarga.edit', [$row->no_kk, $row->nik]) . '" class="btn-edit"><i class="fa fa-pencil"></i></a>';
-                   $message = "Apakah anda yakin menghapus data $row->nama_lengkap?";
+                $btn .= '<a href="' . route('pengajuan-surat.show', $row->id) . '" class="btn-show"><i class="fa fa-info"></i></a>';
+                // $btn .= ' <a href="' . route('anggota-keluarga.edit', [$row->no_kk, $row->nik]) . '" class="btn-edit"><i class="fa fa-pencil"></i></a>';
+                $message = "Apakah anda yakin menghapus data $row->nama_lengkap?";
                 //    $btn .= "<button class='btn-delete' x-data x-on:click=\"\$dispatch('open-modal', {name: 'delete'}), message= '$message', url= '" . route("anggota-keluarga.destroy", [$row->no_kk, $row->nik]) . "'\"><i class='fa fa-trash'></i></button>";
                 $btn .= '</div>';
                 return $btn;
@@ -81,7 +82,7 @@ class PengajuanSuratRtController extends Controller
                 return $row->masyarakat->kartuKeluarga->rt;
             })
             ->addColumn("created_at", function ($row) {
-                return Helpers::formatDate($row->created_at,true);
+                return Helpers::formatDate($row->created_at, true);
             })
             ->rawColumns(['action'])
             ->make(true);

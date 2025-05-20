@@ -35,4 +35,9 @@ class PengajuanSuratModel extends Model
     {
         return $this->hasMany(FieldValue::class, 'id_pengajuan');
     }
+
+    public function histori()
+    {
+        return $this->hasMany(HistoriPengajuan::class, "id_pengajuan");
+    }
 }

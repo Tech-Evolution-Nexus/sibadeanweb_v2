@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PengajuanResource;
+use App\Models\HistoriPengajuan;
 use App\Models\LampiranSuratModel;
 use App\Models\MasyarakatModel;
 use App\Models\PengajuanSuratModel;
@@ -113,7 +114,11 @@ class PengajuanMasyarakatController extends Controller
                 $status = "di_terima_rw";
             }
         }
-
+        HistoriPengajuan::create([
+            "id_pengajuan" => $idPengajuan,
+            "id_petugas" => auth()->user()->id,
+            "status_pengajuan" => $status
+        ]);
         $pengajuan->update([
             "status" => $status,
             "keterangan_ditolak" => request()->keterangan,

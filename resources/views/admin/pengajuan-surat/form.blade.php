@@ -17,6 +17,36 @@
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
+        <div class="card bg-white rounded-lg shadow-sm p-6 mb-4">
+            <h2 class="text-lg font-semibold mb-6">Timeline Status Pengajuan</h2>
+
+            <div class="flex items-center justify-center overflow-x-auto space-x-4 ">
+                @foreach ($data->pengajuan->histori as $index => $histori)
+                    <!-- Titik pertama -->
+                    <div class="flex flex-col  items-center relative ">
+                        <!-- Circle -->
+                        <div class="w-5 h-5 bg-blue-600 rounded-full border-4 border-white z-10"></div>
+                        <!-- Box bawah -->
+                        <div class="mt-2 bg-blue-100 p-3 rounded shadow text-center w-40">
+                            <p class="text-sm font-semibold text-grey-600">
+                                {{Helpers::formatStatusPengajuan($histori->status_pengajuan) }}
+                            </p>
+                            <p class="text-xs text-grey-600 mt-1">{{ Helpers::formatDate($histori->created_at) }}</p>
+                        </div>
+                        @if (!$loop->last)
+                            <div class="h-1 bg-gray-200 rounded-sm   w-[163%] absolute top-2 left-[60%]">
+                            </div>
+                        @endif
+                    </div>
+
+                    @if (!$loop->last)
+                        <div class="h-1  flex-1 max-w-[100px]" style="min-width: 40px;"></div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+
+
         <div class="card">
             <!-- Detail Card -->
             <div class=" p-6">
@@ -26,7 +56,7 @@
                         $customFields = $data->pengajuan->fieldValues;
                         $formatFields = [];
                         foreach ($customFields as $field) {
-                            $formatFields[strtoupper($field->field->nama_field)] = $field->value;
+                            $formatFields[strtoupper($field->fields->nama_field)] = $field->value;
                         }
                         $fields = [
                             'Nama Surat' => $data->pengajuan->surat->nama_surat ?? "-",
@@ -38,7 +68,7 @@
                             'No KK' => $data->pengajuan->masyarakat->no_kk ?? "-",
                             'Alamat' => $data->pengajuan->masyarakat->kartuKeluarga->alamat ?? "-",
                             'No HP' => $data->pengajuan->masyarakat->user->no_telepon ?? "-",
-                            'Agama' => $data->pengajuan->masyarakat->agama ?? "-",
+                            'Agama' => str_replace("_", " ", $data->pengajuan->masyarakat->agama) ?? "-",
                             'Pekerjaan' => $data->pengajuan->masyarakat->pekerjaan ?? "-",
                             'Tanggal Pengajuan' => Helpers::formatDate($data->pengajuan->created_at, true),
                         ];

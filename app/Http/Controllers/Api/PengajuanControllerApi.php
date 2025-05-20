@@ -8,6 +8,7 @@ use App\Http\Resources\BeritaResource;
 use App\Http\Resources\SuratResource;
 use App\Models\BeritaModel;
 use App\Models\FieldValue;
+use App\Models\HistoriPengajuan;
 use App\Models\LampiranPengajuanModel;
 use App\Models\PengajuanSuratModel;
 use Illuminate\Http\Request;
@@ -79,6 +80,11 @@ class PengajuanControllerApi extends Controller
         }
 
 
+        HistoriPengajuan::create([
+            "id_pengajuan" => null,
+            "id_petugas" => auth()->user()->id,
+            "status_pengajuan" => $status
+        ]);
         // 5. Simpan data pengajuan surat
         $pengajuan = PengajuanSuratModel::create([
             'nik' => $request->nik,
