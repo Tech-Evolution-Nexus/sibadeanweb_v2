@@ -131,8 +131,8 @@ class AuthController extends Controller
             ['no_kk' => $request->no_kk],
             [
                 'alamat' => $request->alamat,
-                'rt' => 1,
-                'rw' => 1,
+                'rt' => $request->rt,
+                'rw' => $request->rw,
                 'kk_gambar' => $kkGambarPath
             ]
         );
