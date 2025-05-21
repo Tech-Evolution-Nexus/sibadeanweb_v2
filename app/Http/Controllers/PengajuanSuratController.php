@@ -62,6 +62,7 @@ class PengajuanSuratController extends Controller
             // "id_petugas" => auth()->user()->masyarakat->nik,
             "status_pengajuan" => "selesai"
         ]);
+
         return redirect()->route("pengajuan-surat.index")->with("success", "Pengajuan berhasil disetujui");
     }
 

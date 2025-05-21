@@ -70,3 +70,8 @@ Route::post('/ocr-api', [Ocrtest::class, 'ocrWithApi']);
 
 Route::get('surat-keluar', [SuraKeluarController::class, 'apiIndex']);
 Route::get('/api/surat-keluar/download/{filename}', [SuraKeluarController::class, 'apiDownload']);
+
+Route::get("/pengaturan", function () {
+
+    return ResponseHelper::success(Helpers::pengaturan());
+});
