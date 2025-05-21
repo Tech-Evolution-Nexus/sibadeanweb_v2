@@ -72,6 +72,8 @@ Route::get('surat-keluar', [SuraKeluarController::class, 'apiIndex']);
 Route::get('/api/surat-keluar/download/{filename}', [SuraKeluarController::class, 'apiDownload']);
 
 Route::get("/pengaturan", function () {
-
-    return ResponseHelper::success(Helpers::pengaturan());
+    $pengaturan = Helpers::pengaturan();
+    $pengaturan->logo = url("/assets/logos/$pengaturan->logo");
+    $pengaturan->logo_horizontal = url("/assets/logos/$pengaturan->logo_horizontal");
+    return ResponseHelper::success($pengaturan);
 });
