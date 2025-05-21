@@ -70,3 +70,12 @@ Route::post('/ocr-api', [Ocrtest::class, 'ocrWithApi']);
 
 Route::get('surat-keluar', [SuraKeluarController::class, 'apiIndex']);
 Route::get('/api/surat-keluar/download/{filename}', [SuraKeluarController::class, 'apiDownload']);
+
+Route::get("/pengaturan", function () {
+    $pengaturan = Helpers::pengaturan();
+    $pengaturan->logo = url("/assets/logos/$pengaturan->logo");
+    $pengaturan->logo_horizontal = url("/assets/logos/$pengaturan->logo_horizontal");
+    $pengaturan->appName = config("app.name") ;
+    $pengaturan->descApk = config("app.name") . " merupakan aplikasi surat-menyurat digital untuk kelurahan. Aplikasi ini membantu dalam melacak permohonan surat dan proses administrasi secara efisien.";
+    return ResponseHelper::success($pengaturan);
+});
