@@ -92,40 +92,46 @@ class PengajuanMasyarakatController extends Controller
             );
         }
 
-        $pengaturan = Helpers::pengaturan();
-        $userAprove = auth()->user();
-        $role = $userAprove->role;
-        $statusPengajuan = request()->status;
+        try {
+            $pengaturan = Helpers::pengaturan();
+            $userAprove = auth()->user();
+            $role = $userAprove->role;
+            $statusPengajuan = request()->status;
 
-        $pengajuan = PengajuanSuratModel::find($idPengajuan);
+            $pengajuan = PengajuanSuratModel::find($idPengajuan);
 
-        $status = "";
-        if ($role == "rw") {
-            $status = match ($statusPengajuan) {
-                "ditolak" => "di_tolak_rw",
-                "disetujui" => "di_terima_rw",
-            };
-        } else if ($role == "rt") {
-            $status = match ($statusPengajuan) {
-                "ditolak" => "di_tolak_rt",
-                "disetujui" => "di_terima_rt",
-            };
-            if (!$pengaturan->hasRw) {
-                $status = "di_terima_rw";
+            $status = "";
+            if ($role == "rw") {
+                $status = match ($statusPengajuan) {
+                    "ditolak" => "di_tolak_rw",
+                    "disetujui" => "di_terima_rw",
+                };
+            } else if ($role == "rt") {
+                $status = match ($statusPengajuan) {
+                    "ditolak" => "di_tolak_rt",
+                    "disetujui" => "di_terima_rt",
+                };
+                if (!$pengaturan->hasRw) {
+                    $status = "di_terima_rw";
+                }
             }
-        }
-        // HistoriPengajuan::create([
-        //     "id_pengajuan" => $idPengajuan,
-        //     "id_petugas" => auth()->user()->id,
-        //     "status_pengajuan" => $status
-        // ]);
-        $pengajuan->update([
-            "status" => $status,
-            "keterangan_ditolak" => request()->keterangan,
-        ]);
+            HistoriPengajuan::create([
+                "id_pengajuan" => $idPengajuan,
+                "id_petugas" => auth()->user()->id,
+                "status_pengajuan" => $status
+            ]);
+            $pengajuan->update([
+                "status" => $status,
+                "keterangan_ditolak" => request()->keterangan,
+            ]);
 
-        return ResponseHelper::success(
-            ["message" => "Status Pengajuan berhasil diupdate"]
-        );
+            return ResponseHelper::success(
+                ["message" => "Status Pengajuan berhasil diupdate"]
+            );
+        } catch (\Throwable $th) {
+            return ResponseHelper::error(
+                ["message" => $th->getMessage()]
+            );
+        }
     }
 }
