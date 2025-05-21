@@ -95,23 +95,27 @@ class AuthController extends Controller
         $request->merge([
             "no_kk" => trim($request->no_kk),
         ]);
-
+        if ($request->nik === $request->no_kk) {
+            return ResponseHelper::error("NIK dan No KK tidak boleh sama", 422);
+        }
         // Validasi input pengguna
         $validator = Validator::make($request->all(), [
             "nama_lengkap" => "required|string|max:255",
-            "nik" => "required|unique:masyarakat,nik",
-            "no_kk" => "required|string|max:16",
+            "nik" => "required|string|digits:16|unique:masyarakat,nik",
+            "no_kk" => "required|string|digits:16",
+            "rt" => "required|integer",
+            "rw" => "required|integer",
             "tempat_lahir" => "required|string|max:255",
             "tanggal_lahir" => "required|date",
-            "jenis_kelamin" => "required|in:Laki-laki,Perempuan",
+            "jenis_kelamin" => "required|in:laki-laki,perempuan",
             "alamat" => "required|string",
             "pekerjaan" => "required|string",
             "agama" => "required|string",
-            "phone" => "required|numeric",
+            "no_hp" => "required|numeric",
             "email" => "required|email|unique:users,email",
-            "password" => "required|min:6",
-            "kk_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048", // Validasi gambar KK
-            "ktp_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048" // Validasi gambar KTP
+            "password" => "required|min:8",
+            "kk_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048",
+            "ktp_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048"
         ]);
 
         // Jika validasi gagal, kembalikan pesan error
@@ -119,14 +123,27 @@ class AuthController extends Controller
             return ResponseHelper::error($validator->errors()->first(), 422);
         }
 
-        // Proses unggah file KK
-        $kkGambarPath = 'default.jpg'; // Default jika tidak ada file yang diunggah
-        if ($request->hasFile('kk_gambar')) {
-            // Validasi dan simpan file dengan nama aman
-            $kkGambarPath = $request->file('kk_gambar')->store('kk', 'public');
+        // Simpan gambar KK
+        if (request()->hasFile('kk_gambar')) {
+            $file = request()->file('kk_gambar');
+            $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('kk', $randomName, ['disk' => 'private']);
+            $kkGambarPath = 'kk/' .  $randomName;
         }
+        if (request()->hasFile('ktp_gambar')) {
+            $file = request()->file('ktp_gambar');
+            $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('ktp', $randomName, ['disk' => 'private']);
+            $ktpGambarPath = 'ktp/' .  $randomName;
+        }
+         $user = User::create([
+            'name' => $request->nama_lengkap,
+            'email' => $request->email,
+            'no_hp'=>$request->no_hp,
+            'password' => Hash::make($request->password),
+            'asal_Data' => 'register'
+        ]);
 
-        // Cek apakah no_kk sudah ada, jika belum, buat baru
         $kk = KartuKeluargaModel::firstOrCreate(
             ['no_kk' => $request->no_kk],
             [
@@ -137,30 +154,26 @@ class AuthController extends Controller
             ]
         );
 
-        // Buat user baru dengan password yang aman
-        $user = User::create([
-            'name' => $request->nama_lengkap,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            "asal_Data" => "register"
-        ]);
+        // Buat akun user
+       
 
-        // Buat masyarakat terkait user
+        // Simpan data masyarakat
         $masyarakat = MasyarakatModel::create([
-            "nik" => $request->nik,
-            "id_user" => $user->id,
-            "no_kk" => $request->no_kk,
-            "nama_lengkap" => $request->nama_lengkap,
-            "jenis_kelamin" => $request->jenis_kelamin,
-            "tempat_lahir" => $request->tempat_lahir,
-            "tanggal_lahir" => $request->tanggal_lahir,
-            "agama" => $request->agama,
-            "pekerjaan" => $request->pekerjaan,
-            "alamat" => $request->alamat,
-            "phone" => $request->phone,
+            'nik' => $request->nik,
+            'id_user' => $user->id,
+            'no_kk' => $request->no_kk,
+            'nama_lengkap' => $request->nama_lengkap,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'tempat_lahir' => $request->tempat_lahir,
+           'tanggal_lahir' => date('Y-m-d', strtotime(str_replace('-', '/', $request->tanggal_lahir))),
+            'agama' => $request->agama,
+            'pekerjaan' => $request->pekerjaan,
+            'alamat' => $request->alamat,
+            'phone' => $request->phone,
+            'ktp_gambar' => $ktpGambarPath
         ]);
 
-        // Respons berhasil dengan data user, masyarakat, dan kk
+        // Kembalikan respons sukses
         return response()->json([
             'message' => 'Registrasi berhasil',
             'user' => [
@@ -170,8 +183,9 @@ class AuthController extends Controller
             ],
             'masyarakat' => $masyarakat,
             'kk' => $kk
-        ], 201);
+        ], 200);
     }
+
 
     public function verifikasi(Request $request)
     {
