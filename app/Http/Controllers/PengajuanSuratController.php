@@ -59,7 +59,7 @@ class PengajuanSuratController extends Controller
         $pengajuan->update(["status" => "selesai"]);
         HistoriPengajuan::create([
             "id_pengajuan" => $id,
-            "id_petugas" => auth()->user()->masyarakat->nik,
+            // "id_petugas" => auth()->user()->masyarakat->nik,
             "status_pengajuan" => "selesai"
         ]);
         return redirect()->route("pengajuan-surat.index")->with("success", "Pengajuan berhasil disetujui");
