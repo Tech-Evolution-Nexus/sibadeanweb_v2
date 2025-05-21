@@ -115,6 +115,13 @@ class PengajuanMasyarakatController extends Controller
                     $status = "di_terima_rw";
                 }
             }
+            return ResponseHelper::success(
+                [
+                    "id_pengajuan" => $idPengajuan,
+                    "id_petugas" => auth()->user()->id,
+                    "status_pengajuan" => $status
+                ]
+            );
             HistoriPengajuan::create([
                 "id_pengajuan" => $idPengajuan,
                 "id_petugas" => auth()->user()->id,
