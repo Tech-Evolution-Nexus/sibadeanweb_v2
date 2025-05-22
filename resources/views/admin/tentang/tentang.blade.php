@@ -5,6 +5,17 @@
                 @csrf
                 @method('POST')
 
+                @if ($errors->any())
+                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                        <strong>Terjadi kesalahan:</strong>
+                        <ul class="mt-2 list-disc list-inside text-sm">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <h5 class="text-xl font-bold text-gray-800 mb-4">Edit Halaman Landing Page</h5>
 
                 <h6 class="text-lg font-semibold    text-gray-700 mt-6 mb-2">- Section Home</h6>
@@ -16,12 +27,9 @@
                     <div>
                         <label for="judul_home" class="block text-sm font-medium text-gray-700">Judul Halaman
                             Home:</label>
-                        <input type="text" value="{{ old('judul_home', $value->judul_home ?? '') }}"
+                        <input type="text" value="{{ $value->hero_title }}"
                             class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200"
                             id="judul_home" name="judul_home">
-                        @error('judul_home')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
                     </div>
                 </div>
                 <div class="mt-4">
@@ -44,20 +52,20 @@
         </div>
 
         <h6 class="text-lg font-semibold text-gray-700 mt-6 mb-2">- Section Tentang</h6>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
             <div>
                 <label for="judul_tentang" class="block text-sm font-medium text-gray-700">Judul Halaman
                     Tentang:</label>
                 <input type="text" value="{{ $value->about_title }}"
-                    class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200"
+                    class="mt-4 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200"
                     id="judul_tentang" name="judul_tentang">
             </div>
-            <div>
+            {{-- <div>
                 <label for="judul_fitur" class="block text-sm font-medium text-gray-700">Judul Fitur:</label>
                 <input type="text" value="{{ $value->judul_fitur }}"
                     class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200"
                     id="judul_fitur" name="judul_fitur">
-            </div>
+            </div> --}}
             <div>
                 <label for="deskripsi_tentang" class="block text-sm font-medium text-gray-700">Deskripsi Tentang
                     Badean:</label>
@@ -65,18 +73,21 @@
                     class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->about_description }}</textarea>
             </div>
 
-            <div>
+            {{-- <div>
                 <label for="deskripsi_fitur" class="block text-sm font-medium text-gray-700">Deskripsi Fitur:</label>
                 <textarea id="deskripsi_fitur" name="deskripsi_fitur" rows="4"
                     class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->deskripsi_fitur }}</textarea>
-            </div>
+            </div> --}}
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             @foreach ($value->fiturUtama as $fu)
                 <div class=" mb-2 mt-4">
                     <label for="title_fitur_{{ $loop->iteration }}"
                         class="block text-sm font-medium text-gray-700">Judul Fitur {{ $loop->iteration }}:</label>
                     <input type="text" value="{{ $fu->title }}"
                         class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200"
-                        id="title_fitur_1" name="title_fitur_1">
+                        id="title_fitur_{{ $loop->iteration }}" name="title_fitur_{{ $loop->iteration }}">
                     <x-file-upload :name="'icon'" :label="'Gambar Fitur 1'" :defaultImage="$fu->icon ? asset($fu->icon) : asset('assets/image/default-2.png')" />
                     <x-input-error :messages="$errors->get('img_fitur_' . $loop->iteration)" class="mt-2 text-red-500 text-xs" />
                     <label for="desc_fitur_{{ $loop->iteration }}"
