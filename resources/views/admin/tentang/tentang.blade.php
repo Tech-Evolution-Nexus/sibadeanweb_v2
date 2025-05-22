@@ -109,11 +109,11 @@
             </div>
         </div>
 
-        <div class="mt-4">
+        {{-- <div class="mt-4">
             <label for="tentang_aplikasi" class="block text-sm font-medium text-gray-700">Tentang Aplikasi:</label>
             <textarea id="tentang_aplikasi" name="tentang_aplikasi" rows="4"
                 class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ $value->tentang_aplikasi }}</textarea>
-        </div>
+        </div> --}}
 
         <div class="mt-6 text-right">
             <button type="submit"
