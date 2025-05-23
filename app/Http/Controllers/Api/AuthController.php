@@ -221,6 +221,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'nik' => 'required|exists:masyarakat,nik',
             'email' => 'required|email',
+            'no_hp' => 'required|min:11|max:13',
             'password' => 'required|min:6',
         ]);
 
@@ -244,6 +245,7 @@ class AuthController extends Controller
 
         $user->update([
             'email' => $request->email,
+            'no_hp' => $request->no_hp,
             'password' => Hash::make($request->password),
             'status' => 1,
         ]);
