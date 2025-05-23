@@ -10,9 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum("asal_data", ["register", "admin"])->default("admin")->change();
-        });
+       Schema::table('users', function (Blueprint $table) {
+    if (!Schema::hasColumn('users', 'asal_data')) {
+        $table->enum('asal_data', ['register', 'admin'])->default('admin');
+    } else {
+        $table->enum('asal_data', ['register', 'admin'])->default('admin')->change();
+    }
+});
     }
 
     /**
