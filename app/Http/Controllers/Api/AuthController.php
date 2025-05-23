@@ -83,6 +83,7 @@ class AuthController extends Controller
                 'role' => $user->role,
                 'masyarakat' => $user->masyarakat
             ],
+            'fcm_token' => $user->fcm_token,
             'access_token' => $token,
             'token_type' => 'Bearer',
         ], 'Login Sukses');
@@ -136,10 +137,10 @@ class AuthController extends Controller
             $file->storeAs('ktp', $randomName, ['disk' => 'private']);
             $ktpGambarPath = 'ktp/' .  $randomName;
         }
-         $user = User::create([
+        $user = User::create([
             'name' => $request->nama_lengkap,
             'email' => $request->email,
-            'no_hp'=>$request->no_hp,
+            'no_hp' => $request->no_hp,
             'password' => Hash::make($request->password),
             'asal_Data' => 'register'
         ]);
@@ -155,7 +156,7 @@ class AuthController extends Controller
         );
 
         // Buat akun user
-       
+
 
         // Simpan data masyarakat
         $masyarakat = MasyarakatModel::create([
@@ -165,7 +166,7 @@ class AuthController extends Controller
             'nama_lengkap' => $request->nama_lengkap,
             'jenis_kelamin' => $request->jenis_kelamin,
             'tempat_lahir' => $request->tempat_lahir,
-           'tanggal_lahir' => date('Y-m-d', strtotime(str_replace('-', '/', $request->tanggal_lahir))),
+            'tanggal_lahir' => date('Y-m-d', strtotime(str_replace('-', '/', $request->tanggal_lahir))),
             'agama' => $request->agama,
             'pekerjaan' => $request->pekerjaan,
             'alamat' => $request->alamat,
@@ -377,5 +378,20 @@ class AuthController extends Controller
             ]
         ], 'Login Sukses');
         // return ResponseHelper::success($user);
+    }
+    public function fcm(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'fcm_token' => 'required|string',
+        ]);
+
+        $user = User::find($request->user_id);
+        $user->fcm_token = $request->fcm_token;
+        $user->save();
+
+        return response()->json([
+            'message' => 'FCM token berhasil disimpan',
+        ]);
     }
 }

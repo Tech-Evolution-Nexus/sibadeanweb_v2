@@ -35,6 +35,7 @@ Route::post('/aktivasi', [AuthController::class, 'activateAccount']);
 
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('reset-password', [AuthController::class, 'resetPassword']);
+Route::post('/fcm/save-token', [AuthController::class, 'fcm']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/cekuser', [AuthController::class, 'cekuser']);
