@@ -82,7 +82,7 @@ class PengajuanControllerApi extends Controller
 
         HistoriPengajuan::create([
             "id_pengajuan" => null,
-            "id_petugas" => auth()->user()->id,
+            "id_petugas" => auth()->user()->masyarakat->nik,
             "status_pengajuan" => $status
         ]);
         // 5. Simpan data pengajuan surat

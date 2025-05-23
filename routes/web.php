@@ -92,6 +92,7 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get("/tentang", [TentangController::class, 'index'])->name('tentang.index');
+    Route::post("/tentang/{id}", [TentangController::class, 'update'])->name('tentang.update');
 });
 // use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Response;
