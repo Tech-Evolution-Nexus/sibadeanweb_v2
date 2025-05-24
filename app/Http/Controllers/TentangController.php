@@ -118,6 +118,7 @@ class TentangController extends Controller
                 if ($imgFile) {
                     $iconName = uniqid() . '.' . $imgFile->getClientOriginalExtension();
                     $imgFile->move(public_path('assets/images'), $iconName);
+                    $iconName = "assets/images/$iconName";
                 }
 
                 // Simpan ke database
