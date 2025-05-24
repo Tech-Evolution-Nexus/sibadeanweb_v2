@@ -18,83 +18,46 @@ class TentangController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request->all());
-
-        $validatedData = $request->validate([
+        $rules = [
             'judul_home' => 'required|string',
-            'deskripsi_home' => 'required|string|max:255',
+            'deskripsi_home' => 'required|string',
             'hero_image' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
             'about_image' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
             'judul_tentang' => 'required|string',
-            // 'judul_fitur' => 'required|string',
-            'deskripsi_tentang' => 'required|string|max:255',
-            // 'deskripsi_fitur' => 'required|string|max:255',
-            'title_fitur_1' => 'required|string',
-            'title_fitur_2' => 'required|string',
-            'title_fitur_3' => 'required|string',
-            'title_fitur_4' => 'required|string',
-            'imge_fitur_1' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
-            'imge_fitur_2' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
-            'imge_fitur_3' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
-            'imge_fitur_4' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
-            'desc_fitur_1' => 'required|string|max:255',
-            'desc_fitur_2' => 'required|string|max:255',
-            'desc_fitur_3' => 'required|string|max:255',
-            'desc_fitur_4' => 'required|string|max:255',
-            'video_url' => 'required|string|',
-        ], [
+            'deskripsi_tentang' => 'required|string',
+            'video_url' => 'required|string',
+
+            'title' => 'required|array|min:1',
+            'title.*' => 'required|string',
+
+            'desc' => 'required|array|min:1',
+            'desc.*' => 'required|string|max:255',
+
+            'imge' => 'nullable|array',
+            'imge.*' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
+        ];
+        $messages = [
             'judul_home.required' => 'Judul Home harus diisi',
-            'judul_home.string' => 'Judul Home harus berupa huruf dan angka',
             'deskripsi_home.required' => 'Deskripsi Home harus diisi',
-            'deskripsi_home.string' => 'Deskripsi Home harus berupa huruf dan angka',
-            'deskripsi_home.max' => 'Deskripsi Home tidak boleh lebih dari 255 karakter',
-            'hero_image.image' => 'File harus berupa gambar.',
-            'hero_image.mimes' => 'File harus memiliki format: webp, jpeg, png, jpg, gif, atau svg.',
-            'hero_image.max' => 'File tidak boleh lebih dari 2MB.',
-            'about_image.image' => 'File harus berupa gambar.',
-            'about_image.mimes' => 'File harus memiliki format: webp, jpeg, png, jpg, gif, atau svg.',
-            'about_image.max' => 'File tidak boleh lebih dari 2MB.',
             'judul_tentang.required' => 'Judul Tentang harus diisi',
-            'judul_tentang.string' => 'Judul Tentang harus berupa huruf dan angka',
-            'deskripsi_tentang.max' => 'deskripsi_home tidak boleh lebih dari 255 karakter.',
-            // 'judul_fitur.required' => 'Judul Fitur harus diisi',
-            // 'judul_fitur.string' => 'Judul Fitur harus berupa huruf dan angka',
-            // 'deskripsi_fitur.required' => 'Deskripsi Fitur tidak boleh kosong',
-            // 'deskripsi_fitur.string' => 'Deskripsi Fitur harus berupa huruf dan angka',
-            // 'deskripsi_fitur.max' => 'Deskripsi Fitur tidak boleh lebih dari 255 karakter.',
-            'title_fitur_1.required' => 'Title Fitur 1 harus diisi',
-            'title_fitur_1.string' => 'Title Fitur 1 harus berupa huruf dan angka',
-            'title_fitur_2.required' => 'Title Fitur 2 harus diisi',
-            'title_fitur_2.string' => 'Title Fitur 2 harus berupa huruf dan angka',
-            'title_fitur_3.required' => 'Title Fitur 3 harus diisi',
-            'title_fitur_3.string' => 'Title Fitur 3 harus berupa huruf dan angka',
-            'title_fitur_4.required' => 'Title Fitur 4 harus diisi',
-            'title_fitur_4.string' => 'Title Fitur 4 harus berupa huruf dan angka',
-            'imge_fitur_1.image' => 'File harus berupa gambar.',
-            'imge_fitur_1.mimes' => 'File harus memiliki format: webp, jpeg, png, jpg, gif, atau svg.',
-            'imge_fitur_1.max' => 'File tidak boleh lebih dari 2MB.',
-            'imge_fitur_2.image' => 'File harus berupa gambar.',
-            'imge_fitur_2.mimes' => 'File harus memiliki format: webp, jpeg, png, jpg, gif, atau svg.',
-            'imge_fitur_2.max' => 'File tidak boleh lebih dari 2MB.',
-            'imge_fitur_3.image' => 'File harus berupa gambar.',
-            'imge_fitur_3.mimes' => 'File harus memiliki format: webp, jpeg, png, jpg, gif, atau svg.',
-            'imge_fitur_3.max' => 'File tidak boleh lebih dari 2MB.',
-            'imge_fitur_4.image' => 'File harus berupa gambar.',
-            'imge_fitur_4.mimes' => 'File harus memiliki format: webp, jpeg, png, jpg, gif, atau svg.',
-            'imge_fitur_4.max' => 'File tidak boleh lebih dari 2MB.',
-            'desc_fitur_1.required' => 'Deskripsi Fitur 1 harus diisi',
-            'desc_fitur_1.string' => 'Deskripsi Fitur 1 harus berupa huruf dan angka',
-            'desc_fitur_1.max' => 'Deskripsi Fitur 1 tidak boleh lebih dari 255 karakter',
-            'desc_fitur_2.required' => 'Deskripsi Fitur 2 harus diisi',
-            'desc_fitur_2.string' => 'Deskripsi Fitur 2 harus berupa huruf dan angka',
-            'desc_fitur_2.max' => 'Deskripsi Fitur 2 tidak boleh lebih dari 255 karakter',
-            'desc_fitur_3.required' => 'Deskripsi Fitur 3 harus diisi',
-            'desc_fitur_3.string' => 'Deskripsi Fitur 3 harus berupa huruf dan angka',
-            'desc_fitur_3.max' => 'Deskripsi Fitur 3 tidak boleh lebih dari 255 karakter',
-            'desc_fitur_4.required' => 'Deskripsi Fitur 4 harus diisi',
-            'desc_fitur_4.string' => 'Deskripsi Fitur 4 harus berupa huruf dan angka',
-            'desc_fitur_4.max' => 'Deskripsi Fitur 4 tidak boleh lebih dari 255 karakter',
-        ]);
+            'deskripsi_tentang.required' => 'Deskripsi Tentang harus diisi',
+            'video_url.required' => 'URL Video harus diisi',
+
+            'title.required' => 'Minimal satu fitur harus diisi',
+            'title.*.required' => 'Title fitur tidak boleh kosong',
+            'title.*.string' => 'Title fitur harus berupa teks',
+
+            'desc.required' => 'Minimal satu deskripsi fitur harus diisi',
+            'desc.*.required' => 'Deskripsi fitur tidak boleh kosong',
+            'desc.*.string' => 'Deskripsi fitur harus berupa teks',
+            'desc.*.max' => 'Deskripsi fitur tidak boleh lebih dari 255 karakter',
+
+            'imge.*.image' => 'File harus berupa gambar',
+            'imge.*.mimes' => 'Format gambar tidak valid. Hanya: webp, jpeg, png, jpg, gif, svg',
+            'imge.*.max' => 'Ukuran gambar maksimal 2MB',
+        ];
+        $validated = $request->validate($rules, $messages);
+
 
         // dd($validatedData);
         DB::beginTransaction();
@@ -105,6 +68,13 @@ class TentangController extends Controller
                 return redirect()->back()->with("error", "tentang tidak ditemukan");
             }
 
+            $dataUpdate = array_merge($dataUpdate, [
+                "hero_title" => request()->judul_home,
+                "hero_description" => request()->deskripsi_home,
+                "about_title" => request()->judul_tentang,
+                "about_description" => request()->deskripsi_tentang,
+                "demo_url" => request()->video_url
+            ]);
             if ($request->hasFile('hero_image')) {
                 if ($tentang->hero_image && file_exists(public_path('assets/images/' . $tentang->hero_image))) {
                     unlink(public_path('assets/images/' . $tentang->hero_image));
@@ -123,55 +93,45 @@ class TentangController extends Controller
                 $request->file('about_image')->move(public_path('assets/images'), $imageName);
                 $dataUpdate['about_image'] = $imageName;
             }
-            $dataUpdate = array_merge($dataUpdate, [
-                "hero_title" => request()->judul_home,
-                "hero_description" => request()->deskripsi_home,
-                "hero_img" => request()->hero_image,
-                "about_img" => request()->about_image,
-                "about_title" => request()->judul_tentang,
-                "about_description" => request()->deskripsi_tentang,
-                "demo_url" => request()->video_url
-                // "mobile_link" => request()->download_here
-            ]);
+
 
             // dd($dataUpdate);
 
-            $semuaFitur =  FiturUtama::where("landing_id", $id)->get();
+            $semuaFitur = FiturUtama::where("landing_id", $id)->get();
 
             FiturUtama::where("landing_id", $id)->delete();
 
             // dd($semuaFitur);
             // Looping untuk fitur 1 sampai 4
-            for ($i = 1; $i <= 4; $i++) {
-                $titleKey = "title_fitur_$i";
-                $descKey = "desc_fitur_$i";
-                $imgKey = "img_fitur_$i";
-                $iconName = $semuaFitur[($i - 1)]->icon;
+            foreach ($request->title as $i => $title) {
+                $desc = $request->desc[$i] ?? '';
+                $imgFile = $request->file('imge')[$i] ?? null;
+                $oldIcon = $semuaFitur[$i]->icon ?? null;
 
-                if ($request->hasFile($imgKey)) {
-                    // Jika sebelumnya ada gambar dan file-nya ada di server, hapus
-                    if ($tentang->$imgKey && file_exists(public_path('assets/images/' . $tentang->$imgKey))) {
-                        unlink(public_path('assets/images/' . $tentang->$imgKey));
-                    }
-
-                    // Generate nama unik dan simpan gambar
-                    $iconName = uniqid() . '.' . $request->file($imgKey)->extension();
-                    $request->file($imgKey)->move(public_path('assets/images'), $iconName);
+                // Hapus gambar lama jika ada file baru
+                if ($imgFile && $oldIcon && file_exists(public_path('assets/images/' . $oldIcon))) {
+                    unlink(public_path('assets/images/' . $oldIcon));
                 }
 
-                // dd($iconName);
+                // Simpan gambar baru jika ada
+                $iconName = $oldIcon;
+                if ($imgFile) {
+                    $iconName = uniqid() . '.' . $imgFile->getClientOriginalExtension();
+                    $imgFile->move(public_path('assets/images'), $iconName);
+                }
 
-                // Simpan data ke tabel fitur
+                // Simpan ke database
                 FiturUtama::create([
-                    "title" => $request->$titleKey,
-                    "icon" => $iconName, // fallback ke input lama jika tidak upload ulang
-                    "description" => $request->$descKey,
-                    "landing_id" => $id
+                    "title" => $title,
+                    "icon" => $iconName,
+                    "description" => $desc,
+                    "landing_id" => $id,
                 ]);
             }
 
-            // dd($dataUpdate, $tentang);
+
             $tentang->update($dataUpdate);
+
             DB::commit();
             return redirect()->back()->with("success", "tentang berhasil diubah");
         } catch (\Throwable $th) {
