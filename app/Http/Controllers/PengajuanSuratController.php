@@ -7,6 +7,7 @@ use App\Models\PengajuanSuratModel;
 use App\Models\User;
 use Dompdf\Dompdf;
 use Helpers;
+use TCPDF;
 use Yajra\DataTables\DataTables;
 
 class PengajuanSuratController extends Controller
@@ -35,10 +36,15 @@ class PengajuanSuratController extends Controller
     }
     public function show($id)
     {
-        $pengajuan = PengajuanSuratModel::where("id", $id)->first();
+        $pengajuan = PengajuanSuratModel::find($id);
         if (!$pengajuan) {
             return abort(404);
         }
+
+        $html = $pengajuan->surat->format_surat;
+        // dd($data->surat);
+        $this->replaceValue($html, $pengajuan);
+        $pengajuan->surat->format_surat = $html;
 
         $params["data"] = (object) [
             "title" => "Pengajuan Surat",
@@ -66,45 +72,114 @@ class PengajuanSuratController extends Controller
         return redirect()->route("pengajuan-surat.index")->with("success", "Pengajuan berhasil disetujui");
     }
 
+    // public function download($id)
+    // {
+    //     $data = PengajuanSuratModel::find($id);
+    //     $html = "<style>
+    //     @page { margin:10px 50px; }
+    //     img{
+    //         height:auto;
+    //         max-width:100%;
+    //     }
+    //     .image-style-align-left{
+    //         float:left;
+    //     }
+    //     .image-style-align-right{
+    //         float:right;
+    //     }
+    //     .image-style-block-align-right{
+    //         margin-left: auto;
+    //         margin-right: 0;
+    //     }
+    //     .image-style-block-align-left{
+    //         margin-left: 0;
+    //         margin-right: auto;
+    //     }
+    //     </style>";
+
+    //     $html .= $data->surat->format_surat;
+    //     // dd($data->surat);
+    //     $this->replaceValue($html, $data);
+    //     $dompdf = new Dompdf();
+    //     // $html = preg_replace(
+    //     //     '/src="[^"]*assets\/images\//',
+    //     //     'src="' . asset('assets/images') . '/',
+    //     //     $html
+    //     // );
+
+    //     // echo "<pre>";
+    //     // print_r($html);
+    //     // echo "</pre>";
+    //     // exit;
+    //     $options = $dompdf->getOptions();
+    //     $options->set('isHtml5ParserEnabled', true);
+    //     $options->set('isRemoteEnabled', true);
+    //     $dompdf->getOptions()->setChroot(public_path("assets/images"));
+    //     $dompdf->setOptions($options);
+    //     $dompdf->loadHtml($html);
+    //     $dompdf->setPaper('A4', 'portrait');
+    //     $dompdf->render();
+
+    //     $dompdf->stream($data->surat->nama_surat . ".pdf", [
+    //         "Attachment" => false // Ubah ke false jika ingin ditampilkan di browser
+    //     ]);
+    // }
+
     public function download($id)
     {
         $data = PengajuanSuratModel::find($id);
-        $html = "<style>
-        @page { margin:10px 50px; }
-        img{
-            height:auto;
-            max-width:100%;
-        }
-        .image-style-align-left{
-            float:left;
-        }
-        .image-style-align-right{
-            float:right;
-        }
-        .image-style-block-align-right{
-            margin-left: auto;
-            margin-right: 0;
-        }
-        .image-style-block-align-left{
-            margin-left: 0;
-            margin-right: auto;
-        }
-        </style>";
+
+        // Siapkan HTML (pastikan gambar sudah absolute path/public URL)
+        $html = '
+        <style>
+            img {
+                height: auto;
+                max-width: 100%;
+            }
+            .image-style-align-left { float: left; }
+            .image-style-align-right { float: right; }
+            .image-style-block-align-right { margin-left: auto; margin-right: 0; }
+            .image-style-block-align-left { margin-left: 0; margin-right: auto; }
+        </style>
+    ';
 
         $html .= $data->surat->format_surat;
-        // dd($data->surat);
+
         $this->replaceValue($html, $data);
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $options = $dompdf->getOptions();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-        $dompdf->setOptions($options);
-        $dompdf->render();
-        $dompdf->stream($data->nama_surat . ".pdf", [
-            "Attachment" => true // Ubah ke false jika ingin ditampilkan di browser
-        ]);
+
+        // Replace src path agar sesuai domain atau path lokal publik
+        $html = preg_replace_callback('/src="([^"]+)"/', function ($matches) {
+            $src = $matches[1];
+
+            if (strpos($src, '/assets/images/') !== false) {
+                $filename = basename($src);
+                $fullPath = ("assets/images/{$filename}");
+
+                if (file_exists($fullPath)) {
+                    return 'src="' . url($fullPath) . '"';
+                } else {
+                    logger("Gambar tidak ditemukan: " . $fullPath);
+                    return ''; // hapus gambar jika tidak ditemukan
+                }
+            }
+
+            return 'src="' . $src . '"';
+        }, $html);
+        // dd($html);
+
+        // Inisialisasi TCPDF
+        $pdf = new TCPDF();
+        $pdf->SetCreator('Laravel');
+        $pdf->SetAuthor('Sistem');
+        $pdf->SetTitle('Surat');
+        $pdf->SetMargins(15, 10, 15);
+        $pdf->AddPage();
+
+        // Write HTML
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        // Output PDF
+        $pdf->Output($data->surat->nama_surat . '.pdf', 'I'); // 'I' = inline, 'D' = download
     }
     private function replaceValue(&$html, $data)
     {
@@ -167,15 +242,13 @@ class PengajuanSuratController extends Controller
         $html = str_replace("{jabatan_lurah}", "Lurah" ?? "", $html);
 
 
-        // foreach ($data->fields as $field) {
-        //     $value = $this->model->fieldValues
-        //         ->where("id_field", "=", $field->id)
-        //         ->where("id_pengajuan", "=", $data->id_pengajuan)
-        //         ->first();
-        //     $namaField = "{field_" . strtolower(str_replace(" ", "_", trim($field->nama_field)) . "}");
+        foreach ($data->fieldValues as $field) {
+            $value = $field->value;
+            $namaField = "{" . $field->fields->nama_field . "}";
+            // $namaField = "{field_" . strtolower(str_replace(" ", "_", trim($field->nama_field)) . "}");
 
-        //     $html = str_replace($namaField,  $value->value ?? "-", $html);
-        // }
+            $html = str_replace($namaField, $value->value ?? "-", $html);
+        }
     }
 
     public function dataTable($data, $status)

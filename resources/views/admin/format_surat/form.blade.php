@@ -28,7 +28,8 @@
                         <div class="mb-4 ">
                             <label for="konten" class="block text-sm font-medium text-gray-700 mb-1">Konten</label>
                             <textarea name="format_surat" id="konten"
-                                class="konten w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">{{ old('konten', $data->surat->format_surat) }}</textarea>
+                                class="konten w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                                {{ old('konten', $data->surat->format_surat) }}</textarea>
                             @error('format_surat')
                                 <p class="mt-1 text-sm text-red-600 capitalize">{{ $message }}</p>
                             @enderror
@@ -75,6 +76,8 @@
                 HtmlEmbed,
                 Mention,
                 TableColumnResize,
+                SimpleUploadAdapter,
+                ImageResize, ImageToolbar, ImageStyle, ImageResizeEditing, ImageResizeHandles
             } from 'ckeditor5';
 
             document.addEventListener("DOMContentLoaded", function () {
@@ -83,7 +86,7 @@
                     const fields = @json($data->fields);
                     if (kontenEditor) {
                         ClassicEditor.create(kontenEditor, {
-                            plugins: [Mention, HtmlEmbed, Heading, Essentials, Paragraph, Bold, Italic, Font, Alignment, Image, ImageUpload, TableColumnResize, TableToolbar, Table, Indent, HorizontalLine, Underline],
+                            plugins: [Mention, HtmlEmbed, Heading, Essentials, Paragraph, Bold, Italic, Font, Alignment, Image, SimpleUploadAdapter, ImageUpload, TableColumnResize, TableToolbar, Table, Indent, HorizontalLine, Underline, ImageResize, ImageToolbar, ImageStyle, ImageResizeEditing, ImageResizeHandles],
                             toolbar: [
                                 'undo', 'redo', '|', 'bold', 'italic', 'underline', '|',
                                 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
@@ -92,6 +95,31 @@
                                 'heading', 'indent', 'outdent', '|',
                                 'removeFormat', 'horizontalLine'
                             ],
+                            simpleUpload: {
+                                uploadUrl: '/ckeditor-upload-image',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                }
+                            },
+                            image: {
+                                toolbar: [
+                                    'imageStyle:alignLeft',
+                                    'imageStyle:alignRight',
+                                    'imageStyle:alignBlockLeft',
+                                    'imageStyle:alignCenter',
+                                    'imageStyle:alignBlockRight',
+                                    '|',
+                                    'toggleImageCaption',
+                                    'imageTextAlternative',
+                                    '|',
+                                    'linkImage'
+                                ],
+                                insert: {
+                                    // If this setting is omitted, the editor defaults to 'block'.
+                                    // See explanation below.
+                                    type: 'auto'
+                                }
+                            },
                             mention: {
                                 feeds: [
                                     {
