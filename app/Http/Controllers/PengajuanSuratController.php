@@ -127,7 +127,7 @@ class PengajuanSuratController extends Controller
         $dompdf->render();
 
         $dompdf->stream($data->surat->nama_surat . ".pdf", [
-            "Attachment" => false // Ubah ke false jika ingin ditampilkan di browser
+            "Attachment" => true // Ubah ke false jika ingin ditampilkan di browser
         ]);
     }
 
