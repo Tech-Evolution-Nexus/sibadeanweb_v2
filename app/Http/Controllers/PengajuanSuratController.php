@@ -6,6 +6,7 @@ use App\Models\HistoriPengajuan;
 use App\Models\PengajuanSuratModel;
 use App\Models\User;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 use Helpers;
 use TCPDF;
 use Yajra\DataTables\DataTables;
@@ -100,7 +101,11 @@ class PengajuanSuratController extends Controller
         $html .= $data->surat->format_surat;
         // dd($data->surat);
         $this->replaceValue($html, $data);
-        $dompdf = new Dompdf();
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $options->set('isHtml5ParserEnabled', true);
+
+        $dompdf = new Dompdf($options);
         $html = preg_replace_callback('/src="([^"]+)"/', function ($matches) {
             $src = $matches[1];
 
@@ -118,10 +123,6 @@ class PengajuanSuratController extends Controller
 
             return 'src="' . $src . '"';
         }, $html);
-        $options = $dompdf->getOptions();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-        $dompdf->setOptions($options);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
