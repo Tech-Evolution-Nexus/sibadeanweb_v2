@@ -180,7 +180,6 @@ class PengajuanSuratController extends Controller
         $pdf->SetAuthor('Sistem');
         $pdf->SetTitle('Surat');
         $pdf->SetMargins(15, 10, 15);
-        $pdf->AddPage();
 
 
         // Nonaktifkan header & footer default TCPDF
