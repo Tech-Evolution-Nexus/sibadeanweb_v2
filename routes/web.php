@@ -108,4 +108,22 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
 //         'Content-Type' => 'application/pdf',
 //     ]);
 // });
+
+Route::post("/ckeditor-upload-image", function () {
+    if (request()->hasFile('upload')) {
+        $file = request()->file('upload');
+        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        $path = $file->move(public_path('assets/images'), $filename);
+
+        // URL relative ke public folder
+        $url = asset('assets/images/' . $filename);
+
+        return response()->json([
+            'url' => $url
+        ]);
+    }
+
+    return response()->json(['error' => 'No file uploaded'], 400);
+
+});
 require __DIR__ . '/auth.php';

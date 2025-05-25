@@ -2,9 +2,9 @@
 
 
     <div class="md:px-12 px-6 md:py-4 py-2">
-        <div class="mb-10">
+        <div class="mb-6">
             <div class="text-sm">Dashboard / <a class="hover:underline" href="{{route("kartu-keluarga.index")}}">Kartu
-                    keluarga</a> / <a href="{{route("anggota-keluarga.index", [$nik, $no_kk])}}"
+                    keluarga</a> / <a href="{{route("anggota-keluarga.index", [$no_kk])}}"
                     class="hover:underline ">Anggota Keluarga</a> / <span
                     class="hover:underline text-gray-700 font-semibold">Anggota Keluarga</>
             </div>
@@ -12,8 +12,8 @@
                 <h1 class="text-2xl font-bold">Detail Anggota Keluarga</h1>
             </div>
         </div>
-        <a href="{{route("anggota-keluarga.index", [$nik, $no_kk])}}"
-            class="bg-gray-100 hover:bg-gray-300 text-gray-800 font-medium px-4 py-2 rounded-md ">Anggota Keluarga</a>
+        <a href="{{route("anggota-keluarga.index", [$no_kk])}}"
+            class="bg-gray-100 hover:bg-gray-300 mb-4  text-gray-800 font-medium px-4 py-2 rounded-md inline-block">Kembali</a>
         <div class="card ">
             <h2 class="text-xl font-bold mb-6 text-gray-800">Detail Warga</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm text-gray-700">
