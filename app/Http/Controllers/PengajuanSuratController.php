@@ -72,88 +72,35 @@ class PengajuanSuratController extends Controller
         return redirect()->route("pengajuan-surat.index")->with("success", "Pengajuan berhasil disetujui");
     }
 
-    public function download($id)
-    {
-        $data = PengajuanSuratModel::find($id);
-        $html = "<style>
-        @page { margin:10px 50px; }
-        img{
-            height:auto;
-            max-width:100%;
-        }
-        .image-style-align-left{
-            float:left;
-        }
-        .image-style-align-right{
-            float:right;
-        }
-        .image-style-block-align-right{
-            margin-left: auto;
-            margin-right: 0;
-        }
-        .image-style-block-align-left{
-            margin-left: 0;
-            margin-right: auto;
-        }
-        </style>";
-
-        $html .= $data->surat->format_surat;
-        // dd($data->surat);
-        $this->replaceValue($html, $data);
-        $dompdf = new Dompdf();
-        $html = preg_replace_callback('/src="([^"]+)"/', function ($matches) {
-            $src = $matches[1];
-
-            if (strpos($src, '/assets/images/') !== false) {
-                $filename = basename($src);
-                $fullPath = ("assets/images/{$filename}");
-
-                if (file_exists($fullPath)) {
-                    return 'src="' . url($fullPath) . '"';
-                } else {
-                    logger("Gambar tidak ditemukan: " . $fullPath);
-                    return ''; // hapus gambar jika tidak ditemukan
-                }
-            }
-
-            return 'src="' . $src . '"';
-        }, $html);
-        $options = $dompdf->getOptions();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-        $dompdf->setOptions($options);
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->render();
-
-        $dompdf->stream($data->surat->nama_surat . ".pdf", [
-            "Attachment" => true // Ubah ke false jika ingin ditampilkan di browser
-        ]);
-    }
-
     // public function download($id)
     // {
     //     $data = PengajuanSuratModel::find($id);
-
-    //     // Siapkan HTML (pastikan gambar sudah absolute path/public URL)
-    //     $html = '
-    //     <style>
-    //         img {
-    //             height: auto;
-    //             max-width: 100%;
-    //         }
-    //         .image-style-align-left { float: left; }
-    //         .image-style-align-right { float: right; }
-    //         .image-style-block-align-right { margin-left: auto; margin-right: 0; }
-    //         .image-style-block-align-left { margin-left: 0; margin-right: auto; }
-    //     </style>
-    // ';
+    //     $html = "<style>
+    //     @page { margin:10px 50px; }
+    //     img{
+    //         height:auto;
+    //         max-width:100%;
+    //     }
+    //     .image-style-align-left{
+    //         float:left;
+    //     }
+    //     .image-style-align-right{
+    //         float:right;
+    //     }
+    //     .image-style-block-align-right{
+    //         margin-left: auto;
+    //         margin-right: 0;
+    //     }
+    //     .image-style-block-align-left{
+    //         margin-left: 0;
+    //         margin-right: auto;
+    //     }
+    //     </style>";
 
     //     $html .= $data->surat->format_surat;
-
+    //     // dd($data->surat);
     //     $this->replaceValue($html, $data);
-
-    //     // Replace src path agar sesuai domain atau path lokal publik
+    //     $dompdf = new Dompdf();
     //     $html = preg_replace_callback('/src="([^"]+)"/', function ($matches) {
     //         $src = $matches[1];
 
@@ -171,22 +118,87 @@ class PengajuanSuratController extends Controller
 
     //         return 'src="' . $src . '"';
     //     }, $html);
-    //     // dd($html);
+    //     $options = $dompdf->getOptions();
+    //     $options->set('isHtml5ParserEnabled', true);
+    //     $options->set('isRemoteEnabled', true);
+    //     $dompdf->setOptions($options);
+    //     $dompdf->loadHtml($html);
+    //     $dompdf->setPaper('A4', 'portrait');
+    //     $dompdf->render();
 
-    //     // Inisialisasi TCPDF
-    //     $pdf = new TCPDF();
-    //     $pdf->SetCreator('Laravel');
-    //     $pdf->SetAuthor('Sistem');
-    //     $pdf->SetTitle('Surat');
-    //     $pdf->SetMargins(15, 10, 15);
-    //     $pdf->AddPage();
-
-    //     // Write HTML
-    //     $pdf->writeHTML($html, true, false, true, false, '');
-
-    //     // Output PDF
-    //     $pdf->Output($data->surat->nama_surat . '.pdf', 'I'); // 'I' = inline, 'D' = download
+    //     $dompdf->stream($data->surat->nama_surat . ".pdf", [
+    //         "Attachment" => true // Ubah ke false jika ingin ditampilkan di browser
+    //     ]);
     // }
+
+    public function download($id)
+    {
+        $data = PengajuanSuratModel::find($id);
+
+        // Siapkan HTML (pastikan gambar sudah absolute path/public URL)
+        $html = '
+        <style>
+            img {
+                height: auto;
+                max-width: 100%;
+            }
+            .image-style-align-left { float: left; }
+            .image-style-align-right { float: right; }
+            .image-style-block-align-right { margin-left: auto; margin-right: 0; }
+            .image-style-block-align-left { margin-left: 0; margin-right: auto; }
+        </style>
+    ';
+
+        $html .= $data->surat->format_surat;
+
+        $this->replaceValue($html, $data);
+
+        // Replace src path agar sesuai domain atau path lokal publik
+        $html = preg_replace_callback('/src="([^"]+)"/', function ($matches) {
+            $src = $matches[1];
+
+            if (strpos($src, '/assets/images/') !== false) {
+                $filename = basename($src);
+                $fullPath = ("assets/images/{$filename}");
+
+                if (file_exists($fullPath)) {
+                    return 'src="' . url($fullPath) . '"';
+                } else {
+                    logger("Gambar tidak ditemukan: " . $fullPath);
+                    return ''; // hapus gambar jika tidak ditemukan
+                }
+            }
+
+            return 'src="' . $src . '"';
+        }, $html);
+        // dd($html);
+
+        // Inisialisasi TCPDF
+        // ✅ Inisialisasi TCPDF dengan konfigurasi seperti DomPDF
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', true, 'UTF-8', false);
+        $pdf->SetCreator('Laravel');
+        $pdf->SetAuthor('Sistem');
+        $pdf->SetTitle('Surat');
+
+
+        // Nonaktifkan header & footer default TCPDF
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+
+        // Set margin mirip dengan `@page { margin:10px 50px; }`
+        $pdf->SetMargins(50, 10, 50); // kiri, atas, kanan
+
+        // Tambah halaman baru
+        $pdf->AddPage();
+
+        // Tulis HTML ke PDF
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        // Output PDF ke browser (inline/view atau download)
+        // $pdf->Output($data->surat->nama_surat . '.pdf', 'D');
+        // Write HTML
+        $pdf->Output($data->surat->nama_surat . '.pdf', 'I'); // 'I' = inline, 'D' = download
+    }
     private function replaceValue(&$html, $data)
     {
         $noSurat = $data->nomor_surat;
