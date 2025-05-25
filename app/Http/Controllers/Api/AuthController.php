@@ -195,9 +195,11 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             "nik" => "required|numeric|digits:16",
         ]);
+
         if ($validator->fails()) {
             return ResponseHelper::error($validator->errors()->first(), 422);
         }
+
         // Cari data masyarakat berdasarkan NIK dan ambil juga data KK (relasi)
         $masyarakat = MasyarakatModel::with('kartuKeluarga')
             ->where('nik', $request->nik)
@@ -208,11 +210,17 @@ class AuthController extends Controller
             return ResponseHelper::error('NIK tidak ditemukan', 404);
         }
 
-        // Jika ditemukan, kembalikan data masyarakat
+        // Jika sudah punya id_user, berarti sudah terdaftar
+        if (!is_null($masyarakat->id_user)) {
+            return ResponseHelper::error('NIK sudah terdaftar', 409);
+        }
+
+        // Jika ditemukan dan belum terdaftar
         return ResponseHelper::success([
             'masyarakat' => $masyarakat,
-        ], "Nik Ditemukan", 200);
+        ], "NIK ditemukan dan belum terdaftar", 200);
     }
+
 
 
 
