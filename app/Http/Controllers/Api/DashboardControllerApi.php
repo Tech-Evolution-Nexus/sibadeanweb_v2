@@ -22,45 +22,52 @@ class DashboardControllerApi extends Controller
 {
     public function index()
     {
-        $masyarakat = auth()->user()->masyarakat;
-        $role = auth()->user()->role;
+        $user = auth()->user();
+        $masyarakat = $user->masyarakat;
+        $role = $user->role;
 
-        // Cek apakah data masyarakat tersedia
         if (!$masyarakat) {
             return ResponseHelper::error('Data masyarakat tidak ditemukan', 404);
         }
 
         $nik = $masyarakat->nik;
+        $rt = $masyarakat->kartuKeluarga->rt;
+        $rw = $masyarakat->kartuKeluarga->rw;
         $totalTidakDibatalkan = 0;
         $totalSelesai = 0;
 
+        $statusDibatalkan = ['dibatalkan_rt', 'dibatalkan_rw', 'dibatalkan_lurah', 'dibatalkan'];
+
         if ($role === 'masyarakat') {
             $totalTidakDibatalkan = PengajuanSuratModel::where('nik', $nik)
+                ->whereNotIn('status', $statusDibatalkan)
+                ->count();
+
+            $totalSelesai = PengajuanSuratModel::where('nik', $nik)
                 ->where('status', 'selesai')
                 ->count();
-
-            $totalSelesai = PengajuanSuratModel::where('nik', $nik)
-                ->whereNotIn('status', [
-                    'dibatalkan_rt',
-                    'dibatalkan_rw',
-                    'dibatalkan_lurah',
-                    'dibatalkan'
-                ])
-                ->count();
         } elseif ($role === 'rt') {
-            $totalTidakDibatalkan = PengajuanSuratModel::where('nik', $nik)
-                ->where('status', 'pendding')
+            $nikList = MasyarakatModel::whereHas('kartuKeluarga', function ($q) use ($rt, $rw) {
+                $q->where('rt', $rt)->where('rw', $rw);
+            })->pluck('nik');
+
+            $totalTidakDibatalkan = PengajuanSuratModel::whereIn('nik', $nikList)
+                ->where('status', 'pending')
                 ->count();
 
-            $totalSelesai = PengajuanSuratModel::where('nik', $nik)
+            $totalSelesai = PengajuanSuratModel::whereIn('nik', $nikList)
                 ->where('status', 'di_terima_rt')
                 ->count();
         } elseif ($role === 'rw') {
-            $totalTidakDibatalkan = PengajuanSuratModel::where('nik', $nik)
+            $nikList = MasyarakatModel::whereHas('kartuKeluarga', function ($q) use ($rw) {
+                $q->where('rw', $rw);
+            })->pluck('nik');
+
+            $totalTidakDibatalkan = PengajuanSuratModel::whereIn('nik', $nikList)
                 ->where('status', 'di_terima_rt')
                 ->count();
 
-            $totalSelesai = PengajuanSuratModel::where('nik', $nik)
+            $totalSelesai = PengajuanSuratModel::whereIn('nik', $nikList)
                 ->where('status', 'di_terima_rw')
                 ->count();
         } else {
@@ -72,8 +79,16 @@ class DashboardControllerApi extends Controller
                 'total_menunggu_persetujuan' => $totalTidakDibatalkan,
                 'total_persetujuan_selesai' => $totalSelesai,
             ],
-            'surat' => SuratResource::collection(SuratModel::limit(3)->whereIn("singkatan_nama_surat", ["skck", "sku", "sktm"])->get()),
-            'berita' => BeritaResource::collection(BeritaModel::limit(5)->orderByDesc("created_at")->get()),
+            'surat' => SuratResource::collection(
+                SuratModel::whereIn("singkatan_nama_surat", ["skck", "sku", "sktm"])
+                    ->limit(3)
+                    ->get()
+            ),
+            'berita' => BeritaResource::collection(
+                BeritaModel::orderByDesc("created_at")
+                    ->limit(5)
+                    ->get()
+            ),
         ], 'Data Berhasil Diambil');
     }
 }
