@@ -86,19 +86,24 @@
                             $customFields = $data->pengajuan->fieldValues;
                             $formatFields = [];
                             foreach ($customFields as $field) {
-                                $formatFields[strtoupper($field->fields->nama_field)] = $field->value;
+                                $formatFields[strtoupper(string: $field->fields->nama_field)] = $field->value;
                             }
                             $fields = [
                                 'Nama Surat' => $data->pengajuan->surat->nama_surat ?? "-",
                                 'No Surat' => $data->pengajuan->nomor_surat ?? "-",
                                 'Keterangan' => $data->pengajuan->keterangan ?? "-",
+                                ...$formatFields,
                                 'Nama' => $data->pengajuan->masyarakat->nama_lengkap ?? "-",
                                 'Jenis Kelamin' => $data->pengajuan->masyarakat->jenis_kelamin ?? "-",
                                 'NIK' => $data->pengajuan->masyarakat->nik ?? "-",
                                 'No KK' => $data->pengajuan->masyarakat->no_kk ?? "-",
                                 'Alamat' => $data->pengajuan->masyarakat->kartuKeluarga->alamat ?? "-",
                                 'No HP' => $data->pengajuan->masyarakat->user->no_telepon ?? "-",
-                                'Agama' => str_replace("_", " ", $data->pengajuan->masyarakat->agama) ?? "-",
+                                'Agama' => str_replace(
+                                    "_",
+                                    " ",
+                                    $data->pengajuan->masyarakat->agama
+                                ) ?? "-",
                                 'Pekerjaan' => $data->pengajuan->masyarakat->pekerjaan ?? "-",
                                 'Tanggal Pengajuan' => Helpers::formatDate($data->pengajuan->created_at, true),
                             ];
