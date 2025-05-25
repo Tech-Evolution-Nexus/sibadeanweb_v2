@@ -27,6 +27,24 @@ body {
 section{
     @apply md:py-20 py-10;
 }
+img{
+            height:auto;
+            max-width:100%;
+        }
+        .image-style-align-left{
+            float:left;
+        }
+        .image-style-align-right{
+            float:right;
+        }
+        .image-style-block-align-right{
+            margin-left: auto;
+            margin-right: 0;
+        }
+        .image-style-block-align-left{
+            margin-left: 0;
+            margin-right: auto;
+        }
 .card{
     @apply bg-white p-4 rounded-md border;
 }

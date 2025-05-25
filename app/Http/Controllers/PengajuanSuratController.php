@@ -57,17 +57,18 @@ class PengajuanSuratController extends Controller
     }
     public function updateStatus($id)
     {
+        $status = request()->status;
         $pengajuan = PengajuanSuratModel::find($id);
 
         if (!$pengajuan) {
             return redirect()->back()->with("error", "data tidak ditemukan");
         }
 
-        $pengajuan->update(["status" => "selesai"]);
+        $pengajuan->update(["status" => $status]);
+
         HistoriPengajuan::create([
             "id_pengajuan" => $id,
-            // "id_petugas" => auth()->user()->masyarakat->nik,
-            "status_pengajuan" => "selesai"
+            "status_pengajuan" => $status
         ]);
 
         return redirect()->route("pengajuan-surat.index")->with("success", "Pengajuan berhasil disetujui");
