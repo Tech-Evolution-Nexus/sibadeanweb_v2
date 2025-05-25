@@ -179,6 +179,8 @@ class PengajuanSuratController extends Controller
         $pdf->SetCreator('Laravel');
         $pdf->SetAuthor('Sistem');
         $pdf->SetTitle('Surat');
+        $pdf->SetMargins(15, 10, 15);
+        $pdf->AddPage();
 
 
         // Nonaktifkan header & footer default TCPDF
@@ -186,17 +188,19 @@ class PengajuanSuratController extends Controller
         $pdf->setPrintFooter(false);
 
         // Set margin mirip dengan `@page { margin:10px 50px; }`
-        $pdf->SetMargins(50, 10, 50); // kiri, atas, kanan
 
         // Tambah halaman baru
         $pdf->AddPage();
 
         // Tulis HTML ke PDF
-        $pdf->writeHTML($html, true, false, true, false, '');
+        // $pdf->writeHTML($html, true, false, true, false, '');
 
         // Output PDF ke browser (inline/view atau download)
         // $pdf->Output($data->surat->nama_surat . '.pdf', 'D');
         // Write HTML
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        // Output PDF
         $pdf->Output($data->surat->nama_surat . '.pdf', 'I'); // 'I' = inline, 'D' = download
     }
     private function replaceValue(&$html, $data)
