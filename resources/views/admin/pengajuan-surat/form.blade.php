@@ -137,7 +137,7 @@
                     </button>
                 </div>
 
-                <x-modal :name="'update'" :maxWidth="'2xl'">
+                <x-modal :name="'update'" :maxWidth="'custom'" :maxWidthCustom="'6xl'">
                     <div class="p-4">
                         <h6 class="font-bold text-lg">Pratinjau surat</h6>
                         {!! $data->pengajuan->surat->format_surat !!}
