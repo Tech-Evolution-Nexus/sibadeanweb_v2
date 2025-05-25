@@ -19,13 +19,23 @@ class PengajuanSuratController extends Controller
      */
     public function index()
     {
-        $status = match (request()->status ?? "menunggu") {
+        $statusPengajuan = request()->status ?? "menunggu";
+        $status = match ($statusPengajuan) {
             "selesai" => "selesai",
             "menunggu" => "di_terima_rw",
             "di_terima_rt" => "di_terima_rt",
         };
-        $anggotaKeluarga = PengajuanSuratModel::where("status", $status)->orderBy("created_at", "desc")->get();
 
+        $query = PengajuanSuratModel::query();
+
+        match ($status) {
+            "selesai" => $query->whereIn("status", ["selesai", "di_tolak_lurah"]),
+            "menunggu" => $query->where("status", "di_terima_rw"),
+            "di_terima_rt" => $query->where("status", "di_terima_rt"),
+            default => $query->where("status", "di_terima_rw"), // fallback aman
+        };
+
+        $anggotaKeluarga = $query->orderBy("created_at", "desc")->get();
         $params["data"] = (object) [
             "anggota_keluarga" => $anggotaKeluarga
         ];
@@ -57,14 +67,21 @@ class PengajuanSuratController extends Controller
     }
     public function updateStatus($id)
     {
-        $status = request()->status;
+        $status = request()->status ?? "di_tolak_lurah";
+        $keterangan = request()->keterangan;
+        $keteranganDitolak = request()->keterangan_ditolak;
+        $nomor_surat = request()->nomor_surat;
         $pengajuan = PengajuanSuratModel::find($id);
-
         if (!$pengajuan) {
             return redirect()->back()->with("error", "data tidak ditemukan");
         }
 
-        $pengajuan->update(["status" => $status]);
+        $pengajuan->update([
+            "status" => $status,
+            "keterangan" => $keterangan,
+            "nomor_surat" => $nomor_surat,
+            "keterangan_ditolak" => $keteranganDitolak
+        ]);
 
         HistoriPengajuan::create([
             "id_pengajuan" => $id,
@@ -274,11 +291,9 @@ class PengajuanSuratController extends Controller
                 $btn = '<div class="row flex">';
                 $btn .= '<a href="' . route('pengajuan-surat.show', $row->id) . '" class="btn-show ' . ($status == 'selesai' ? '' : 'rounded-md') . '"><i class="fa fa-info"></i></a>';
 
-                if ($status === "selesai") {
+                if (in_array($row->status, ["selesai", "di_tolak_lurah"])) {
                     $btn .= ' <a href="' . route('pengajuan-surat.download', $row->id) . '" class="btn-edit rounded-md rounded-s-none"><i class="fa fa-download"></i></a>';
                 }
-                $message = "Apakah anda yakin menghapus data $row->nama_lengkap?";
-                //    $btn .= "<button class='btn-delete' x-data x-on:click=\"\$dispatch('open-modal', {name: 'delete'}), message= '$message', url= '" . route("anggota-keluarga.destroy", [$row->no_kk, $row->nik]) . "'\"><i class='fa fa-trash'></i></button>";
                 $btn .= '</div>';
                 return $btn;
             })
@@ -300,13 +315,14 @@ class PengajuanSuratController extends Controller
                 return Helpers::formatDate($row->created_at, true);
             })
             ->addColumn("status", function ($row) {
-                $classStatus = str_contains("tolak", $row->status) ? "bg-red-500 text-white" : "bg-green-500 text-white";
+                $classStatus = str_contains($row->status, "tolak") ? "bg-red-500 text-white" : "bg-green-500 text-white";
                 $status = match ($row->status) {
                     "di_terima_rw" => "Disetujui Rw",
                     "di_terima_rt" => "Disetujui Rt",
                     "selesai" => "Selesai",
                     "di_tolak_rw" => "Ditolak Rw",
                     "di_tolak_rt" => "Ditolak Rt",
+                    "di_tolak_lurah" => "Ditolak Lurah",
                     "dibatalkan" => "Dibatalkan",
                 };
                 return "<span class='px-2 py-1 rounded-full {$classStatus}'>{$status}</span>";
