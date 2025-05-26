@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\API\ProfileControllerApi;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\Admin\SuratPengantarController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FormatSuratController;
@@ -93,6 +94,8 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
 
     Route::get("/tentang", [TentangController::class, 'index'])->name('tentang.index');
     Route::post("/tentang/{id}", [TentangController::class, 'update'])->name('tentang.update');
+    Route::get('/surat-pengantar', [SuratPengantarController::class, 'show']);
+
 });
 // use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Response;
@@ -127,3 +130,5 @@ Route::post("/ckeditor-upload-image", function () {
 
 });
 require __DIR__ . '/auth.php';
+
+
