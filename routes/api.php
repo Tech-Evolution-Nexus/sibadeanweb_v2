@@ -64,8 +64,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/detail-pengajuan/{id}', [PengajuanController::class, 'getDetailPengajuan']);
 
-    Route::get('/ubhemail', [ProfileControllerApi::class, 'ubhEmail']);
-    Route::post('/ubhPass', [ProfileControllerApi::class, 'ubhPass']);
+    Route::post('/ubhemail', [ProfileControllerApi::class, 'ubhEmail']);
+    Route::post('/ubhpass', [ProfileControllerApi::class, 'ubhPass']);
+    Route::post('/ubhnohp', [ProfileControllerApi::class, 'ubhNoHp']);
+
 });
 Route::post('/ocr-api', [Ocrtest::class, 'ocrWithApi']);
 
