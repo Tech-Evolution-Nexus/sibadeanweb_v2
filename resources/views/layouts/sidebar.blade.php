@@ -68,7 +68,8 @@
             </li>
 
             {{-- <hr class="block mt-6 mb-2 border-slate-300"> --}}
-            <li class="mt-6 mb-6 cursor-pointer" x-data="{ isCollapse: true }">
+         @if(auth()->user()->role === "admin")
+   <li class="mt-6 mb-6 cursor-pointer" x-data="{ isCollapse: true }">
                 <!-- Header -->
                 <div @click="isCollapse = !isCollapse" class="flex justify-between items-center text-gray-800 transition-all">
                     <span class="text-sm font-medium ">Master Data</span>
@@ -166,7 +167,7 @@
                     </li>
                 </ul>
             </li>
-
+         @endif
 
         </ul>
     </div>

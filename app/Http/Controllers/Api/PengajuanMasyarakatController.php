@@ -22,7 +22,7 @@ class PengajuanMasyarakatController extends Controller
     {
         $idMasyarakat = auth()->user()->masyarakat->nik;
         $user = MasyarakatModel::whereHas("user", function ($qr) {
-            $qr->whereIn("role", ["rt", "rw"]);
+            $qr->whereIn("role", ["rt", "rw", "masyarakat"]);
         })->where("nik", $idMasyarakat)->first();
 
         $pengajuan = PengajuanSuratModel::with(["masyarakat", "surat", "lampiran"])
