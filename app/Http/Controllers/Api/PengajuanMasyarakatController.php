@@ -66,6 +66,7 @@ class PengajuanMasyarakatController extends Controller
             ]
         );
     }
+
     public function getRiwayatDetail($idPengajuan)
     {
         $pengajuan = PengajuanSuratModel::where("id", $idPengajuan)

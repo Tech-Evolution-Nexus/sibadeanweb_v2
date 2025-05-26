@@ -36,7 +36,7 @@ class DashboardControllerApi extends Controller
         $totalTidakDibatalkan = 0;
         $totalSelesai = 0;
 
-        $statusDibatalkan = ['dibatalkan_rt', 'dibatalkan_rw', 'dibatalkan_lurah', 'dibatalkan'];
+        $statusDibatalkan = ['dibatalkan_rt', 'dibatalkan_rw', 'dibatalkan_lurah', 'dibatalkan', "selesai"];
 
         if ($role === 'masyarakat') {
             $totalTidakDibatalkan = PengajuanSuratModel::where('nik', $nik)
