@@ -114,7 +114,7 @@ class ProfileControllerApi extends Controller
     public function updatektpgambar(Request $request)
     {
         $request->validate([
-            'file' => 'required|image|mimes:jpg,jpeg,png',
+            'file' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'nik' => 'required',
         ]);
 
@@ -151,7 +151,7 @@ class ProfileControllerApi extends Controller
     public function updatekkgambar(Request $request)
     {
         $request->validate([
-            'file' => 'required|image|mimes:jpg,jpeg,png',
+            'file' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'no_kk' => 'required',
         ]);
 
