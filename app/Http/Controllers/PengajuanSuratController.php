@@ -48,15 +48,27 @@ class PengajuanSuratController extends Controller
     public function show($id)
     {
         $pengajuan = PengajuanSuratModel::find($id);
+        $lastPengajuanSelesai = PengajuanSuratModel::where("status", "selesai")->orderBy("created_at", "desc")->first();
         if (!$pengajuan) {
             return abort(404);
         }
 
         $html = $pengajuan->surat->format_surat;
-        // dd($data->surat);
         $this->replaceValue($html, $pengajuan);
         $pengajuan->surat->format_surat = $html;
+        $nomorAwal = env("NOMOR_SURAT_AWAL", 1);
+        $formatSurat = env("FORMAT_NOMOR_SURAT", "470/{nomor_urut}/430.11.11.8/2024");
+        $regexPattern = preg_quote($formatSurat, '/');
+        $regexPattern = str_replace('\{nomor_urut\}', '(\d+)', $regexPattern);
+        if ($lastPengajuanSelesai && preg_match("/$regexPattern/", $lastPengajuanSelesai->nomor_surat, $matches)) {
+            $nomorUrut = isset($matches[1]) ? (int) $matches[1] + 1 : $nomorAwal;
+        } else {
+            $nomorUrut = $nomorAwal;
+        }
 
+        $nomorSurat = str_replace('{nomor_urut}', $nomorUrut, $formatSurat);
+        if ($pengajuan->status == "di_terima_rw")
+            $pengajuan->nomor_surat = $nomorSurat;
         $params["data"] = (object) [
             "title" => "Pengajuan Surat",
             "action_form" => route("pengajuan-surat.update", $id),
@@ -213,7 +225,7 @@ class PengajuanSuratController extends Controller
     //     // Output PDF
     //     $pdf->Output($data->surat->nama_surat . '.pdf', 'I'); // 'I' = inline, 'D' = download
     // }
- private function replaceValue(&$html, $data)
+    private function replaceValue(&$html, $data)
     {
         $noSurat = $data->nomor_surat;
         $html = str_replace("{no_surat}", $noSurat ?? "", $html);
