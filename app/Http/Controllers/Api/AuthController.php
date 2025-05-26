@@ -118,7 +118,7 @@ class AuthController extends Controller
             "email" => "required|email|unique:users,email",
             "password" => "required|min:8",
             "kk_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048",
-            "ktp_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048"
+            "ktp_gambar" => "nullable|image|mimes:jpeg,png,jpg|max:2048"
         ]);
 
         // Jika validasi gagal, kembalikan pesan error
@@ -173,7 +173,7 @@ class AuthController extends Controller
             'pekerjaan' => $request->pekerjaan,
             'alamat' => $request->alamat,
             'phone' => $request->phone,
-            'ktp_gambar' => $ktpGambarPath
+            'ktp_gambar' => $ktpGambarPath??"",
         ]);
 
         // Kembalikan respons sukses
