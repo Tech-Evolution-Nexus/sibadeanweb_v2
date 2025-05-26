@@ -7,6 +7,7 @@ use App\Http\Resources\PengajuanResource;
 use App\Models\LampiranSuratModel;
 use App\Models\PengajuanSuratModel;
 use App\Models\SuratModel;
+use App\Models\User;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Helpers;
@@ -139,6 +140,22 @@ class PengajuanController extends Controller
         $html = str_replace("{pendidikan}", $data->masyarakat->pendidikan ?? "", $html);
         $html = str_replace("{alamat}", $data->masyarakat->kartuKeluarga->alamat ?? "", $html);
         $html = str_replace("{rw}", $data->masyarakat->kartuKeluarga->rw ?? "", $html);
+        $html = str_replace("{rt}", $data->masyarakat->kartuKeluarga->rt ?? "", $html);
+
+        // pengaju
+        $html = str_replace("{pengaju_nama}", $data->pengaju->nama_lengkap ?? "", $html);
+        $html = str_replace("{pengaju_nik}", $data->pengaju->nik ?? "", $html);
+        $html = str_replace("{pengaju_tempat_lahir}", $data->pengaju->tempat_lahir ?? "", $html);
+        $html = str_replace("{pengaju_tanggal_lahir}", $data->pengaju->tgl_lahir ?? "", $html);
+        $html = str_replace("{pengaju_jenis_kelamin}", $data->pengaju->jenis_kelamin ?? "", $html);
+        $html = str_replace("{pengaju_pekerjaan}", $data->pengaju->pekerjaan ?? "", $html);
+        $html = str_replace("{pengaju_agama}", $data->pengaju->agama ?? "", $html);
+        $html = str_replace("{pengaju_status_perkawinan}", $data->pengaju->status_perkawinan ?? "", $html);
+        $html = str_replace("{pengaju_kewarganegaraan}", $data->pengaju->kewarganegaraan ?? "", $html);
+        $html = str_replace("{pengaju_pendidikan}", $data->pengaju->pendidikan ?? "", $html);
+        $html = str_replace("{pengaju_alamat}", $data->pengaju->kartuKeluarga->alamat ?? "", $html);
+        $html = str_replace("{pengaju_rw}", $data->pengaju->kartuKeluarga->rw ?? "", $html);
+        $html = str_replace("{pengaju_rt}", $data->pengaju->kartuKeluarga->rt ?? "", $html);
 
         if ($data->masyarakat->bapak()) {
             $html = str_replace("{nama_bapak}", $data->masyarakat->bapak()->nama_lengkap ?? "", $html);
@@ -176,14 +193,19 @@ class PengajuanController extends Controller
         $html = str_replace("{tanggal_pengajuan}", Helpers::formatDate($data->created_at) ?? "", $html);
 
 
-        // foreach ($data->fields as $field) {
-        //     $value = $this->model->fieldValues
-        //         ->where("id_field", "=", $field->id)
-        //         ->where("id_pengajuan", "=", $data->id_pengajuan)
-        //         ->first();
-        //     $namaField = "{field_" . strtolower(str_replace(" ", "_", trim($field->nama_field)) . "}");
+        $lurah = User::where("role", "lurah")->where("status", 1)->whereNotNull("masa_jabatan_mulai")->first();
+        // lurah
+        $html = str_replace("{nama_lurah}", $lurah->petugas->nama ?? "", $html);
+        $html = str_replace("{nip_lurah}", $lurah->petugas->nip ?? "", $html);
+        $html = str_replace("{jabatan_lurah}", "Lurah" ?? "", $html);
 
-        //     $html = str_replace($namaField,  $value->value ?? "-", $html);
-        // }
+
+        foreach ($data->fieldValues as $field) {
+            $value = $field->value;
+            $namaField = "{" . $field->fields->nama_field . "}";
+            // $namaField = "{field_" . strtolower(str_replace(" ", "_", trim($field->nama_field)) . "}");
+
+            $html = str_replace($namaField, $value->value ?? "-", $html);
+        }
     }
 }

@@ -213,7 +213,7 @@ class PengajuanSuratController extends Controller
     //     // Output PDF
     //     $pdf->Output($data->surat->nama_surat . '.pdf', 'I'); // 'I' = inline, 'D' = download
     // }
-    private function replaceValue(&$html, $data)
+ private function replaceValue(&$html, $data)
     {
         $noSurat = $data->nomor_surat;
         $html = str_replace("{no_surat}", $noSurat ?? "", $html);
@@ -230,6 +230,22 @@ class PengajuanSuratController extends Controller
         $html = str_replace("{pendidikan}", $data->masyarakat->pendidikan ?? "", $html);
         $html = str_replace("{alamat}", $data->masyarakat->kartuKeluarga->alamat ?? "", $html);
         $html = str_replace("{rw}", $data->masyarakat->kartuKeluarga->rw ?? "", $html);
+        $html = str_replace("{rt}", $data->masyarakat->kartuKeluarga->rt ?? "", $html);
+
+        // pengaju
+        $html = str_replace("{pengaju_nama}", $data->pengaju->nama_lengkap ?? "", $html);
+        $html = str_replace("{pengaju_nik}", $data->pengaju->nik ?? "", $html);
+        $html = str_replace("{pengaju_tempat_lahir}", $data->pengaju->tempat_lahir ?? "", $html);
+        $html = str_replace("{pengaju_tanggal_lahir}", $data->pengaju->tgl_lahir ?? "", $html);
+        $html = str_replace("{pengaju_jenis_kelamin}", $data->pengaju->jenis_kelamin ?? "", $html);
+        $html = str_replace("{pengaju_pekerjaan}", $data->pengaju->pekerjaan ?? "", $html);
+        $html = str_replace("{pengaju_agama}", $data->pengaju->agama ?? "", $html);
+        $html = str_replace("{pengaju_status_perkawinan}", $data->pengaju->status_perkawinan ?? "", $html);
+        $html = str_replace("{pengaju_kewarganegaraan}", $data->pengaju->kewarganegaraan ?? "", $html);
+        $html = str_replace("{pengaju_pendidikan}", $data->pengaju->pendidikan ?? "", $html);
+        $html = str_replace("{pengaju_alamat}", $data->pengaju->kartuKeluarga->alamat ?? "", $html);
+        $html = str_replace("{pengaju_rw}", $data->pengaju->kartuKeluarga->rw ?? "", $html);
+        $html = str_replace("{pengaju_rt}", $data->pengaju->kartuKeluarga->rt ?? "", $html);
 
         if ($data->masyarakat->bapak()) {
             $html = str_replace("{nama_bapak}", $data->masyarakat->bapak()->nama_lengkap ?? "", $html);
