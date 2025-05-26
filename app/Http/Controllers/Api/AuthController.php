@@ -244,18 +244,21 @@ class AuthController extends Controller
             return ResponseHelper::error('NIK tidakd ditemukan', 404);
         }
 
-        // Cari user berdasarkan id_user dari masyarakat
-        $user = User::find($masyarakat->id_user);
+        // // Cari user berdasarkan id_user dari masyarakat
+        // $user = User::find($masyarakat->id_user);
 
-        if (!$user) {
-            return ResponseHelper::error('User tidak ditemukan', 404);
-        }
+        // if (!$user) {
+        //     return ResponseHelper::error('User tidak ditemukan', 404);
+        // }
 
-        $user->update([
+        $user = User::create([
             'email' => $request->email,
             'no_hp' => $request->no_hp,
             'password' => Hash::make($request->password),
             'status' => 1,
+        ]);
+        $masyarakat->update([
+            'id_user' => $user->id,
         ]);
         $user->makeHidden(['password']);
         return response()->json([
