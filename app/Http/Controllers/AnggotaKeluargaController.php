@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MasyarakatModel;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -190,10 +191,22 @@ class AnggotaKeluargaController extends Controller
      */
     public function destroy($no_kk, string $id)
     {
-        $masyarakat = MasyarakatModel::find($id);
-        if(!$masyarakat) return abort(404);
-        $masyarakat->delete();
-        return redirect()->back()->with("success","Berhasil menghapus anggota keluarga");
+        try {
+            $masyarakat = MasyarakatModel::find($id);
+            if (!$masyarakat)
+                return abort(404);
+            $masyarakat->delete();
+            return redirect()->back()->with("success", "Berhasil menghapus anggota keluarga");
+        } catch (QueryException $e) {
+            // Tangani constraint violation (kode 23000)
+            if ($e->getCode() === '23000') {
+                return redirect()->back()->with('error', 'Gagal menghapus karena data terkait masih digunakan.');
+            }
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan tak terduga.');
+        }
     }
 
     public function dataTable($data)

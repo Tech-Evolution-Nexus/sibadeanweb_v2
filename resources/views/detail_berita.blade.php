@@ -9,7 +9,7 @@
                         <h1 class="text-2xl mt-4 font-semibold text-center">{{ $berita->judul }}</h1>
                         <span class="text-gray-500 text-sm">{{ Helpers::formatDate($berita->created_at, true) }}</span>
                     </div>
-                    <img src="{{ asset($berita->gambar) }}" alt="{{ $berita->judul }}"
+                    <img src="{{ url("/c/private-image?path=$berita->gambar") }}" alt="{{ $berita->judul }}"
                         class="w-full mx-auto object-cover aspect-video rounded-md my-6">
                     <p class="prose lg:prose-base max-w-full">{!! $berita->konten !!}</p>
 
@@ -19,7 +19,7 @@
                         @foreach ($beritaTerbaru as $bt)
                             <a href="/berita/{{ $bt->slug }}">
                                 <article class="flex gap-4  items-start ">
-                                    <img src="{{ asset($bt->gambar) }}" alt="{{ $bt->judul }}"
+                                    <img src="{{url("/c/private-image?path=$bt->gambar") }}" alt="{{ $bt->judul }}"
                                         class="w-40 mx-auto aspect-video object-cover rounded-md ">
                                     <div class="">
                                         <h3 class="text-lg mb-4 font-semibold line-clamp-3">{{ $bt->judul }}</h3>

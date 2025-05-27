@@ -10,11 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('fields', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId("id_surat")->references("id")->on("surat");
-            $table->string("nama_field");
-            $table->timestamps();
+        Schema::table('histori_pengajuan', function (Blueprint $table) {
+            $table->dropForeign(['id_pengajuan']);
+            $table->foreign("id_pengajuan")->references("id")->on("pengajuan_surat")->onDelete("cascade");
+
         });
     }
 
@@ -23,6 +22,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('fields');
+        Schema::table('lampiran_surat', function (Blueprint $table) {
+            //
+        });
     }
 };
