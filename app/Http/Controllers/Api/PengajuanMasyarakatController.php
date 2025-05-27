@@ -84,7 +84,7 @@ class PengajuanMasyarakatController extends Controller
     public function updateStatus($idPengajuan)
     {
         $validated = Validator::make(request()->all(), [
-            "status" => "required|in:ditolak,disetujui"
+            "status" => "required|in:ditolak,disetujui|dibatalkan"
         ]);
 
         if ($validated->fails()) {
