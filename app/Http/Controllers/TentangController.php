@@ -21,7 +21,7 @@ class TentangController extends Controller
         $rules = [
             'judul_home' => 'required|string',
             'deskripsi_home' => 'required|string',
-            'hero_image' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
+            'hero_img' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
             'about_image' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
             'judul_tentang' => 'required|string',
             'deskripsi_tentang' => 'required|string',
@@ -75,13 +75,13 @@ class TentangController extends Controller
                 "about_description" => request()->deskripsi_tentang,
                 "demo_url" => request()->video_url
             ]);
-            if ($request->hasFile('hero_image')) {
-                if ($tentang->hero_image && file_exists(public_path('assets/images/' . $tentang->hero_image))) {
-                    unlink(public_path('assets/images/' . $tentang->hero_image));
+            if ($request->hasFile('hero_img')) {
+                if ($tentang->hero_img && file_exists(public_path('assets/images/' . $tentang->hero_img))) {
+                    unlink(public_path('assets/images/' . $tentang->hero_img));
                 }
-                $imageName = uniqid() . '.' . $request->hero_image->extension();
-                $request->file('hero_image')->move(public_path('assets/images'), $imageName);
-                $dataUpdate['hero_image'] = $imageName;
+                $imageName = uniqid() . '.' . $request->hero_img->extension();
+                $request->file('hero_img')->move(public_path('assets/images'), $imageName);
+                $dataUpdate['hero_img'] = $imageName;
             }
 
             dd($dataUpdate);

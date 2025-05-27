@@ -97,7 +97,7 @@
 
                     {{-- Upload Gambar --}}
                     <div class="mb-2"> <x-file-upload :name="'imge[' . $i . ']'" :label="'Gambar Fitur ' . ($i + 1)"
-                            :defaultImage="$fu->icon ? asset( $fu->icon) : asset('assets/image/default-2.png')" />
+                            :defaultImage="$fu->icon ? asset($fu->icon) : asset('assets/image/default-2.png')" />
                         @error("imge.$i")
                             <span class="text-red-500 text-xs">{{ $message }}</span>
                         @enderror
