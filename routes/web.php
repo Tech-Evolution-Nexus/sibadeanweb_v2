@@ -97,6 +97,7 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get('/surat-pengantar', [SuratPengantarController::class, 'show']);
 
 });
+
 // use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Response;
 // Route::get('/c/private-image', function (Request $request) {

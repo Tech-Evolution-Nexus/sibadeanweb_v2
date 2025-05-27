@@ -62,33 +62,34 @@
     <div class="header">
         <h3>PEMERINTAH KABUPATEN BONDOWOSO</h3>
         <h4>KELURAHAN KOTAKULON</h4>
-        <h4>KETUA RT {{ $data->rt }} / RW {{ $data->rw }}</h4>
+        <h4>KETUA RT {{$data->masyarakat->kartuKeluarga->rt }} / RW {{ $data->masyarakat->kartuKeluarga->rw }}</h4>
     </div>
+    <hr>
 
     <div class="title">SURAT PENGANTAR</div>
-    <div class="nomor">Nomor: {{ $data->nomor_surat }}</div>
+    <div class="nomor">Nomor: {{ $totalPengantarRt }}/{{date('d/m/Y', strtotime($data->histori()->where("status_pengajuan","di_terima_rt")->first()->created_at))}}</div>
 
     <div class="content">
-        <p>Yang bertanda tangan di bawah ini, Ketua RT.{{ $data->rt }}/RW.{{ $data->rw }} Kelurahan Kotakulon Kecamatan Bondowoso Kabupaten Bondowoso, bersama ini kami menghadapakan seorang warga:</p>
+        <p>Yang bertanda tangan di bawah ini, Ketua RT.{{ $data->masyarakat->kartuKeluarga->rt }}/RW.{{ $data->masyarakat->kartuKeluarga->rw }} Kelurahan Kotakulon Kecamatan Bondowoso Kabupaten Bondowoso, bersama ini kami menghadapakan seorang warga:</p>
 
         <table class="info-table">
-            <tr><td>Nama</td><td>: {{ $data->nama }}</td></tr>
-            <tr><td>Tempat, Tgl. Lahir</td><td>: {{ $data->tempat_lahir }}, {{ date('d-m-Y', strtotime($data->tanggal_lahir)) }}</td></tr>
-            <tr><td>Jenis Kelamin</td><td>: {{ $data->jenis_kelamin }}</td></tr>
-            <tr><td>Agama</td><td>: {{ $data->agama }}</td></tr>
-            <tr><td>Nomor KTP / KK</td><td>: {{ $data->no_ktp_kk }}</td></tr>
-            <tr><td>Pekerjaan</td><td>: {{ $data->pekerjaan }}</td></tr>
-            <tr><td>Keperluan</td><td>: {{ $data->keperluan }}</td></tr>
+            <tr><td>Nama</td><td>: {{ $data->masyarakat->nama_lengkap }}</td></tr>
+            <tr><td>Tempat, Tgl. Lahir</td><td>: {{ $data->masyarakat->tempat_lahir }}, {{ date('d-m-Y', strtotime($data->masyarakat->tanggal_lahir)) }}</td></tr>
+            <tr><td>Jenis Kelamin</td><td>: {{ $data->masyarakat->jenis_kelamin }}</td></tr>
+            <tr><td>Agama</td><td>: {{ $data->masyarakat->agama }}</td></tr>
+            <tr><td>Nomor KTP / KK</td><td>: {{ $data->masyarakat->nik }} / {{$data->masyarakat->no_kk}}</td></tr>
+            <tr><td>Pekerjaan</td><td>: {{ $data->masyarakat->pekerjaan }}</td></tr>
+            <tr><td>Keperluan</td><td>: {{ $data->keterangan }}</td></tr>
         </table>
 
-        <p>Orang tersebut di atas adalah benar-benar penduduk RT.{{ $data->rt }}/RW.{{ $data->rw }} Kelurahan Kotakulon Kecamatan Bondowoso Kabupaten Bondowoso.</p>
+        <p>Orang tersebut di atas adalah benar-benar penduduk RT.{{ $data->masyarakat->kartuKeluarga->rt }}/ RW.{{ $data->masyarakat->kartuKeluarga->rw }} Kelurahan Kotakulon Kecamatan Bondowoso Kabupaten Bondowoso.</p>
 
         <p>Demikian surat pengantar ini dibuat untuk dipergunakan sebagaimana mestinya.</p>
     </div>
 
     <div class="footer">
         <div class="footer-right">
-            <p>Bondowoso, {{ date('d-m-Y', strtotime($data->tanggal_surat)) }}</p>
+            <p>Bondowoso, {{ date('d-m-Y', strtotime($data->histori()->where("status_pengajuan","di_terima_rt")->first()->created_at)) }}</p>
             <p>KETUA RT.{{ $data->rt }}/RW.{{ $data->rw }}</p>
             <br><br><br>
             <p><strong>{{ $data->nama_ketua_rt }}</strong></p>
