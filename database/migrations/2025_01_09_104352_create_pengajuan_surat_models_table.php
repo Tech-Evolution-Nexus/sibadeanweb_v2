@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,7 +13,9 @@ return new class extends Migration
         Schema::create('pengajuan_surat', function (Blueprint $table) {
             $table->id();
             $table->char("nik", 16);
+            $table->char("nik_pengaju", 16);
             $table->foreign("nik")->references("nik")->on("masyarakat")->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreign("nik_pengaju")->references("nik")->on("masyarakat")->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId("id_surat")->references("id")->on("surat")->restrictOnDelete();
             $table->string("nomor_surat", 50)->nullable();
             $table->string("nik_pemohon", 16);

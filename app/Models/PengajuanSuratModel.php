@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PengajuanSuratModel extends Model
 {
     protected $table = "pengajuan_surat";
-    protected $fillable = ["nik", "id_surat","nik_diajukan", "keterangan", "keterangan_ditolak", "status", "nomor_surat", "pengantar_rt"];
+    protected $fillable = ["nik", "id_surat", "nik_diajukan", "keterangan", "keterangan_ditolak", "status", "nomor_surat", "pengantar_rt"];
 
     protected function nik(): Attribute
     {
@@ -20,6 +20,10 @@ class PengajuanSuratModel extends Model
     public function masyarakat()
     {
         return $this->belongsTo(MasyarakatModel::class, "nik", "nik");
+    }
+    public function pengaju()
+    {
+        return $this->belongsTo(MasyarakatModel::class, "nik_pengaju", "nik");
     }
     public function surat()
     {

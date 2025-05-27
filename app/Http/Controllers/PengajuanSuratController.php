@@ -19,13 +19,23 @@ class PengajuanSuratController extends Controller
      */
     public function index()
     {
-        $status = match (request()->status ?? "menunggu") {
+        $statusPengajuan = request()->status ?? "menunggu";
+        $status = match ($statusPengajuan) {
             "selesai" => "selesai",
             "menunggu" => "di_terima_rw",
             "di_terima_rt" => "di_terima_rt",
         };
-        $anggotaKeluarga = PengajuanSuratModel::where("status", $status)->orderBy("created_at", "desc")->get();
 
+        $query = PengajuanSuratModel::query();
+
+        match ($status) {
+            "selesai" => $query->whereIn("status", ["selesai", "di_tolak_lurah"]),
+            "menunggu" => $query->where("status", "di_terima_rw"),
+            "di_terima_rt" => $query->where("status", "di_terima_rt"),
+            default => $query->where("status", "di_terima_rw"), // fallback aman
+        };
+
+        $anggotaKeluarga = $query->orderBy("created_at", "desc")->get();
         $params["data"] = (object) [
             "anggota_keluarga" => $anggotaKeluarga
         ];
@@ -38,15 +48,27 @@ class PengajuanSuratController extends Controller
     public function show($id)
     {
         $pengajuan = PengajuanSuratModel::find($id);
+        $lastPengajuanSelesai = PengajuanSuratModel::where("status", "selesai")->orderBy("created_at", "desc")->first();
         if (!$pengajuan) {
             return abort(404);
         }
 
         $html = $pengajuan->surat->format_surat;
-        // dd($data->surat);
         $this->replaceValue($html, $pengajuan);
         $pengajuan->surat->format_surat = $html;
+        $nomorAwal = env("NOMOR_SURAT_AWAL", 1);
+        $formatSurat = env("FORMAT_NOMOR_SURAT", "470/{nomor_urut}/430.11.11.8/2024");
+        $regexPattern = preg_quote($formatSurat, '/');
+        $regexPattern = str_replace('\{nomor_urut\}', '(\d+)', $regexPattern);
+        if ($lastPengajuanSelesai && preg_match("/$regexPattern/", $lastPengajuanSelesai->nomor_surat, $matches)) {
+            $nomorUrut = isset($matches[1]) ? (int) $matches[1] + 1 : $nomorAwal;
+        } else {
+            $nomorUrut = $nomorAwal;
+        }
 
+        $nomorSurat = str_replace('{nomor_urut}', $nomorUrut, $formatSurat);
+        if ($pengajuan->status == "di_terima_rw")
+            $pengajuan->nomor_surat = $nomorSurat;
         $params["data"] = (object) [
             "title" => "Pengajuan Surat",
             "action_form" => route("pengajuan-surat.update", $id),
@@ -57,14 +79,21 @@ class PengajuanSuratController extends Controller
     }
     public function updateStatus($id)
     {
-        $status = request()->status;
+        $status = request()->status ?? "di_tolak_lurah";
+        $keterangan = request()->keterangan;
+        $keteranganDitolak = request()->keterangan_ditolak;
+        $nomor_surat = request()->nomor_surat;
         $pengajuan = PengajuanSuratModel::find($id);
-
         if (!$pengajuan) {
             return redirect()->back()->with("error", "data tidak ditemukan");
         }
 
-        $pengajuan->update(["status" => $status]);
+        $pengajuan->update([
+            "status" => $status,
+            "keterangan" => $keterangan,
+            "nomor_surat" => $nomor_surat,
+            "keterangan_ditolak" => $keteranganDitolak
+        ]);
 
         HistoriPengajuan::create([
             "id_pengajuan" => $id,
@@ -213,6 +242,22 @@ class PengajuanSuratController extends Controller
         $html = str_replace("{pendidikan}", $data->masyarakat->pendidikan ?? "", $html);
         $html = str_replace("{alamat}", $data->masyarakat->kartuKeluarga->alamat ?? "", $html);
         $html = str_replace("{rw}", $data->masyarakat->kartuKeluarga->rw ?? "", $html);
+        $html = str_replace("{rt}", $data->masyarakat->kartuKeluarga->rt ?? "", $html);
+
+        // pengaju
+        $html = str_replace("{pengaju_nama}", $data->pengaju->nama_lengkap ?? "", $html);
+        $html = str_replace("{pengaju_nik}", $data->pengaju->nik ?? "", $html);
+        $html = str_replace("{pengaju_tempat_lahir}", $data->pengaju->tempat_lahir ?? "", $html);
+        $html = str_replace("{pengaju_tanggal_lahir}", $data->pengaju->tgl_lahir ?? "", $html);
+        $html = str_replace("{pengaju_jenis_kelamin}", $data->pengaju->jenis_kelamin ?? "", $html);
+        $html = str_replace("{pengaju_pekerjaan}", $data->pengaju->pekerjaan ?? "", $html);
+        $html = str_replace("{pengaju_agama}", $data->pengaju->agama ?? "", $html);
+        $html = str_replace("{pengaju_status_perkawinan}", $data->pengaju->status_perkawinan ?? "", $html);
+        $html = str_replace("{pengaju_kewarganegaraan}", $data->pengaju->kewarganegaraan ?? "", $html);
+        $html = str_replace("{pengaju_pendidikan}", $data->pengaju->pendidikan ?? "", $html);
+        $html = str_replace("{pengaju_alamat}", $data->pengaju->kartuKeluarga->alamat ?? "", $html);
+        $html = str_replace("{pengaju_rw}", $data->pengaju->kartuKeluarga->rw ?? "", $html);
+        $html = str_replace("{pengaju_rt}", $data->pengaju->kartuKeluarga->rt ?? "", $html);
 
         if ($data->masyarakat->bapak()) {
             $html = str_replace("{nama_bapak}", $data->masyarakat->bapak()->nama_lengkap ?? "", $html);
@@ -274,11 +319,9 @@ class PengajuanSuratController extends Controller
                 $btn = '<div class="row flex">';
                 $btn .= '<a href="' . route('pengajuan-surat.show', $row->id) . '" class="btn-show ' . ($status == 'selesai' ? '' : 'rounded-md') . '"><i class="fa fa-info"></i></a>';
 
-                if ($status === "selesai") {
+                if (in_array($row->status, ["selesai", "di_tolak_lurah"])) {
                     $btn .= ' <a href="' . route('pengajuan-surat.download', $row->id) . '" class="btn-edit rounded-md rounded-s-none"><i class="fa fa-download"></i></a>';
                 }
-                $message = "Apakah anda yakin menghapus data $row->nama_lengkap?";
-                //    $btn .= "<button class='btn-delete' x-data x-on:click=\"\$dispatch('open-modal', {name: 'delete'}), message= '$message', url= '" . route("anggota-keluarga.destroy", [$row->no_kk, $row->nik]) . "'\"><i class='fa fa-trash'></i></button>";
                 $btn .= '</div>';
                 return $btn;
             })
@@ -300,13 +343,14 @@ class PengajuanSuratController extends Controller
                 return Helpers::formatDate($row->created_at, true);
             })
             ->addColumn("status", function ($row) {
-                $classStatus = str_contains("tolak", $row->status) ? "bg-red-500 text-white" : "bg-green-500 text-white";
+                $classStatus = str_contains($row->status, "tolak") ? "bg-red-500 text-white" : "bg-green-500 text-white";
                 $status = match ($row->status) {
                     "di_terima_rw" => "Disetujui Rw",
                     "di_terima_rt" => "Disetujui Rt",
                     "selesai" => "Selesai",
                     "di_tolak_rw" => "Ditolak Rw",
                     "di_tolak_rt" => "Ditolak Rt",
+                    "di_tolak_lurah" => "Ditolak Lurah",
                     "dibatalkan" => "Dibatalkan",
                 };
                 return "<span class='px-2 py-1 rounded-full {$classStatus}'>{$status}</span>";
