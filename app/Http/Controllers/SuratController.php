@@ -218,9 +218,7 @@ class SuratController extends Controller
                 $file->storeAs('surat', $randomName, ['disk' => 'private']);
                 $surat->gambar = 'surat/' . $randomName; // Update nama gambar
             }
-            // $surat->singkatan_nama_surat = implode('', array_map(function ($word) {
-            //     return ctype_alpha($word[0]) ? strtoupper($word[0]) : '';
-            // }, explode(' ', $validated['nama_surat'])));
+
 
             $surat->save(); // Simpan perubahan surat
 
