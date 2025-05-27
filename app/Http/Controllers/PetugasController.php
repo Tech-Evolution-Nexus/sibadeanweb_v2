@@ -57,12 +57,12 @@ class PetugasController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            "nip" => "required|numeric|digits:16",
+            "nip" => "required|numeric|digits:16|unique:petugas,nip",
             "nama" => "required|min:3|max:50",
             "email" => "required|email|unique:users,email",
             "password" => "required|min:6",
             "role" => "required",
-            "no_hp" => "required|string|min:11|max:13",
+            "no_hp" => "required|string|min:11|max:13|unique:users,no_hp",
         ]);
 
         // Check if a 'lurah' already exists
@@ -132,17 +132,27 @@ class PetugasController extends Controller
         }
 
         $validated = $request->validate([
-            "nip" => "required|numeric|digits:16",
+            "nip" => [
+                "required",
+                "numeric",
+                "digits:16",
+                Rule::unique('petugas', 'nip')->ignore($petugas->id_user, 'id_user'),
+            ],
             "nama" => "required|min:3|max:50",
             "email" => [
                 "required",
                 "email",
-                Rule::unique('users', 'email')->ignore($petugas->id_user),
+                Rule::unique('users', 'email')->ignore($petugas->id_user, 'id_user'),
             ],
             "password" => "nullable|min:6",
             "role" => "required",
-            "status" => "required",
-            "no_hp" => "required|string|min:11|max:13",
+            "no_hp" => [
+                "required",
+                "string",
+                "min:11",
+                "max:13",
+                Rule::unique('users', 'no_hp')->ignore($petugas->id_user, 'id_user'),
+            ],
         ]);
 
         // Cegah lebih dari satu lurah
@@ -185,7 +195,7 @@ class PetugasController extends Controller
             DB::rollBack();
             Log::error("Gagal update petugas: " . $e->getMessage());
             return back()->withErrors([
-                'errorvalidasi' => "errordb"
+                'errorvalidasi' => $e->getMessage()
             ]);
         }
     }

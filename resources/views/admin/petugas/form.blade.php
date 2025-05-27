@@ -11,9 +11,9 @@
 
         <x-alert-status class="mb-4" :status="'success'" :message="session('success')" />
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
-        @if ($errors->any())
+        <!-- @if ($errors->any())
         <x-alert-status :status="'error'" :message="$errors->first('errorvalidasi')" class="mb-4" />
-        @endif
+        @endif -->
         <form action="{{ $action_form }}" method="POST" class="card">
             @csrf
             @method($method)
