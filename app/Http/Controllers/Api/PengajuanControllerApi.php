@@ -40,6 +40,7 @@ class PengajuanControllerApi extends Controller
             'nik' => 'required|string',
             'id_surat' => 'required|integer',
             'keterangan' => 'nullable|string',
+            'nik_pemohon' => 'required|string',
             'pengantar_rt' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
@@ -75,10 +76,10 @@ class PengajuanControllerApi extends Controller
         // 5. Simpan data pengajuan surat
         $pengajuan = PengajuanSuratModel::create([
             'nik' => $request->nik,
-            'nik_pengaju' => auth()->user()->masyarakat->nik,
             'id_surat' => $request->id_surat,
             'keterangan' => $request->keterangan,
             'pengantar_rt' => $pengantarPath,
+            'nik_pemohon' => $request->nik_pemohon,
             'status' => $status,
         ]);
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PengajuanSuratModel extends Model
 {
     protected $table = "pengajuan_surat";
-    protected $fillable = ["nik", "nik_pengaju", "id_surat", "keterangan", "keterangan_ditolak", "status", "nomor_surat", "pengantar_rt"];
+    protected $fillable = ["nik", "id_surat", "nik_diajukan", "keterangan", "keterangan_ditolak", "status", "nomor_surat", "pengantar_rt"];
 
     protected function nik(): Attribute
     {

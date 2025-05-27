@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helpers\NotificationHelper;
 use App\Models\BeritaModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -77,7 +78,7 @@ class BeritaController extends Controller
 
         // Menyimpan data kartu keluarga
         BeritaModel::create($dataBerita);
-
+        NotificationHelper::broadcastToAll('Berita Baru', 'Berita baru telah ditambahkan');
         return redirect()->route('berita.index')->with('success', 'Berita berhasil ditambahkan');
     }
 
