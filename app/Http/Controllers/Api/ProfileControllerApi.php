@@ -49,6 +49,10 @@ class ProfileControllerApi extends Controller
 
     public function ubhNoHp(Request $request)
     {
+        return response()->json([
+            'status' => false,
+            'message' => 'User tidak ditemukan.',
+        ], 404);
         $request->validate([
             'nik' => 'required|string',
             'no_hp' => 'required|string',
@@ -79,16 +83,18 @@ class ProfileControllerApi extends Controller
     }
 
 
+
+
     public function ubhPass(Request $request)
     {
         $request->validate([
             'nik' => 'required|string|max:16',
-            'password' => 'required|string',
-            'newPass' => 'required|string',
-            'confPass' => 'required|string',
+            'password' => 'required|string',       // password lama
+            'newPass' => 'required|string|min:6',  // beri batasan minimal karakter
+            'confPass' => 'required|string|same:newPass',
         ]);
 
-        // Cari user melalui relasi masyarakat
+        // Cari user berdasarkan NIK dari relasi masyarakat
         $user = User::whereHas('masyarakat', function ($query) use ($request) {
             $query->where('nik', $request->nik);
         })->first();
@@ -100,17 +106,26 @@ class ProfileControllerApi extends Controller
             ], 404);
         }
 
+        // Cek apakah password lama cocok
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Password lama tidak sesuai.',
+            ], 401);
+        }
 
-        $user->password = $request->newPass;
+        // Update password baru (harus di-hash)
+        $user->password = Hash::make($request->newPass);
         $user->save();
 
         return response()->json([
             'status' => true,
             'message' => 'Password berhasil diubah.',
-            'user' => $user->load('masyarakat'), // ikutkan relasi
-            'token' => $user->createToken('auth_token')->plainTextToken,
+            'user' => $user->load('masyarakat'),
+            // 'token' => $user->createToken('auth_token')->plainTextToken,
         ]);
     }
+
     public function updatektpgambar(Request $request)
     {
         $request->validate([
@@ -182,6 +197,7 @@ class ProfileControllerApi extends Controller
         ], 'Gambar KK berhasil diperbarui');
     }
 
+
     public function profile(Request $request)
     {
         $request->validate([
@@ -202,5 +218,46 @@ class ProfileControllerApi extends Controller
             $data,
             'Detail berita berhasil diambil'
         );
+    }
+    public function ttd(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'nik' => 'required',
+        ]);
+
+        $user = User::with('masyarakat')
+            ->whereHas('masyarakat', function ($query) use ($request) {
+                $query->where('nik', $request->nik);
+            })
+            ->firstOrFail();
+        if (!empty($user->ttd)) {
+            $oldImagePath = storage_path('app/private/' . $user->ttd);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
+
+        // Simpan gambar baru
+        $file = $request->file('file');
+        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        $path = 'ttd/' . $filename;
+
+        $file->storeAs('ttd', $filename, ['disk' => 'private']);
+
+        // Hanya update kolom `ttd`
+        $user->update([
+            'ttd' => $path,
+        ]);
+
+        $updatedUser = $user->fresh(); // reload dari DB
+
+        if ($updatedUser->ttd === $path) {
+            return ResponseHelper::success([
+                'ttd' => $path,
+            ], 'Gambar tanda tangan berhasil diperbarui.');
+        } else {
+            return ResponseHelper::error('Gagal menyimpan tanda tangan.', 500);
+        }
     }
 }

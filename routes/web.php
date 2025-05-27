@@ -46,9 +46,9 @@ Route::get('/c/private-image', function () {
     }
     abort(404);
 })->name("private.image");
-Route::post("testimoni/store", function () { })->name("testimoni.store");
+Route::post("testimoni/store", function () {})->name("testimoni.store");
 
-
+Route::get('/pengajuan-surat/export', [PengajuanSuratController::class, 'export'])->name("pengajuan-surat.export");
 Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get('/dashboard', [DashboardController::class, "index"])->name('dashboard');
     Route::resource("/surat", SuratController::class);
@@ -62,6 +62,7 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get("/pengajuan-surat/{id}", [PengajuanSuratController::class, "show"])->name("pengajuan-surat.show");
     Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class, "updateStatus"])->name("pengajuan-surat.update");
     Route::get("/pengajuan-surat/{id}/download", [PengajuanSuratController::class, "download"])->name("pengajuan-surat.download");
+
     Route::post("/masyarakat/import", function () {
         try {
             request()->validate([
@@ -128,6 +129,5 @@ Route::post("/ckeditor-upload-image", function () {
     }
 
     return response()->json(['error' => 'No file uploaded'], 400);
-
 });
 require __DIR__ . '/auth.php';

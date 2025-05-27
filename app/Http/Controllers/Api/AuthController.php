@@ -26,7 +26,7 @@ class AuthController extends Controller
         $user = User::all();
         return response()->json($user);
     }
-    public function login(Request $request)
+     public function login(Request $request)
     {
         Log::info('Login Request Data', $request->all());
 
@@ -34,8 +34,6 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             "nik" => "required|numeric|digits:16",
             "password" => "required|min:6",
-            "fcm_token" => "nullable|min:6",
-
         ]);
 
         // Jika validasi gagal, kembalikan pesan error
@@ -75,17 +73,20 @@ class AuthController extends Controller
 
         // Membuat token akses baru
         $token = $user->createToken('auth_token')->plainTextToken;
+        $data = $user;
         Auth::login($user);
+        $user->update([
+            'fcm_token' => $request->fcm_token
+        ]);
         // Kembalikan response dengan data user (tanpa password) dan token
         return ResponseHelper::success([
             'user' => [
-                'id' => $user->id,
-                'name' => $user->masyarakat->nama_lengkap,
-                'email' => $user->email,
-                'role' => $user->role,
-                'masyarakat' => $user->masyarakat
+                'id' => $data->id,
+                'name' => $data->masyarakat->nama_lengkap,
+                'email' => $data->email,
+                'role' => $data->role,
+                'masyarakat' => $data->masyarakat
             ],
-            'fcm_token' => $user->fcm_token,
             'access_token' => $token,
             'token_type' => 'Bearer',
         ], 'Login Sukses');
