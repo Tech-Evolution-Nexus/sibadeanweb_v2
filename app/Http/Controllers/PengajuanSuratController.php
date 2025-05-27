@@ -301,6 +301,7 @@ class PengajuanSuratController extends Controller
         $html = str_replace("{nama_lurah}", $lurah->petugas->nama ?? "", $html);
         $html = str_replace("{nip_lurah}", $lurah->petugas->nip ?? "", $html);
         $html = str_replace("{jabatan_lurah}", "Lurah" ?? "", $html);
+        $html = str_replace("{ttd_lurah}", "<img src='" . route("private.image", ["path" => $lurah->ttd]) . "'>" ?? "", $html);
 
 
         foreach ($data->fieldValues as $field) {

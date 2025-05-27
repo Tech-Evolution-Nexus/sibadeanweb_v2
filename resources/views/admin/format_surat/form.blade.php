@@ -138,7 +138,7 @@
                                             "{pendidikan_bapak}", "{alamat_bapak}", "{nama_ibu}", "{nik_ibu}", "{tempat_lahir_ibu}",
                                             "{tanggal_lahir_ibu}", "{jenis_kelamin_ibu}", "{pekerjaan_ibu}", "{agama_ibu}",
                                             "{status_perkawinan_ibu}", "{kewarganegaraan_ibu}", "{pendidikan_ibu}", "{alamat_ibu}",
-                                            "{rt}", "{kecamatan}", "{desa}", "{kabupaten}", "{tanggal_pengajuan}", "{nama_lurah}", "{nip_lurah}", "{jabatan_lurah}",
+                                            "{rt}", "{kecamatan}", "{desa}", "{kabupaten}", "{tanggal_pengajuan}", "{nama_lurah}", "{nip_lurah}", "{jabatan_lurah}", "{ttd_lurah}",
                                         ],
                                         minimumCharacters: 0
                                     }
