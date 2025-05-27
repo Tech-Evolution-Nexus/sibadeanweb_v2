@@ -26,7 +26,8 @@ class User extends Authenticatable
         "role",
         "status",
         "no_hp",
-        "fcm_token"
+        "fcm_token",
+        "ttd"
     ];
 
     /**

@@ -49,6 +49,10 @@ class ProfileControllerApi extends Controller
 
     public function ubhNoHp(Request $request)
     {
+        return response()->json([
+            'status' => false,
+            'message' => 'User tidak ditemukan.',
+        ], 404);
         $request->validate([
             'nik' => 'required|string',
             'no_hp' => 'required|string',
@@ -182,6 +186,7 @@ class ProfileControllerApi extends Controller
         ], 'Gambar KK berhasil diperbarui');
     }
 
+
     public function profile(Request $request)
     {
         $request->validate([
@@ -202,5 +207,46 @@ class ProfileControllerApi extends Controller
             $data,
             'Detail berita berhasil diambil'
         );
+    }
+    public function ttd(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'nik' => 'required',
+        ]);
+
+        $user = User::with('masyarakat')
+            ->whereHas('masyarakat', function ($query) use ($request) {
+                $query->where('nik', $request->nik);
+            })
+            ->firstOrFail();
+        if (!empty($user->ttd)) {
+            $oldImagePath = storage_path('app/private/' . $user->ttd);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
+
+        // Simpan gambar baru
+        $file = $request->file('file');
+        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        $path = 'ttd/' . $filename;
+
+        $file->storeAs('ttd', $filename, ['disk' => 'private']);
+
+        // Hanya update kolom `ttd`
+        $user->update([
+            'ttd' => $path,
+        ]);
+
+        $updatedUser = $user->fresh(); // reload dari DB
+
+        if ($updatedUser->ttd === $path) {
+            return ResponseHelper::success([
+                'ttd' => $path,
+            ], 'Gambar tanda tangan berhasil diperbarui.');
+        } else {
+            return ResponseHelper::error('Gagal menyimpan tanda tangan.', 500);
+        }
     }
 }
