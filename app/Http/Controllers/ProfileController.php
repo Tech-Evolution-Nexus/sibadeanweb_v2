@@ -37,6 +37,32 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
+    public function updateTTD()
+    {
+        request()->validate([
+            "ttd" => 'required|file|image|max:2024'
+        ]);
+        $user = auth()->user();
+        if (request()->hasFile('ttd')) {
+            // Menghapus gambar lama jika ada
+            if ($user->ttd) {
+                $oldImagePath = storage_path('app/private/' . $user->ttd);
+                if (file_exists($oldImagePath) && $user->ttd != "default-2.png") {
+                    unlink($oldImagePath); // Menghapus file gambar lama
+                }
+            }
+
+            // Menyimpan gambar yang baru
+            $file = request()->file('ttd');
+            $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('tanda_tangan', $randomName, ['disk' => 'private']);
+            $user->ttd = "tanda_tangan/" . $randomName;
+        }
+        $user->save();
+        // dd($user);
+        return Redirect::route('profile.edit')->with('status', 'ttd-updated');
+
+    }
     /**
      * Delete the user's account.
      */

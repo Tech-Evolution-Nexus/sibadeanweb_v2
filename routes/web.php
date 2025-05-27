@@ -90,6 +90,7 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::resource("/rw/{rw}/rt", RTController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/ttd', [ProfileController::class, 'updateTTD'])->name('profile.ttd');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get("/tentang", [TentangController::class, 'index'])->name('tentang.index');
