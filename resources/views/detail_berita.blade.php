@@ -19,7 +19,7 @@
                         @foreach ($beritaTerbaru as $bt)
                             <a href="/berita/{{ $bt->slug }}">
                                 <article class="flex gap-4  items-start ">
-                                    <img src="{{ asset($bt->gambar) }}" alt="{{ $bt->judul }}"
+                                    <img src="{{url("/c/private-image?path=$bt->gambar") }}" alt="{{ $bt->judul }}"
                                         class="w-40 mx-auto aspect-video object-cover rounded-md ">
                                     <div class="">
                                         <h3 class="text-lg mb-4 font-semibold line-clamp-3">{{ $bt->judul }}</h3>
