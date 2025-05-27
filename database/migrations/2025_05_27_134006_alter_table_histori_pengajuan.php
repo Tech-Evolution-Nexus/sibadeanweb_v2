@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::table('histori_pengajuan', function (Blueprint $table) {
             $table->dropForeign(['id_pengajuan']);
-            $table->foreignId("id_pengajuan")->references("id")->on("pengajuan_surat")->onDelete("cascade");
+            $table->foreign("id_pengajuan")->references("id")->on("pengajuan_surat")->onDelete("cascade");
 
         });
     }
