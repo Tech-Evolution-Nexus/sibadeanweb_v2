@@ -142,6 +142,7 @@ class PetugasController extends Controller
             "password" => "nullable|min:6",
             "role" => "required",
             "status" => "required",
+            "no_hp" => "required|string|min:11|max:13",
         ]);
 
         // Cegah lebih dari satu lurah
@@ -168,7 +169,7 @@ class PetugasController extends Controller
                 'email' => $validated['email'],
                 'password' => $validated['password'] ?? $petugas->user->password,
                 'role' => $validated['role'],
-                'no_hp' => $validated['nohp'],
+                'no_hp' => $validated['no_hp'],
                 'status' => $validated['status'],
             ]);
 
