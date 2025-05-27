@@ -68,8 +68,7 @@
             </li>
 
             {{-- <hr class="block mt-6 mb-2 border-slate-300"> --}}
-         @if(auth()->user()->role === "admin")
-   <li class="mt-6 mb-6 cursor-pointer" x-data="{ isCollapse: true }">
+            <li class="mt-6 mb-6 cursor-pointer" x-data="{ isCollapse: true }">
                 <!-- Header -->
                 <div @click="isCollapse = !isCollapse" class="flex justify-between items-center text-gray-800 transition-all">
                     <span class="text-sm font-medium ">Master Data</span>
@@ -78,13 +77,14 @@
 
                 <!-- Dropdown dengan animasi height -->
                 <ul class="overflow-hidden transition-all duration-300 ease-in-out "
-                    :class="isCollapse ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'">
-                    <li>
-                        <a href="{{ route('rw.index') }}"
-                            class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium {{request()->routeIs("rw.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
-                            <i class="fa fa-circle {{request()->routeIs("rw.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> RT & RW
-                        </a>
+                :class="isCollapse ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'">
+                <li>
+                    <a href="{{ route('rw.index') }}"
+                    class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium {{request()->routeIs("rw.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
+                    <i class="fa fa-circle {{request()->routeIs("rw.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> RT & RW
+                </a>
                     </li>
+                    @if(auth()->user()->role === "admin")
                     <li>
                         <a href="{{ route('kartu-keluarga.index') }}"
                             class="flex  px-2 py-2 rounded-md text-sm  items-center gap-2  hover:bg-gray-100 transition-all font-medium {{request()->routeIs("kartu-keluarga.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-slate-700 md:hover:bg-gray-100'}}">
@@ -127,8 +127,12 @@
                             <i class="fa fa-circle {{request()->routeIs("faq.index") ? 'text-[var(--primary)] bg-gray-100' : 'text-gray-400'}} text-[6px] w-6"></i> FAQ
                         </a>
                     </li>
+            @endif
+
                 </ul>
             </li>
+                    @if(auth()->user()->role === "admin")
+
             <li class="mt-6 mb-6 cursor-pointer" x-data="{ isCollapse: true }">
                 <!-- Header -->
                 <div @click="isCollapse = !isCollapse" class="flex justify-between items-center text-gray-800 transition-all">
@@ -167,7 +171,7 @@
                     </li>
                 </ul>
             </li>
-         @endif
+            @endif
 
         </ul>
     </div>

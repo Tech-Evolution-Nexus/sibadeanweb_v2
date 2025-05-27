@@ -46,73 +46,64 @@ Route::get('/c/private-image', function () {
     }
     abort(404);
 })->name("private.image");
-Route::post("testimoni/store", function () {})->name("testimoni.store");
+Route::post("testimoni/store", function () { })->name("testimoni.store");
 
-Route::get('/pengajuan-surat/export', [PengajuanSuratController::class, 'export'])->name("pengajuan-surat.export");
 Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get('/dashboard', [DashboardController::class, "index"])->name('dashboard');
-    Route::resource("/surat", SuratController::class);
-    Route::resource("/faq", FaqController::class);
-    Route::resource("/kartu-keluarga", KartuKeluargaController::class);
-    Route::resource("/kartu-keluarga/{no_kk}/anggota-keluarga", AnggotaKeluargaController::class);
-    Route::resource("/berita", BeritaController::class);
-    Route::resource("/users", UserController::class);
-    Route::get('/admin/users/create', [UserController::class, 'create'])->name('users.create');
+
+    //role admin
+    Route::middleware("roleAdmin:admin")->group(function () {
+        Route::resource("/surat", SuratController::class);
+        Route::resource("/faq", FaqController::class);
+        Route::resource("/kartu-keluarga", KartuKeluargaController::class);
+        Route::resource("/kartu-keluarga/{no_kk}/anggota-keluarga", AnggotaKeluargaController::class);
+        Route::resource("/berita", BeritaController::class);
+        Route::resource("/users", UserController::class);
+        Route::get('/admin/users/create', [UserController::class, 'create'])->name('users.create');
+        Route::get("/format-surat", [FormatSuratController::class, "index"])->name("format-surat.index");
+        Route::get("/format-surat/{id}/edit", [FormatSuratController::class, "edit"])->name("format-surat.edit");
+        Route::put("/format-surat/{id}", [FormatSuratController::class, "update"])->name("format-surat.update");
+        Route::resource("/petugas", PetugasController::class);
+        Route::resource("/lampiran", LampiranController::class);
+        Route::resource("/setting", PengaturanController::class);
+        Route::get("/tentang", [TentangController::class, 'index'])->name('tentang.index');
+        Route::post("/tentang/{id}", [TentangController::class, 'update'])->name('tentang.update');
+        Route::post("/masyarakat/import", function () {
+            try {
+                request()->validate([
+                    'importFile' => 'required|file|mimes:xls,xlsx'
+                ]);
+                Excel::import(new MasyarakatImport, request()->file('importFile'));
+                return back()->with('success', 'Import berhasil.');
+            } catch (\Exception $e) {
+                return back()->with('error', 'Gagal mengimpor: ' . $e->getMessage());
+            }
+        })->name("import.masyarakat");
+    });
+
+
+    // role admin dan lurah
     Route::get("/pengajuan-surat", [PengajuanSuratController::class, "index"])->name("pengajuan-surat.index");
     Route::get("/pengajuan-surat/{id}", [PengajuanSuratController::class, "show"])->name("pengajuan-surat.show");
     Route::post("/pengajuan-surat/{id}", [PengajuanSuratController::class, "updateStatus"])->name("pengajuan-surat.update");
     Route::get("/pengajuan-surat/{id}/download", [PengajuanSuratController::class, "download"])->name("pengajuan-surat.download");
-
-    Route::post("/masyarakat/import", function () {
-        try {
-            request()->validate([
-                'importFile' => 'required|file|mimes:xls,xlsx'
-            ]);
-            Excel::import(new MasyarakatImport, request()->file('importFile'));
-            return back()->with('success', 'Import berhasil.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Gagal mengimpor: ' . $e->getMessage());
-        }
-    })->name("import.masyarakat");
-
     Route::get('/surat-keluar/download/{filename}', [SuraKeluarController::class, 'download'])->name('surat-keluar.download');
-
-    Route::get("/format-surat", [FormatSuratController::class, "index"])->name("format-surat.index");
-    Route::get("/format-surat/{id}/edit", [FormatSuratController::class, "edit"])->name("format-surat.edit");
-    Route::put("/format-surat/{id}", [FormatSuratController::class, "update"])->name("format-surat.update");
-
     Route::resource("/surat-keluar", SuraKeluarController::class);
-    Route::resource("/petugas", PetugasController::class);
-
-    Route::resource("/lampiran", LampiranController::class);
-
-    Route::resource("/setting", PengaturanController::class);
     Route::resource("/rw", RWController::class);
     Route::resource("/rw/{rw}/rt", RTController::class);
+    Route::get('/pengajuan-surat/export', [PengajuanSuratController::class, 'export'])->name("pengajuan-surat.export");
+
+
+
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/ttd', [ProfileController::class, 'updateTTD'])->name('profile.ttd');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get("/tentang", [TentangController::class, 'index'])->name('tentang.index');
-    Route::post("/tentang/{id}", [TentangController::class, 'update'])->name('tentang.update');
+
 });
 Route::get('/surat-pengantar/{id}', [SuratPengantarController::class, 'show']);
-
-// use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Response;
-// Route::get('/c/private-image', function (Request $request) {
-//     $path = $request->query('path'); // contoh: "surat_keluar/6826cd3b370f7.pdf"
-//     $fullPath = storage_path('app/private/' . $path); // karena file ada di storage/app/private/surat_keluar
-
-//     if (!file_exists($fullPath)) {
-//         abort(404, 'File tidak ditemukan');
-//     }
-
-//     return Response::file($fullPath, [
-//         'Content-Type' => 'application/pdf',
-//     ]);
-// });
 
 Route::post("/ckeditor-upload-image", function () {
     if (request()->hasFile('upload')) {
