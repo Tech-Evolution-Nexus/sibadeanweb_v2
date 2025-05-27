@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\NotificationHelper;
 use App\Models\BeritaModel;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -71,7 +72,7 @@ class BeritaController extends Controller
 
         if (request()->hasFile('gambar')) {
             $file = request()->file('gambar');
-            $randomName =  uniqid() . '.' . $file->getClientOriginalExtension();
+            $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('berita', $randomName, ['disk' => 'private']);
             $dataBerita['gambar'] = 'berita/' . $randomName;
         }
@@ -157,7 +158,7 @@ class BeritaController extends Controller
                 $file = request()->file('gambar');
                 $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('berita', $randomName, ['disk' => 'private']);
-                $dataBerita->gambar = 'berita/' .  $randomName;
+                $dataBerita->gambar = 'berita/' . $randomName;
             }
 
             // Menyimpan data kartu keluarga yang telah diperbarui
@@ -175,14 +176,24 @@ class BeritaController extends Controller
      */
     public function destroy($id)
     {
-        $BeritaModel = BeritaModel::findOrFail($id);
-        $oldImagePath = storage_path('app/private/' . $BeritaModel->gambar);
-        // dd($oldImagePath);
-        if (file_exists($oldImagePath)) {
-            unlink($oldImagePath); // Menghapus file gambar lama
+        try {
+            $BeritaModel = BeritaModel::findOrFail($id);
+            $oldImagePath = storage_path('app/private/' . $BeritaModel->gambar);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath); // Menghapus file gambar lama
+            }
+            $BeritaModel->delete();
+            return redirect()->back()->with('success', 'Berita berhasil dihapus');
+        } catch (QueryException $e) {
+            // Tangani constraint violation (kode 23000)
+            if ($e->getCode() === '23000') {
+                return redirect()->back()->with('error', 'Gagal menghapus karena data terkait masih digunakan.');
+            }
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan tak terduga.');
         }
-        $BeritaModel->delete();
-        return redirect()->back()->with('success', 'Berita berhasil dihapus');
     }
 
 

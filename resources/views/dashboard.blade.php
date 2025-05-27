@@ -14,7 +14,7 @@
                     <div>
                         <h3 class="text-lg font-semibold text-blue-800">Surat Masuk</h3>
                         <p class="text-4xl font-bold text-blue-900 mt-2">{{ $suratMasuk }}</p>
-                        <p class="text-sm text-blue-600 mt-1">Hari ini</p>
+                        {{-- <p class="text-sm text-blue-600 mt-1">Hari ini</p> --}}
                     </div>
                     <div class="bg-blue-100 text-blue-600 p-4 rounded-full text-2xl">
                         <i class="fa-solid fa-envelope"></i>
@@ -28,7 +28,7 @@
                     <div>
                         <h3 class="text-lg font-semibold text-green-800">Surat Keluar</h3>
                         <p class="text-4xl font-bold text-green-900 mt-2">{{ $suratKeluar }}</p>
-                        <p class="text-sm text-green-600 mt-1">Hari ini</p>
+                        {{-- <p class="text-sm text-green-600 mt-1">Hari ini</p> --}}
                     </div>
                     <div class="bg-green-100 text-green-600 p-4 rounded-full text-2xl">
                         <i class="fa-solid fa-paper-plane"></i>

@@ -6,6 +6,7 @@ use App\Models\Field;
 use App\Models\LampiranModel;
 use App\Models\LampiranSuratModel;
 use App\Models\SuratModel;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -213,7 +214,7 @@ class SuratController extends Controller
                     unlink(storage_path('app/private/' . $surat->gambar)); // Hapus gambar lama
                 }
                 $file = request()->file('gambar');
-                $randomName =  uniqid() . '.' . $file->getClientOriginalExtension();
+                $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('surat', $randomName, ['disk' => 'private']);
                 $surat->gambar = 'surat/' . $randomName; // Update nama gambar
             }
@@ -264,13 +265,25 @@ class SuratController extends Controller
      */
     public function destroy(SuratModel $surat)
     {
-        $oldImagePath = storage_path('app/private/' . $surat->gambar);
-        if (file_exists($oldImagePath)) {
-            unlink($oldImagePath); // Menghapus file gambar lama
-        }
-        $surat->delete();
+        try {
 
-        return redirect()->back()->with('success', 'surat berhasil dihapus');
+            $oldImagePath = storage_path('app/private/' . $surat->gambar);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath); // Menghapus file gambar lama
+            }
+            $surat->delete();
+
+            return redirect()->back()->with('success', 'surat berhasil dihapus');
+        } catch (QueryException $e) {
+            // Tangani constraint violation (kode 23000)
+            if ($e->getCode() === '23000') {
+                return redirect()->back()->with('error', 'Gagal menghapus karena data terkait masih digunakan.');
+            }
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan tak terduga.');
+        }
     }
 
 
