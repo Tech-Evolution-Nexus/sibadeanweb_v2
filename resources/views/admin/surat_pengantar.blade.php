@@ -137,7 +137,7 @@
             <p>Bondowoso,
                 {{ date('d-m-Y', strtotime($data->histori()->where("status_pengajuan", "di_terima_rt")->first()->created_at)) }}
             </p>
-            <img src="{{public_path("assets/image/badean.jpg")}}" width="80" height="80" alt="">
+            <img src="{{asset("assets/image/badean.jpg")}}" width="80" height="80" alt="">
             <p>KETUA RT.{{ $data->masyarakat->kartuKeluarga->rt }}/
                 RW.{{ $data->masyarakat->kartuKeluarga->rw }}</p>
             <p><strong>{{ $data->masyarakat->ketuaRt()->nama_lengkap }}</strong></p>
