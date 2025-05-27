@@ -15,14 +15,3 @@ require __DIR__ . '/../vendor/autoload.php';
 // Bootstrap Laravel and handle the request...
 (require_once __DIR__ . '/../bootstrap/app.php')
     ->handleRequest(Request::capture());
-
-
-$target = __DIR__ . '/../storage/app/public';
-$link = __DIR__ . '/../public/storage';
-
-if (!file_exists($link)) {
-    symlink($target, $link);
-    echo '✅ Symbolic link created: public/storage → storage/app/public';
-} else {
-    echo 'ℹ️ Symbolic link already exists.';
-}
