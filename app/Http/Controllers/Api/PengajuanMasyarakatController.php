@@ -89,7 +89,7 @@ class PengajuanMasyarakatController extends Controller
     public function updateStatus($idPengajuan)
     {
         $validated = Validator::make(request()->all(), [
-            "status" => "required|in:ditolak,disetujui|dibatalkan"
+            "status" => "required|in:ditolak,disetujui,dibatalkan"
         ]);
 
         if ($validated->fails()) {
@@ -111,15 +111,21 @@ class PengajuanMasyarakatController extends Controller
                 $status = match ($statusPengajuan) {
                     "ditolak" => "di_tolak_rw",
                     "disetujui" => "di_terima_rw",
+                    "dibatalkan" => "dibatalkan"
                 };
             } else if ($role == "rt") {
                 $status = match ($statusPengajuan) {
                     "ditolak" => "di_tolak_rt",
                     "disetujui" => "di_terima_rt",
+                    "dibatalkan" => "dibatalkan"
                 };
                 if (!$pengaturan->hasRw) {
                     $status = "di_terima_rw";
                 }
+            } else {
+                $status = match ($statusPengajuan) {
+                    "dibatalkan" => "dibatalkan"
+                };
             }
 
             HistoriPengajuan::create([
