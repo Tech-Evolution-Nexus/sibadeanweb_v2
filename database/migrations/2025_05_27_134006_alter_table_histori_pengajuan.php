@@ -10,8 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('lampiran_surat', function (Blueprint $table) {
-            $table->foreignId("id_surat")->references("id")->on("surat")->onDelete("cascade");
+        Schema::table('histori_pengajuan', function (Blueprint $table) {
+            $table->dropForeign(['id_surat']);
+            $table->foreignId("id_pengajuan")->references("id")->on("pengajuan_surat")->onDelete("cascade");
+
         });
     }
 
