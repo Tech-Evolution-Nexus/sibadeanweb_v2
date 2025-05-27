@@ -362,9 +362,10 @@ class PengajuanSuratController extends Controller
     public function export()
     {
         $status = "selesai";
-        $query = PengajuanSuratModel::whereIn("status", ["selesai", "di_tolak_lurah"])
+        $query = PengajuanSuratModel::with("masyarakat.kartuKeluarga", "surat")->whereIn("status", ["selesai", "di_tolak_lurah"])
             ->orderBy("created_at", "desc")
             ->get();
+        dd($query);
 
         return Excel::download(new PengajuanSuratExport($query), 'pengajuan_selesai.xlsx');
     }
