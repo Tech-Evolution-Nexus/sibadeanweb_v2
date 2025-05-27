@@ -68,6 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/ubhpass', [ProfileControllerApi::class, 'ubhPass']);
     Route::post('/ubhnohp', [ProfileControllerApi::class, 'ubhNoHp']);
 
+    Route::post('/ttdup', [ProfileControllerApi::class, 'ttd']);
 });
 Route::post('/ocr-api', [Ocrtest::class, 'ocrWithApi']);
 
