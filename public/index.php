@@ -17,12 +17,12 @@ require __DIR__ . '/../vendor/autoload.php';
     ->handleRequest(Request::capture());
 
 
-$target = storage_path('app/public');
-$link = public_path('storage');
+$target = __DIR__ . '/../storage/app/public';
+$link = __DIR__ . '/../public/storage';
 
 if (!file_exists($link)) {
     symlink($target, $link);
-    echo 'The [public/storage] link has been connected to [storage/app/public].';
+    echo '✅ Symbolic link created: public/storage → storage/app/public';
 } else {
-    echo 'The link already exists.';
+    echo 'ℹ️ Symbolic link already exists.';
 }
