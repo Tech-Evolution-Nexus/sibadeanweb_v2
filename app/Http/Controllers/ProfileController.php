@@ -55,8 +55,8 @@ class ProfileController extends Controller
             // Menyimpan gambar yang baru
             $file = request()->file('ttd');
             $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('tanda_tangan', $randomName, ['disk' => 'private']);
-            $user->ttd = "tanda_tangan/" . $randomName;
+            $file->storeAs('ttd', $randomName, ['disk' => 'private']);
+            $user->ttd = "ttd/" . $randomName;
         }
         $user->save();
         // dd($user);

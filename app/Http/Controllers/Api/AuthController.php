@@ -26,7 +26,7 @@ class AuthController extends Controller
         $user = User::all();
         return response()->json($user);
     }
-     public function login(Request $request)
+    public function login(Request $request)
     {
         Log::info('Login Request Data', $request->all());
 
@@ -75,9 +75,9 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
         $data = $user;
         Auth::login($user);
-        $user->update([
-            'fcm_token' => $request->fcm_token
-        ]);
+        // $user->update([
+        //     'fcm_token' => $request->fcm_token
+        // ]);
         // Kembalikan response dengan data user (tanpa password) dan token
         return ResponseHelper::success([
             'user' => [
@@ -132,13 +132,13 @@ class AuthController extends Controller
             $file = request()->file('kk_gambar');
             $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('kk', $randomName, ['disk' => 'private']);
-            $kkGambarPath = 'kk/' .  $randomName;
+            $kkGambarPath = 'kk/' . $randomName;
         }
         if (request()->hasFile('ktp_gambar')) {
             $file = request()->file('ktp_gambar');
             $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('ktp', $randomName, ['disk' => 'private']);
-            $ktpGambarPath = 'ktp/' .  $randomName;
+            $ktpGambarPath = 'ktp/' . $randomName;
         }
         $user = User::create([
             'name' => $request->nama_lengkap,
@@ -174,7 +174,7 @@ class AuthController extends Controller
             'pekerjaan' => $request->pekerjaan,
             'alamat' => $request->alamat,
             'phone' => $request->phone,
-            'ktp_gambar' => $ktpGambarPath??"",
+            'ktp_gambar' => $ktpGambarPath ?? "",
         ]);
 
         // Kembalikan respons sukses
