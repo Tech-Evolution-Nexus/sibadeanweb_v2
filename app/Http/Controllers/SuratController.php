@@ -275,6 +275,7 @@ class SuratController extends Controller
 
             return redirect()->back()->with('success', 'surat berhasil dihapus');
         } catch (QueryException $e) {
+            dd($e);
             // Tangani constraint violation (kode 23000)
             if ($e->getCode() === '23000') {
                 return redirect()->back()->with('error', 'Gagal menghapus karena data terkait masih digunakan.');
