@@ -52,7 +52,7 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get('/dashboard', [DashboardController::class, "index"])->name('dashboard');
 
     //role admin
-    Route::middleware(["roleAdmin:admin"])->group(function () {
+    Route::middleware(["roleAkses:admin"])->group(function () {
         Route::resource("/surat", SuratController::class);
         Route::resource("/faq", FaqController::class);
         Route::resource("/kartu-keluarga", KartuKeluargaController::class);
