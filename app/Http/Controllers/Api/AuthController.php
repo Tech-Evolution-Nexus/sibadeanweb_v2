@@ -35,7 +35,6 @@ class AuthController extends Controller
             "nik" => "required|numeric|digits:16",
             "password" => "required|min:6",
             "fcm_token" => "nullable|min:6",
-
         ]);
 
         // Jika validasi gagal, kembalikan pesan error

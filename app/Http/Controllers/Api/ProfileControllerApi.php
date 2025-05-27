@@ -83,16 +83,18 @@ class ProfileControllerApi extends Controller
     }
 
 
+
+
     public function ubhPass(Request $request)
     {
         $request->validate([
             'nik' => 'required|string|max:16',
-            'password' => 'required|string',
-            'newPass' => 'required|string',
-            'confPass' => 'required|string',
+            'password' => 'required|string',       // password lama
+            'newPass' => 'required|string|min:6',  // beri batasan minimal karakter
+            'confPass' => 'required|string|same:newPass',
         ]);
 
-        // Cari user melalui relasi masyarakat
+        // Cari user berdasarkan NIK dari relasi masyarakat
         $user = User::whereHas('masyarakat', function ($query) use ($request) {
             $query->where('nik', $request->nik);
         })->first();
@@ -104,17 +106,26 @@ class ProfileControllerApi extends Controller
             ], 404);
         }
 
+        // Cek apakah password lama cocok
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Password lama tidak sesuai.',
+            ], 401);
+        }
 
-        $user->password = $request->newPass;
+        // Update password baru (harus di-hash)
+        $user->password = Hash::make($request->newPass);
         $user->save();
 
         return response()->json([
             'status' => true,
             'message' => 'Password berhasil diubah.',
-            'user' => $user->load('masyarakat'), // ikutkan relasi
-            'token' => $user->createToken('auth_token')->plainTextToken,
+            'user' => $user->load('masyarakat'),
+            // 'token' => $user->createToken('auth_token')->plainTextToken,
         ]);
     }
+
     public function updatektpgambar(Request $request)
     {
         $request->validate([

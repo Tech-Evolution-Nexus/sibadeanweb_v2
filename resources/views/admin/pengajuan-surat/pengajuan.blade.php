@@ -12,6 +12,14 @@
         <x-alert-status class="mb-4" :status="'error'" :message="session('error')" />
 
         <div class="card overflow-x-auto">
+            @if (request()->status == 'selesai')
+            <div class="mb-4">
+                <a href="{{ route('pengajuan-surat.export') }}"
+                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded shadow">
+                    Export ke Excel
+                </a>
+            </div>
+            @endif
             <table id="pengajuan-surat" class="w-full">
                 <thead>
                     <th>No</th>
@@ -29,7 +37,7 @@
 
     <x-slot name="script">
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
                 $('#pengajuan-surat').DataTable({
                     processing: true,
                     serverSide: true,
@@ -39,41 +47,41 @@
                         targets: 5
                     }],
                     columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex'
-                    },
-                    {
-                        data: 'nama_surat',
-                        name: 'nama_surat'
-                    },
-                    {
-                        data: 'nama_masyarakat',
-                        name: 'nama_masyarakat'
-                    },
-                    {
-                        data: 'rt',
-                        name: 'rt'
-                    },
-                    {
-                        data: 'rw',
-                        name: 'rw'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
-                    },
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        {
+                            data: 'nama_surat',
+                            name: 'nama_surat'
+                        },
+                        {
+                            data: 'nama_masyarakat',
+                            name: 'nama_masyarakat'
+                        },
+                        {
+                            data: 'rt',
+                            name: 'rt'
+                        },
+                        {
+                            data: 'rw',
+                            name: 'rw'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status'
+                        },
 
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
+                        {
+                            data: 'created_at',
+                            name: 'created_at'
+                        },
 
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        },
                     ]
                 });
             });

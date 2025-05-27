@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PengajuanSuratExport;
 use App\Models\HistoriPengajuan;
 use App\Models\PengajuanSuratModel;
 use App\Models\User;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Helpers;
-use TCPDF;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class PengajuanSuratController extends Controller
@@ -357,5 +358,14 @@ class PengajuanSuratController extends Controller
             })
             ->rawColumns(['action', "status"])
             ->make(true);
+    }
+    public function export()
+    {
+        $status = "selesai";
+        $query = PengajuanSuratModel::whereIn("status", ["selesai", "di_tolak_lurah"])
+            ->orderBy("created_at", "desc")
+            ->get();
+
+        return Excel::download(new PengajuanSuratExport($query), 'pengajuan_selesai.xlsx');
     }
 }
