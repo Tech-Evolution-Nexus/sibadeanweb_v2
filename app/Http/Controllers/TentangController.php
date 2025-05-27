@@ -84,7 +84,6 @@ class TentangController extends Controller
                 $dataUpdate['hero_img'] = $imageName;
             }
 
-            dd($dataUpdate);
             // Hapus about_image lama jika ada logo baru yang diunggah
             if ($request->hasFile('about_image')) {
                 if ($tentang->about_image && file_exists(public_path('assets/images/' . $tentang->about_image))) {
