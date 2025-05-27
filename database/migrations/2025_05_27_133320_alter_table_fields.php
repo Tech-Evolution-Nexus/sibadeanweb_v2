@@ -11,12 +11,13 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('fields', function (Blueprint $table) {
-            if (!Schema::hasColumn('fields', 'id_surat')) {
-                $table->foreignId('id_surat')->nullable()->constrained('surat')->onDelete('cascade');
-            } else {
-                // Jika sudah ada kolom, baru tambahkan foreign key
-                $table->foreign('id_surat')->references('id')->on('surat')->onDelete('cascade');
-            }
+            $table->dropForeign(['id_surat']);
+
+            // Tambahkan constraint baru
+            $table->foreign('id_surat')
+                ->references('id')
+                ->on('surat')
+                ->onDelete('cascade');
         });
     }
 
