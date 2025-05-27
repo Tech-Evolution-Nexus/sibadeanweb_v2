@@ -9,7 +9,7 @@
                         <h1 class="text-2xl mt-4 font-semibold text-center">{{ $berita->judul }}</h1>
                         <span class="text-gray-500 text-sm">{{ Helpers::formatDate($berita->created_at, true) }}</span>
                     </div>
-                    <img src="{{ asset($berita->gambar) }}" alt="{{ $berita->judul }}"
+                    <img src="{{ url("/c/private-image?path=$berita->gambar") }}" alt="{{ $berita->judul }}"
                         class="w-full mx-auto object-cover aspect-video rounded-md my-6">
                     <p class="prose lg:prose-base max-w-full">{!! $berita->konten !!}</p>
 
