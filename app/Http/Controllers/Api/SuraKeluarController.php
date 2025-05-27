@@ -6,6 +6,7 @@ use App\Http\Resources\SuratKeluarResource;
 use App\Models\SuratKeluarModel;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\NotificationHelper;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -70,7 +71,7 @@ class SuraKeluarController extends Controller
         }
 
         SuratKeluarModel::create($dataSurat);
-
+        NotificationHelper::broadcastToAll('Surat Keluar Baru', 'Surat keluar telah dikeluarkan.');
         return redirect()->route('surat-keluar.index')->with('success', 'Surat berhasil ditambahkan.');
     }
 
