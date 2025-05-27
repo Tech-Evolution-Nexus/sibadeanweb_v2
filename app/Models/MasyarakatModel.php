@@ -38,13 +38,13 @@ class MasyarakatModel extends Model
     protected function noKk(): Attribute
     {
         return Attribute::make(
-            get: fn(string $value) => (string)$value,
+            get: fn(string $value) => (string) $value,
         );
     }
     protected function nik(): Attribute
     {
         return (Attribute::make(
-            get: fn(string $value) => (string)$value,
+            get: fn(string $value) => (string) $value,
         ));
     }
 
@@ -54,14 +54,25 @@ class MasyarakatModel extends Model
     }
     public function bapak()
     {
-        return MasyarakatModel::where("no_kk",$this->no_kk)->where("status_keluarga","kk")->first();
+        return MasyarakatModel::where("no_kk", $this->no_kk)->where("status_keluarga", "kk")->first();
     }
     public function ibu()
     {
-        return MasyarakatModel::where("no_kk",$this->no_kk)->where("status_keluarga","istri")->first();
-     }
+        return MasyarakatModel::where("no_kk", $this->no_kk)->where("status_keluarga", "istri")->first();
+    }
     public function user()
-    {
+    {   
         return $this->belongsTo(User::class, "id_user");
+    }
+
+    public function ketuaRt()
+    {
+        return MasyarakatModel::whereHas("user", function ($qr) {
+            $qr->where("role", "rt");
+        })
+            ->whereHas("kartuKeluarga", function ($qr) {
+                $qr->where('rt', $this->kartuKeluarga->rt)->where("rw", $this->kartuKeluarga->rw);
+            })
+            ->first();
     }
 }

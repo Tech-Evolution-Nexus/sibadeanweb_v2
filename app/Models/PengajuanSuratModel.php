@@ -44,4 +44,11 @@ class PengajuanSuratModel extends Model
     {
         return $this->hasMany(HistoriPengajuan::class, "id_pengajuan");
     }
+
+    public function getPengantarRt($id)
+    {
+        $data = PengajuanSuratModel::find($id);
+        $totalPengantarRt = PengajuanSuratModel::whereNotIn("status", ["dibatalkan", "pending"])->whereNot("id", 1)->count() + 1;
+        return view('admin.surat_pengantar', compact('data', "totalPengantarRt"));
+    }
 }

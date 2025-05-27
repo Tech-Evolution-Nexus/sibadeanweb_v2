@@ -20,8 +20,8 @@ class KartuKeluargaModel extends Model
     protected function noKk(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value !== null ? (string)$value : null,
-            set: fn($value) => $value !== null ? trim((string)$value) : null
+            get: fn($value) => $value !== null ? (string) $value : null,
+            set: fn($value) => $value !== null ? trim((string) $value) : null
         );
     }
 
@@ -33,7 +33,9 @@ class KartuKeluargaModel extends Model
     public function kepalaKeluarga()
     {
         return $this->hasOne(MasyarakatModel::class, "no_kk", "no_kk")
-                    ->whereNotNull("status_keluarga")
-                    ->where("status_keluarga", "kk");
+            ->whereNotNull("status_keluarga")
+            ->where("status_keluarga", "kk");
     }
+
+
 }

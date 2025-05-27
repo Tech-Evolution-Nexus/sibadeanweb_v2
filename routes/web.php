@@ -94,9 +94,8 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
 
     Route::get("/tentang", [TentangController::class, 'index'])->name('tentang.index');
     Route::post("/tentang/{id}", [TentangController::class, 'update'])->name('tentang.update');
-    Route::get('/surat-pengantar', [SuratPengantarController::class, 'show']);
-
 });
+Route::get('/surat-pengantar/{id}', [SuratPengantarController::class, 'show']);
 
 // use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Response;
@@ -131,5 +130,3 @@ Route::post("/ckeditor-upload-image", function () {
 
 });
 require __DIR__ . '/auth.php';
-
-
