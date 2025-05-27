@@ -60,26 +60,28 @@ class SuratController extends Controller
      */
     public function store()
     {
-        // Validasi data menggunakan request() dan validasi bahasa Indonesia
-        $validated = request()->validate([
-            "nama_surat" => "required|min:3|max:50",
-            "singkatan_surat" => "required|min:3|max:8",
-            "gambar" => "required|file|image|max:2024", // Validasi foto (optional)
-            "pendukungFields" => "array", // Validasi array pendukungFields
-            "pendukungFields.*" => "required|min:3|max:50", // Validasi setiap data pendukung
-            "lampiranFields" => "array", // Validasi array lampiranFields
-            "lampiranFields.*" => "nullable|integer|exists:lampiran,id", // Validasi ID lampiran yang valid
-        ]);
+        try {
+            // Validasi data menggunakan request() dan validasi bahasa Indonesia
+            $validated = request()->validate([
+                "nama_surat" => "required|min:3|max:50",
+                "singkatan_surat" => "required|min:3|max:8",
+                "gambar" => "required|file|image|max:2024", // Validasi foto (optional)
+                "pendukungFields" => "nullable|array",
+                "pendukungFields.*" => "nullable|string|min:3|max:50",
 
-        // Menyimpan data Surat
-        $dataSurat = [
-            'nama_surat' => $validated['nama_surat'],
-            'singkatan_nama_surat' => $validated['singkatan_surat'],
-            'gambar' => $validated['gambar'],
-            'singkata_nama_surat' => implode('', array_map(function ($word) {
-                return ctype_alpha($word[0]) ? strtoupper($word[0]) : '';
-            }, explode(' ', $validated['nama_surat']))),
-            'format_surat' => <<<HTML
+                "lampiranFields" => "nullable|array",
+                "lampiranFields.*" => "nullable|integer|exists:lampiran,id",
+            ]);
+
+            // Menyimpan data Surat
+            $dataSurat = [
+                'nama_surat' => $validated['nama_surat'],
+                'singkatan_nama_surat' => $validated['singkatan_surat'],
+                'gambar' => $validated['gambar'],
+                'singkata_nama_surat' => implode('', array_map(function ($word) {
+                    return ctype_alpha($word[0]) ? strtoupper($word[0]) : '';
+                }, explode(' ', $validated['nama_surat']))),
+                'format_surat' => <<<HTML
         <h2 style='text-align:center;'><strong>Surat Keterangan</strong></h2>
         <p style='text-align:center;'><strong>No.</strong> <strong>{no_surat}</strong></p>
         <p><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</strong>Yang bertanda tangan di bawah ini ketua RT {rt}, RW {rw}, Desa {desa} Kecamatan {kecamatan} Kabupaten {kabupaten} dengan ini menerangkan bahwa :</p>
@@ -102,43 +104,51 @@ class SuratController extends Controller
         <p style="text-align:right;">{tanggal_pengajuan},Ketua RT {rt} RW {rt} &nbsp; &nbsp; &nbsp;&nbsp;</p>
         <p style='text-align:right;'>{nama} &nbsp; &nbsp;</p>
         HTML,
-        ];
+            ];
 
-        // Jika ada file foto Surat
-        if (request()->hasFile('gambar')) {
-            $file = request()->file('gambar');
-            $randomName =  uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('surat', $randomName, ['disk' => 'private']);
-            $dataSurat['gambar'] = 'surat/' .$randomName;
-        }
-
-        // Menyimpan data Surat
-        $surat = SuratModel::create($dataSurat);
-
-        // Menyimpan Data Pendukung
-        if (isset($validated['pendukungFields'])) {
-            foreach ($validated['pendukungFields'] as $field) {
-                Field::create([
-                    'id_surat' => $surat->id,
-                    'nama_field' => $field,
-                ]);
+            // Jika ada file foto Surat
+            if (request()->hasFile('gambar')) {
+                $file = request()->file('gambar');
+                $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('surat', $randomName, ['disk' => 'private']);
+                $dataSurat['gambar'] = 'surat/' . $randomName;
             }
-        }
 
-        // Menyimpan Data Lampiran
-        if (isset($validated['lampiranFields'])) {
-            foreach ($validated['lampiranFields'] as $lampiranId) {
-                if ($lampiranId) { // Pastikan ID lampiran valid
-                    LampiranSuratModel::create([
-                        'id_surat' => $surat->id,
-                        'id_lampiran' => $lampiranId,
-                    ]);
+            // Menyimpan data Surat
+            $surat = SuratModel::create($dataSurat);
+
+            // Menyimpan Data Pendukung
+            if (!empty($validated['pendukungFields'])) {
+                foreach ($validated['pendukungFields'] as $field) {
+                    if (!empty($field)) {
+                        Field::create([
+                            'id_surat' => $surat->id,
+                            'nama_field' => $field,
+                        ]);
+                    }
                 }
             }
-        }
 
-        // Redirect kembali ke halaman daftar Surat dengan pesan sukses
-        return redirect()->route('surat.index')->with('success', 'Surat berhasil ditambahkan');
+
+            // Menyimpan Data Lampiran
+            if (!empty($validated['lampiranFields'])) {
+                foreach ($validated['lampiranFields'] as $lampiranId) {
+                    if (!empty($lampiranId)) {
+                        LampiranSuratModel::create([
+                            'id_surat' => $surat->id,
+                            'id_lampiran' => $lampiranId,
+                        ]);
+                    }
+                }
+            }
+
+            // Redirect kembali ke halaman daftar Surat dengan pesan sukses
+            return redirect()->route('surat.index')->with('success', 'Surat berhasil ditambahkan');
+        } catch (\Exception $e) {
+            log::error($e->getMessage());
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
 
@@ -205,7 +215,7 @@ class SuratController extends Controller
                 $file = request()->file('gambar');
                 $randomName =  uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('surat', $randomName, ['disk' => 'private']);
-                $surat->gambar ='surat/' . $randomName; // Update nama gambar
+                $surat->gambar = 'surat/' . $randomName; // Update nama gambar
             }
             $surat->singkatan_nama_surat = implode('', array_map(function ($word) {
                 return ctype_alpha($word[0]) ? strtoupper($word[0]) : '';
