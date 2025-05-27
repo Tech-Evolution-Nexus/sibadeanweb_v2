@@ -135,7 +135,7 @@ class PengajuanSuratController extends Controller
         $options = new Options();
         $options->set('isRemoteEnabled', true);
         $options->set('isHtml5ParserEnabled', true);
-        // dd($html);
+        dd($html);
         $dompdf = new Dompdf($options);
         $html = preg_replace_callback('/src="([^"]+)"/', function ($matches) {
             $src = $matches[1];
