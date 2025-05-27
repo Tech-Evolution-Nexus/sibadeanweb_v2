@@ -118,7 +118,7 @@ class AuthController extends Controller
             "email" => "required|email|unique:users,email",
             "password" => "required|min:8",
             "kk_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048",
-            "ktp_gambar" => "required|image|mimes:jpeg,png,jpg|max:2048"
+            "ktp_gambar" => "nullable|image|mimes:jpeg,png,jpg|max:2048"
         ]);
 
         // Jika validasi gagal, kembalikan pesan error
@@ -173,7 +173,7 @@ class AuthController extends Controller
             'pekerjaan' => $request->pekerjaan,
             'alamat' => $request->alamat,
             'phone' => $request->phone,
-            'ktp_gambar' => $ktpGambarPath
+            'ktp_gambar' => $ktpGambarPath??"",
         ]);
 
         // Kembalikan respons sukses
@@ -244,18 +244,21 @@ class AuthController extends Controller
             return ResponseHelper::error('NIK tidakd ditemukan', 404);
         }
 
-        // Cari user berdasarkan id_user dari masyarakat
-        $user = User::find($masyarakat->id_user);
+        // // Cari user berdasarkan id_user dari masyarakat
+        // $user = User::find($masyarakat->id_user);
 
-        if (!$user) {
-            return ResponseHelper::error('User tidak ditemukan', 404);
-        }
+        // if (!$user) {
+        //     return ResponseHelper::error('User tidak ditemukan', 404);
+        // }
 
-        $user->update([
+        $user = User::create([
             'email' => $request->email,
             'no_hp' => $request->no_hp,
             'password' => Hash::make($request->password),
             'status' => 1,
+        ]);
+        $masyarakat->update([
+            'id_user' => $user->id,
         ]);
         $user->makeHidden(['password']);
         return response()->json([

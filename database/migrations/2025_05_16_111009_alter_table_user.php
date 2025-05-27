@@ -11,10 +11,10 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            if (!Schema::hasColumn('users', 'asal_data')) {
-                $table->string("no_hp")->nullable();
+            if (!Schema::hasColumn('users', 'no_hp')) {
+                $table->char("no_hp",13)->nullable();
             } else {
-                $table->string("no_hp")->nullable()->change();
+                $table->char("no_hp",13)->nullable()->change();
             }
         });
         

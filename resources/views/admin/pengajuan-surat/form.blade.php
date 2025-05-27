@@ -113,16 +113,19 @@
                                 $editable = in_array($label, ['Keterangan', 'No Surat']);
                             @endphp
 
-                            <div class="flex flex-col {{ $editable ? 'col-span-2' : '' }}">
+                            <div
+                                class="flex flex-col {{ $editable && !in_array($data->pengajuan->status, ["selesai", "di_tolak_lurah"]) ? 'col-span-2' : '' }}">
                                 <label class="text-gray-500 mb-1">{{ $label }}</label>
-                                @if ($editable)
+                                @if ($editable && !in_array($data->pengajuan->status, ["selesai", "di_tolak_lurah"]))
                                     @if ($label === 'Keterangan')
                                         <textarea name="keterangan"
                                             class="border-gray-300 px-4 py-2 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full">{{ $value }}</textarea>
                                         <small class="text-xs mt-1">Lakukan penyesuaian keterangan pengajuan sesuai standar
                                             kelurahan</small>
                                     @else
-                                        <x-text-input type="text" name="nomor_surat" value="{{ $value }}" class="w-full" />
+                                        <x-text-input type="hidden" name="nomor_surat" value="{{ $value }}" class="w-full" />
+                                        <span class="font-medium text-gray-900">{{ $value }}</span>
+
                                     @endif
                                 @else
                                     <span class="font-medium text-gray-900">{{ $value }}</span>

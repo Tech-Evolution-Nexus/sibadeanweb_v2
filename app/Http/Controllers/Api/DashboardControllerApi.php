@@ -36,39 +36,43 @@ class DashboardControllerApi extends Controller
         $totalTidakDibatalkan = 0;
         $totalSelesai = 0;
 
-        $statusDibatalkan = ['dibatalkan_rt', 'dibatalkan_rw', 'dibatalkan_lurah', 'dibatalkan', "selesai"];
+
+        $statusDibatalkan = ['di_tolak_rt', 'di_tolak_rw', 'di_tolak_lurah', 'dibatalkan', 'selesai'];
+
 
         if ($role === 'masyarakat') {
             $totalTidakDibatalkan = PengajuanSuratModel::where('nik', $nik)
                 ->whereNotIn('status', $statusDibatalkan)
                 ->count();
-
             $totalSelesai = PengajuanSuratModel::where('nik', $nik)
                 ->where('status', 'selesai')
                 ->count();
         } elseif ($role === 'rt') {
-            $nikList = MasyarakatModel::whereHas('kartuKeluarga', function ($q) use ($rt, $rw) {
-                $q->where('rt', $rt)->where('rw', $rw);
-            })->pluck('nik');
-
-            $totalTidakDibatalkan = PengajuanSuratModel::whereIn('nik', $nikList)
-                ->where('status', 'pending')
+            $totalTidakDibatalkan = PengajuanSuratModel::where('status', 'pending')
+                ->whereHas('masyarakat.kartuKeluarga', function ($query) use ($rt, $rw) {
+                    $query->where('rt', $rt)
+                        ->where('rw', $rw);
+                })
                 ->count();
-
-            $totalSelesai = PengajuanSuratModel::whereIn('nik', $nikList)
-                ->where('status', 'di_terima_rt')
+            $totalSelesai = PengajuanSuratModel::whereHas('masyarakat.kartuKeluarga', function ($query) use ($rt, $rw) {
+                $query->where('rt', $rt)
+                    ->where('rw', $rw);
+            })
+                ->whereIn('status', ["diterima_rw", "diterima_rt", "selesai", "di_tolak_rt"])
                 ->count();
         } elseif ($role === 'rw') {
-            $nikList = MasyarakatModel::whereHas('kartuKeluarga', function ($q) use ($rw) {
-                $q->where('rw', $rw);
-            })->pluck('nik');
-
-            $totalTidakDibatalkan = PengajuanSuratModel::whereIn('nik', $nikList)
-                ->where('status', 'di_terima_rt')
+            $totalTidakDibatalkan = PengajuanSuratModel::where('status', 'diterima_rt')
+                ->whereHas('masyarakat.kartuKeluarga', function ($query) use ($rt, $rw) {
+                    $query->where('rt', $rt)
+                        ->where('rw', $rw);
+                })
                 ->count();
 
-            $totalSelesai = PengajuanSuratModel::whereIn('nik', $nikList)
-                ->where('status', 'di_terima_rw')
+            $totalSelesai = PengajuanSuratModel::whereHas('masyarakat.kartuKeluarga', function ($query) use ($rt, $rw) {
+                $query->where('rt', $rt)
+                    ->where('rw', $rw);
+            })
+                ->whereIn('status', ["diterima_rw", "selesai", "di_tolak_rw"])
                 ->count();
         } else {
             return ResponseHelper::error('Role tidak dikenali', 400);
