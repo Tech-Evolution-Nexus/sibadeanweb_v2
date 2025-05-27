@@ -22,6 +22,7 @@
                 <li><a class="text-sm text-gray-700 hover:text-gray-800" :class="{'text-white hover:text-white': scroll}" href="/">Beranda</a></li>
                 <li><a class="text-sm text-gray-700 hover:text-gray-800" :class="{'text-white hover:text-white': scroll}" href="/esurat-mobile">E-Surat Mobile</a></li>
                 <li><a class="text-sm text-gray-700 hover:text-gray-800" :class="{'text-white hover:text-white': scroll}" href="/berita">Berita</a></li>
+                <li><a class="text-sm text-gray-700 hover:text-gray-800" :class="{'text-white hover:text-white': scroll}" href="/login">Login</a></li>
             </ul>
         </nav>
 
@@ -42,6 +43,7 @@
             <li><a class="block text-sm text-gray-600 hover:text-gray-900" href="/">Beranda</a></li>
             <li><a class="block text-sm text-gray-600 hover:text-gray-900" href="/esurat-mobile">E-Surat Mobile</a></li>
             <li><a class="block text-sm text-gray-600 hover:text-gray-900" href="/berita">Berita</a></li>
+            <li><a class="block text-sm text-gray-600 hover:text-gray-900" href="/login">Login</a></li>
         </ul>
     </nav>
 </header>
