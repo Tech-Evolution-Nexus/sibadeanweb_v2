@@ -48,7 +48,7 @@ class MasyarakatImport implements ToModel, WithHeadingRow
             'agama' => 'required|string|max:50',
             'pendidikan' => 'required|string|max:50',
             'pekerjaan' => 'required|string|max:100',
-            'golongan_darah' => 'nullable|in:A+,A-,B+,B-,AB+,AB-,O+,O-',
+            'golongan_darah' => 'nullable',
             'status_perkawinan' => 'required|in:belum_menikah,menikah,cerai_hidup,cerai_mati,duda,janda',
             'tanggal_perkawinan' => 'nullable|date',
             'status_keluarga' => 'required|in:kk,istri,anak,wali',
