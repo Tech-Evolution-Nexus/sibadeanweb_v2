@@ -15,7 +15,8 @@
                 @foreach ($berita as $b)
                     <article class="border rounded-lg overflow-hidden  transition-all duration-500  hover:shadow-xl">
                         <a href="/berita/{{ $b->slug }}">
-                            <img src="{{ url("/c/private-image?path=$b->gambar")) }}" class="w-full aspect-video object-cover" alt="{{ $b->judul }}">
+                            <img src="{{ url("/c/private-image?path=$b->gambar") }}" class="w-full aspect-video object-cover"
+                                alt="{{ $b->judul }}">
                             <div class="p-4">
                                 <h6 class="text-lg font-semibold text-gray-900">{{ $b->judul }}</h6>
                                 <p class="text-gray-600 text-sm mt-1 line-clamp-2">{!! $b->keterangan  !!}</p>
