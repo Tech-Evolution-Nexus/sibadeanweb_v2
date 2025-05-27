@@ -10,9 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('histori_pengajuan', function (Blueprint $table) {
-            $table->dropForeign(['id_pengajuan']);
-            $table->foreign("id_pengajuan")->references("id")->on("pengajuan_surat")->onDelete("cascade");
+        Schema::table('users', function (Blueprint $table) {
+            $table->string("ttd")->nullable();
         });
     }
 
@@ -21,7 +20,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('lampiran_surat', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }
