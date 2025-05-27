@@ -3,7 +3,7 @@
 use App\Http\Controllers\AnggotaKeluargaController;
 use App\Http\Controllers\API\ProfileControllerApi;
 use App\Http\Controllers\BeritaController;
-use App\Http\Controllers\Admin\SuratPengantarController;
+use App\Http\Controllers\admin\SuratPengantarController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\FormatSuratController;
