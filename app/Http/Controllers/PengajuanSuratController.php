@@ -135,7 +135,7 @@ class PengajuanSuratController extends Controller
         $options = new Options();
         $options->set('isRemoteEnabled', true);
         $options->set('isHtml5ParserEnabled', true);
-        dd($html);
+        // dd($html);
         $dompdf = new Dompdf($options);
         $html = preg_replace_callback('/src="([^"]+)"/', function ($matches) {
             $src = $matches[1];
@@ -301,7 +301,7 @@ class PengajuanSuratController extends Controller
         $html = str_replace("{nama_lurah}", $lurah->petugas->nama ?? "", $html);
         $html = str_replace("{nip_lurah}", $lurah->petugas->nip ?? "", $html);
         $html = str_replace("{jabatan_lurah}", "Lurah" ?? "", $html);
-        $html = str_replace("{ttd_lurah}", "<img style='aspect-ratio:3264/1707;' src='" . route("private.image", ["path" => $lurah->ttd]) . "'>" ?? "", $html);
+        $html = str_replace("{ttd_lurah}", "<figure class='image image_resized image-style-block-align-right' style='width:21.16%;'><img style='aspect-ratio:3264/1707;' src='" . route("private.image", ["path" => $lurah->ttd]) . "'></figure>" ?? "", $html);
 
 
 
