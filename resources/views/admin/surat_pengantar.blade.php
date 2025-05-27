@@ -148,9 +148,9 @@
     <div class="lampiran">
         <p>Melampirkan pula kelengkapan lainnya yaitu:</p>
         <ol>
-            <li>KTP</li>
-            <li>KK</li>
-            <li>Pelunasan PBB</li>
+            @foreach ($data->lampiran as $l)
+                <li>{{$l->nama_lampiran}}</li>
+            @endforeach
         </ol>
     </div>
 </body>
