@@ -81,7 +81,7 @@ class TentangController extends Controller
                 }
                 $imageName = uniqid() . '.' . $request->hero_img->extension();
                 $request->file('hero_img')->move(public_path('assets/images'), $imageName);
-                $dataUpdate['hero_img'] = $imageName;
+                $dataUpdate['hero_img'] = "assets/images/$imageName";
             }
 
             // Hapus about_image lama jika ada logo baru yang diunggah
@@ -91,7 +91,7 @@ class TentangController extends Controller
                 }
                 $imageName = uniqid() . '.' . $request->about_image->extension();
                 $request->file('about_image')->move(public_path('assets/images'), $imageName);
-                $dataUpdate['about_image'] = $imageName;
+                $dataUpdate['about_image'] = "assets/images/$imageName";
             }
 
 
