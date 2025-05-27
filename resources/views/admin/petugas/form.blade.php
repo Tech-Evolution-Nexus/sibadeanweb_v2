@@ -52,10 +52,10 @@
                     <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div>
-                    <x-input-label for="nohp" :value="__('nohp')" />
-                    <x-text-input :value="old('nohp', $data->user->no_hp)" type="number" class="block mt-1 w-full"
-                        placeholder="No Hp" name="number" id="nohp" required />
-                    <x-input-error :messages="$errors->get('nohp')" class="mt-2 text-red-500 text-xs" />
+                    <x-input-label for="no_hp" :value="__('no_hp')" />
+                    <x-text-input :value="old('no_hp', $data->user->no_hp)" type="number" class="block mt-1 w-full"
+                        placeholder="No Hp" name="no_hp" id="no_hp" required maxlength="16" />
+                    <x-input-error :messages="$errors->get('no_hp')" class="mt-2 text-red-500 text-xs" />
                 </div>
 
 

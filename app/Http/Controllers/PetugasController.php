@@ -62,7 +62,7 @@ class PetugasController extends Controller
             "email" => "required|email|unique:users,email",
             "password" => "required|min:6",
             "role" => "required",
-            "nohp" => "required|string|min:11|max:13",
+            "no_hp" => "required|string|min:11|max:13",
         ]);
 
         // Check if a 'lurah' already exists
@@ -79,7 +79,7 @@ class PetugasController extends Controller
                 "email" => $validated["email"],
                 "password" => Hash::make($validated["password"]),
                 "role" => $validated["role"],
-                "no_hp" => $validated["nohp"],
+                "no_hp" => $validated["no_hp"],
                 "status" => 1,
             ]);
 
@@ -96,7 +96,7 @@ class PetugasController extends Controller
             DB::rollBack();
             Log::error("Gagal simpan petugas: " . $e->getMessage());
             return back()->withErrors([
-                'errorvalidasi' => "errordb"
+                'errorvalidasi' => $e->getMessage()
             ]);
         }
     }
