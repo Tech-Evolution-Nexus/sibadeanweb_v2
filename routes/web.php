@@ -46,7 +46,9 @@ Route::get('/c/private-image', function () {
     }
     abort(404);
 })->name("private.image");
-Route::post("testimoni/store", function () { })->name("testimoni.store");
+Route::post("testimoni/store", function () {})->name("testimoni.store");
+Route::get('/pengajuan-surat/export', [PengajuanSuratController::class, 'export'])->name("pengajuan-surat.export");
+
 
 Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::get('/dashboard', [DashboardController::class, "index"])->name('dashboard');
@@ -91,8 +93,6 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::resource("/surat-keluar", SuraKeluarController::class);
     Route::resource("/rw", RWController::class);
     Route::resource("/rw/{rw}/rt", RTController::class);
-    Route::get('/pengajuan-surat/export', [PengajuanSuratController::class, 'export'])->name("pengajuan-surat.export");
-
 
 
 
@@ -100,8 +100,6 @@ Route::prefix("/c/admin")->middleware("auth")->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/ttd', [ProfileController::class, 'updateTTD'])->name('profile.ttd');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-
 });
 Route::get('/surat-pengantar/{id}', [SuratPengantarController::class, 'show']);
 
