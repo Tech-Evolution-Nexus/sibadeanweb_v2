@@ -145,7 +145,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'no_hp' => $request->no_hp,
             'password' => Hash::make($request->password),
-            'asal_Data' => 'register'
+            'asal_data' => 'register'
         ]);
 
         $kk = KartuKeluargaModel::firstOrCreate(
@@ -379,6 +379,7 @@ class AuthController extends Controller
         $masyarakat = MasyarakatModel::where("id_user", $idUser)
             ->with(['user', 'kartuKeluarga'])
             ->first();
+            $masyarakat->kartuKeluarga->kk_gambar = route("private.image",['path'=>$masyarakat->kartuKeluarga->kk_gambar]) ;
         return ResponseHelper::success($masyarakat);
     }
     public function cekuser(Request $request)
