@@ -22,7 +22,7 @@ class PengajuanResource extends JsonResource
             "keterangan_ditolak" => $this->keterangan_ditolak,
             "status" => $this->status,
             "nomor_surat" => $this->nomor_surat,
-            "pengantar_rt" => url("/c/private-image?path=$this->pengantar_rt"),
+            "pengantar_rt" => $this->pengantar_rt ? url("/c/private-image?path=$this->pengantar_rt"):"",
             "created_at" => $this->created_at,
             "masyarakat" => $this->masyarakat,
             "surat" => $this->surat,
