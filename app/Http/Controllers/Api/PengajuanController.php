@@ -198,6 +198,8 @@ class PengajuanController extends Controller
         $html = str_replace("{nama_lurah}", $lurah->petugas->nama ?? "", $html);
         $html = str_replace("{nip_lurah}", $lurah->petugas->nip ?? "", $html);
         $html = str_replace("{jabatan_lurah}", "Lurah" ?? "", $html);
+        $html = str_replace("{ttd_lurah}", "<figure class='image image_resized image-style-block-align-right' style='width:21.16%;'><img style='aspect-ratio:3264/1707;' src='" . route("private.image", ["path" => $lurah->ttd]) . "'></figure>" ?? "", $html);
+
 
 
         foreach ($data->fieldValues as $field) {
