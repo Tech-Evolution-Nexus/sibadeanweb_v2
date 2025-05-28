@@ -57,7 +57,7 @@ class PengajuanControllerApi extends Controller
         // 3. Simpan file pengantar jika ada
         $pengantarPath = null;
         if ($request->hasFile('pengantar_rt')) {
-            $pengantarPath = $request->file('pengantar_rt')->store('pengantar_rt', 'public');
+            $pengantarPath = $request->file('pengantar_rt')->store('pengantar_rt', 'private');
         }
 
         // 4. Tentukan status & cari petugas penerima
