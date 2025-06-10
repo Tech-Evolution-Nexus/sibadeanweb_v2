@@ -43,7 +43,7 @@ class SuraKeluarController extends Controller
     public function store()
     {
         $validated = request()->validate([
-            "title" => "required|min:3|max:50",
+            "title" => "required|min:3|max:50|unique:surat_keluar,title",
             "nama_file" => "required|file|mimes:pdf|max:2024",
             "exp_date" => "required|date",
         ], [

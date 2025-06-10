@@ -45,7 +45,7 @@ class LampiranController extends Controller
     {
         // Validasi data menggunakan request() dan validasi bahasa Indonesia
         $validated = request()->validate([
-            "nama_lampiran" => "required"
+            "nama_lampiran" => "required|unique:lampiran,nama_lampiran"
         ]);
         // Menyimpan data kartu keluarga
         LampiranModel::create($validated);

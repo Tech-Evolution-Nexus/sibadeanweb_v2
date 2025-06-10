@@ -64,12 +64,11 @@ class SuratController extends Controller
         try {
             // Validasi data menggunakan request() dan validasi bahasa Indonesia
             $validated = request()->validate([
-                "nama_surat" => "required|min:3|max:50",
-                "singkatan_surat" => "required|min:3|max:8",
+                "nama_surat" => "required|min:3|max:50|unique:surat,nama_surat",
+                "singkatan_surat" => "required|min:3|max:8|unique:surat,singkatan_nama_surat",
                 "gambar" => "required|file|image|max:2024", // Validasi foto (optional)
                 "pendukungFields" => "nullable|array",
                 "pendukungFields.*" => "nullable|string|min:3|max:50",
-
                 "lampiranFields" => "nullable|array",
                 "lampiranFields.*" => "nullable|integer|exists:lampiran,id",
             ]);
