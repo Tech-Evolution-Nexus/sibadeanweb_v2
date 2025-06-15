@@ -132,7 +132,7 @@
             <div class="md:col-span-2">
                 <label for="app_type" class="block text-sm font-medium text-gray-700">App :</label>
                 <x-select id="app_type" name="app_type" class="block mt-1 w-full" onchange="toggleAppInput(this)"
-                    :options="['upload' => 'upload', 'custom' => 'custom']" value="{{ $value->mobile_link }}" />
+                    :options="['upload' => 'upload', 'custom' => 'custom']" value="{{ $value->app_type }}" />
             </div>
 
             {{-- Jika upload --}}
