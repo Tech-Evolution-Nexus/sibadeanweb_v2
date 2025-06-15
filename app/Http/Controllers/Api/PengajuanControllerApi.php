@@ -37,10 +37,10 @@ class PengajuanControllerApi extends Controller
     {
         // 1. Validasi dasar
         $request->validate([
-            'nik' => 'required|string',
+            'nik' => 'required|string|exixts:masyarakat,nik',
             'id_surat' => 'required|integer',
             'keterangan' => 'nullable|string',
-            'nik_pemohon' => 'required|string',
+            'nik_pemohon' => 'required|string|exixts:masyarakat,nik',
             'pengantar_rt' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
@@ -79,7 +79,7 @@ class PengajuanControllerApi extends Controller
             'id_surat' => $request->id_surat,
             'keterangan' => $request->keterangan,
             'pengantar_rt' => $pengantarPath,
-            'nik_pemohon' => $request->nik_pemohon,
+            'nik_pengaju' => $request->nik_pemohon,
             'status' => $status,
         ]);
 

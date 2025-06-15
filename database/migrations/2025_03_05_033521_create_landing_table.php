@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string("about_img");
             $table->string("demo_url");
             $table->string("mobile_link");
+            $table->enum("app_type", ["custom", "upload"])->default("custom");
             $table->timestamps();
         });
     }
