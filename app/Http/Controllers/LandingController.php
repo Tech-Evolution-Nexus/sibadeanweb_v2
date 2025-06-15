@@ -17,16 +17,16 @@ class LandingController extends Controller
         $landing = Landing::first();
         $fitur = $landing->fiturUtama()->select("title as judul", "description as deskripsi", "icon")->get();
         $testimoni = [
-            (object)[
+            (object) [
                 "pesan" => "Aplikasi ini sangat membantu pekerjaan saya! Proses pembuatan dan pengiriman surat jadi jauh lebih cepat dan praktis.",
                 "nama" => "- Budi, HR Manager"
             ],
-            (object)[
+            (object) [
                 "pesan" => "Saya tidak perlu lagi bolak-balik ke kantor kelurahan.
                         Semua bisa dilakukan dari rumah!",
                 "nama" => "- Siti, Warga"
             ],
-            (object)[
+            (object) [
                 "pesan" => "Proses surat menyurat jadi lebih efisien.
                         Aplikasi ini sangat membantu!",
                 "nama" => "- Pak Rahmat, Petugas Kelurahan"
@@ -45,7 +45,8 @@ class LandingController extends Controller
     {
         $berita = BeritaModel::where("slug", $slug)->first();
         $beritaTerbaru = BeritaModel::orderBy("id", "Desc")->whereNot("slug", $slug)->limit(5)->get();
-        if (!$berita) return abort(404);
+        if (!$berita)
+            return abort(404);
         return view("detail_berita", compact("berita", "beritaTerbaru"));
     }
     public function downloadApp()
