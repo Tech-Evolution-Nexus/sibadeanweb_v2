@@ -79,7 +79,7 @@ class PengajuanControllerApi extends Controller
             'id_surat' => $request->id_surat,
             'keterangan' => $request->keterangan,
             'pengantar_rt' => $pengantarPath,
-            'nik_pengaju' => $request->nik_pemohon,
+            'nik_pengaju' => auth()->user()->masyakarat->nik,
             'status' => $status,
         ]);
 
