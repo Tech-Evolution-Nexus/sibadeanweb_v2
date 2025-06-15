@@ -18,6 +18,7 @@ class TentangController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $rules = [
             'judul_home' => 'required|string',
             'deskripsi_home' => 'required|string',
@@ -35,6 +36,9 @@ class TentangController extends Controller
 
             'imge' => 'nullable|array',
             'imge.*' => 'nullable|image|mimes:webp,jpeg,png,jpg,gif,svg|max:2048',
+            'app_type' => 'required|in:upload,custom',
+            'app_file' => 'required_if:app_type,upload|file|max:153600', // 150MB dalam kilobyte
+            'app_url' => 'required_if:app_type,custom|url',
         ];
         $messages = [
             'judul_home.required' => 'Judul Home harus diisi',
@@ -55,6 +59,12 @@ class TentangController extends Controller
             'imge.*.image' => 'File harus berupa gambar',
             'imge.*.mimes' => 'Format gambar tidak valid. Hanya: webp, jpeg, png, jpg, gif, svg',
             'imge.*.max' => 'Ukuran gambar maksimal 2MB',
+            'app_type.required' => 'Tipe aplikasi harus dipilih',
+            'app_file.required_if' => 'File aplikasi wajib diupload',
+            //    'app_file.mimetypes' => 'File harus berformat APK atau IPA.',
+            'app_file.max' => 'Ukuran file maksimal 150MB',
+            'app_url.required_if' => 'URL aplikasi wajib diisi jika memilih custom',
+            'app_url.url' => 'URL aplikasi tidak valid',
         ];
         $validated = $request->validate($rules, $messages);
 
@@ -93,7 +103,29 @@ class TentangController extends Controller
                 $request->file('about_image')->move(public_path('assets/images'), $imageName);
                 $dataUpdate['about_image'] = "assets/images/$imageName";
             }
+            if ($request->app_type === 'upload') {
+                if ($request->hasFile('app_file')) {
+                    // Hapus file lama jika ada
+                    if ($tentang->app_url && file_exists(public_path($tentang->app_url))) {
+                        unlink(public_path($tentang->app_url));
+                    }
 
+                    // Ambil ekstensi dan simpan dengan nama unik + ekstensi asli
+                    $file = $request->file('app_file');
+                    $ext = $file->getClientOriginalExtension(); // Contoh: apk
+                    $fileName = 'sibadean.' . $ext;
+
+                    // Simpan file ke storage/app/public/apps
+                    $file->storeAs('apps', $fileName, 'public');
+
+                    // Simpan path untuk bisa diakses publik
+                    $dataUpdate['mobile_link'] = 'storage/apps/' . $fileName;
+                    $dataUpdate['app_type'] = 'upload';
+                }
+            } elseif ($request->app_type === 'custom') {
+                $dataUpdate['mobile_link'] = $request->app_url;
+                $dataUpdate['app_type'] = 'custom';
+            }
 
             // dd($dataUpdate);
 

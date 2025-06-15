@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
-
+Route::get('/download', [LandingController::class, 'downloadApp'])->name('app.download');
 Route::get('/', [LandingController::class, "home"]);
 Route::get('/berita', [LandingController::class, "berita"]);
 Route::get('/berita/{slug}', [LandingController::class, "detailBerita"]);

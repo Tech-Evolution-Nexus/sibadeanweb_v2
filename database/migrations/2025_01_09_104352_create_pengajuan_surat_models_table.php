@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->foreign("nik_pengaju")->references("nik")->on("masyarakat")->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId("id_surat")->references("id")->on("surat")->restrictOnDelete();
             $table->string("nomor_surat", 50)->nullable();
-            $table->string("nik_pemohon", 16);
+            // $table->string("nik_pemohon", 16);
             $table->enum("status", ["di_terima_rt", "di_terima_rw", "di_tolak_rt", "di_tolak_lurah", "di_tolak_rw", "selesai", "pending", "`dibatalkan`"])->default("pending");
             $table->string("pengantar_rt")->nullable();
             $table->string("keterangan", 70)->nullable();

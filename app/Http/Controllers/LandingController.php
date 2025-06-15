@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Faq;
 use App\Models\Landing;
 use App\Models\PengaturanModel;
+use Illuminate\Support\Facades\Storage;
 
 class LandingController extends Controller
 {
@@ -46,5 +47,32 @@ class LandingController extends Controller
         $beritaTerbaru = BeritaModel::orderBy("id", "Desc")->whereNot("slug", $slug)->limit(5)->get();
         if (!$berita) return abort(404);
         return view("detail_berita", compact("berita", "beritaTerbaru"));
+    }
+    public function downloadApp()
+    {
+        $landing = Landing::first(); // atau berdasarkan ID jika perlu
+
+        if (!$landing || !$landing->mobile_link) {
+            return redirect()->back()->with('error', 'Aplikasi tidak tersedia.');
+        }
+
+        if ($landing->app_type === 'custom') {
+            // Redirect ke URL custom
+            return redirect()->away($landing->mobile_link);
+        }
+
+        // Jika tipe upload → ambil dari storage/public
+        $filePath = str_replace('storage/', '', $landing->mobile_link);
+
+        if (!Storage::disk('public')->exists($filePath)) {
+            return redirect()->back()->with('error', 'File aplikasi tidak ditemukan.');
+        }
+
+        $fileName = basename($filePath);
+        $mime = Storage::disk('public')->mimeType($filePath);
+
+        return response()->download(storage_path('app/public/' . $filePath), $fileName, [
+            'Content-Type' => $mime,
+        ]);
     }
 }

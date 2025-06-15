@@ -17,46 +17,45 @@ class PengajuanController extends Controller
 {
     public function getRiwayat()
     {
-        $idMasyarakat = auth()->user()->masyarakat->nik;
-        $pengajuan = PengajuanSuratModel::where("nik", $idMasyarakat)
-            ->with(["masyarakat", "surat", "lampiran"])
-            ->where("status", "pending")
-            ->orderBy("id", "desc")
-            ->get()
-        ;
+        $nikLogin = auth()->user()->masyarakat->nik;
+        $baseQuery = function ($statusFilter) use ($nikLogin) {
+            return PengajuanSuratModel::where(function ($query) use ($nikLogin) {
+                $query->where('nik_pengaju', $nikLogin)
+                    ->orWhereRaw('FIND_IN_SET(?, nik)', [$nikLogin]);
+            })
+                ->where($statusFilter)
+                ->with(['masyarakat', 'surat', 'lampiran'])
+                ->orderBy('id', 'desc')
+                ->get();
+        };
 
-        $pengajuanProses = PengajuanSuratModel::where("nik", $idMasyarakat)
-            ->with(["masyarakat", "surat", "lampiran"])
-            ->whereIn("status", ["di_terima_rt", "di_terima_rw"])
-            ->orderBy("id", "desc")
-            ->get();
+        $pengajuan = $baseQuery(function ($query) {
+            $query->where('status', 'pending');
+        });
 
-        $pengajuanSelesai = PengajuanSuratModel::where("nik", $idMasyarakat)
-            ->with(["masyarakat", "surat", "lampiran"])
-            ->where("status", "selesai")
-            ->orderBy("id", "desc")
-            ->get();
+        $pengajuanProses = $baseQuery(function ($query) {
+            $query->whereIn('status', ['di_terima_rt', 'di_terima_rw']);
+        });
 
-        $pengajuanTolak = PengajuanSuratModel::where("nik", $idMasyarakat)
-            ->with(["masyarakat", "surat", "lampiran"])
-            ->whereIn("status", ["di_tolak_rt", "di_tolak_rw", "di_tolak_lurah"])
-            ->orderBy("id", "desc")
-            ->get();
+        $pengajuanSelesai = $baseQuery(function ($query) {
+            $query->where('status', 'selesai');
+        });
 
-        $pengajuanBatal = PengajuanSuratModel::where("nik", $idMasyarakat)
-            ->with(["masyarakat", "surat", "lampiran"])
-            ->where("status", "dibatalkan")
-            ->orderBy("id", "desc")
-            ->get();
-        return ResponseHelper::success(
-            [
-                "pengajuanMenunggu" => PengajuanResource::collection($pengajuan),
-                "pengajuanProses" => PengajuanResource::collection($pengajuanProses),
-                "pengajuanSelesai" => PengajuanResource::collection($pengajuanSelesai),
-                "pengajuanTolak" => PengajuanResource::collection($pengajuanTolak),
-                "pengajuanBatal" => PengajuanResource::collection($pengajuanBatal),
-            ]
-        );
+        $pengajuanTolak = $baseQuery(function ($query) {
+            $query->whereIn('status', ['di_tolak_rt', 'di_tolak_rw', 'di_tolak_lurah']);
+        });
+
+        $pengajuanBatal = $baseQuery(function ($query) {
+            $query->where('status', 'dibatalkan');
+        });
+
+        return ResponseHelper::success([
+            'pengajuanMenunggu' => PengajuanResource::collection($pengajuan),
+            'pengajuanProses' => PengajuanResource::collection($pengajuanProses),
+            'pengajuanSelesai' => PengajuanResource::collection($pengajuanSelesai),
+            'pengajuanTolak' => PengajuanResource::collection($pengajuanTolak),
+            'pengajuanBatal' => PengajuanResource::collection($pengajuanBatal),
+        ]);
     }
     public function getRiwayatDetail($idPengajuan)
     {

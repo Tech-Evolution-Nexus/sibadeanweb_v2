@@ -79,7 +79,8 @@ Route::get("/pengaturan", function () {
     $pengaturan = Helpers::pengaturan();
     $pengaturan->logo = url("/assets/logos/$pengaturan->logo");
     $pengaturan->logo_horizontal = url("/assets/logos/$pengaturan->logo_horizontal");
-    $pengaturan->appName = config("app.name") ;
+    $pengaturan->appName = config("app.name");
     $pengaturan->descApk = config("app.name") . " merupakan aplikasi surat-menyurat digital untuk kelurahan. Aplikasi ini membantu dalam melacak permohonan surat dan proses administrasi secara efisien.";
     return ResponseHelper::success($pengaturan);
 });
+
