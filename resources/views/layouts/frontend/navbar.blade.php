@@ -23,7 +23,7 @@
                 <li><a class="text-sm text-gray-700 hover:text-gray-800"
                         :class="{'text-white hover:text-white': scroll}" href="/">Beranda</a></li>
                 <li><a class="text-sm text-gray-700 hover:text-gray-800"
-                        :class="{'text-white hover:text-white': scroll}" href="/esurat-mobile">E-Surat Mobile</a></li>
+                        :class="{'text-white hover:text-white': scroll}" href="/download">E-Surat Mobile</a></li>
                 <li><a class="text-sm text-gray-700 hover:text-gray-800"
                         :class="{'text-white hover:text-white': scroll}" href="/berita">Berita</a></li>
                 @if (auth()->check())
