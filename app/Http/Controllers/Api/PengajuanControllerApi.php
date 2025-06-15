@@ -35,12 +35,12 @@ class PengajuanControllerApi extends Controller
 
     public function store(Request $request)
     {
+        //  return response()->json($request->all());
         // 1. Validasi dasar
         $request->validate([
-            'nik' => 'required|string|exixts:masyarakat,nik',
+            'nik' => 'required|string|exists:masyarakat,nik',
             'id_surat' => 'required|integer',
             'keterangan' => 'nullable|string',
-            'nik_pemohon' => 'required|string|exixts:masyarakat,nik',
             'pengantar_rt' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
@@ -106,7 +106,7 @@ class PengajuanControllerApi extends Controller
         foreach ($request->allFiles() as $key => $file) {
             if (str_starts_with($key, 'lampiran_')) {
                 $idLampiran = (int) str_replace('lampiran_', '', $key);
-                $path = $file->store('lampiran_surat', 'public');
+                $path = $file->store('lampiran_surat', 'private');
 
                 LampiranPengajuanModel::create([
                     'id_pengajuan' => $pengajuan->id,
