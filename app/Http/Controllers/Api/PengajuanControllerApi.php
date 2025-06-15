@@ -106,7 +106,7 @@ class PengajuanControllerApi extends Controller
         foreach ($request->allFiles() as $key => $file) {
             if (str_starts_with($key, 'lampiran_')) {
                 $idLampiran = (int) str_replace('lampiran_', '', $key);
-                $path = $file->store('lampiran_surat', 'public');
+                $path = $file->store('lampiran_surat', 'private');
 
                 LampiranPengajuanModel::create([
                     'id_pengajuan' => $pengajuan->id,
