@@ -83,4 +83,3 @@ Route::get("/pengaturan", function () {
     $pengaturan->descApk = config("app.name") . " merupakan aplikasi surat-menyurat digital untuk kelurahan. Aplikasi ini membantu dalam melacak permohonan surat dan proses administrasi secara efisien.";
     return ResponseHelper::success($pengaturan);
 });
-
