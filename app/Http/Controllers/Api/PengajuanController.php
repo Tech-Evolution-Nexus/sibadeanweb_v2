@@ -63,7 +63,6 @@ class PengajuanController extends Controller
             ->with(["masyarakat", "surat", "lampiran", "fieldValues"])
             ->orderBy("id", "desc")
             ->first();
-        dd($pengajuanRaw);
         $pengajuan = new PengajuanResource($pengajuanRaw);
         return ResponseHelper::success(
             $pengajuan,
