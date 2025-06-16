@@ -42,6 +42,7 @@ class DashboardControllerApi extends Controller
 
         if ($role === 'masyarakat') {
             $totalTidakDibatalkan = PengajuanSuratModel::where('nik', $nik)
+                ->orWhere('nik_pengaju', $nik)
                 ->whereNotIn('status', $statusDibatalkan)
                 ->count();
             $totalSelesai = PengajuanSuratModel::where('nik', $nik)
