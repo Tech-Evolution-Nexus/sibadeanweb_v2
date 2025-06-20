@@ -1,4 +1,4 @@
-@props(['disabled' => false, 'options' => [], 'onchange'])
+@props(['disabled' => false, 'options' => [], 'onchange' => () =>{}])
 
 <select onchange="{{ $onchange }}" @disabled($disabled) {{ $attributes->merge(['class' => 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm px-[12px] py-[8px]']) }}>
     @foreach ($options as $value => $label)
