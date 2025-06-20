@@ -46,11 +46,11 @@
                         },
                         {
                             data: 'gambar',
-                            name: 'Gambar'
+                            name: 'gambar'
                         },
                         {
                             data: 'judul',
-                            name: 'Judul'
+                            name: 'judul'
                         },
 
                         // {

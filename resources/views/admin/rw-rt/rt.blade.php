@@ -68,19 +68,19 @@
                     },
                     {
                         data: 'nama_lengkap',
-                        name: 'Nama Lengkap'
+                        name: 'nama_lengkap'
                     },
                     {
                         data: 'rt',
-                        name: 'RW'
+                        name: 'rt'
                     },
                     {
                         data: 'rw',
-                        name: 'RW'
+                        name: 'rw'
                     },
                     {
                         data: 'masa_jabatan',
-                        name: 'RW'
+                        name: 'masa_jabatan'
                     },
 
                     {

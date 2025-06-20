@@ -57,7 +57,7 @@ class PetugasController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            "nip" => "required|numeric|digits:16|unique:petugas,nip",
+            "nip" => "numeric|digits:16|unique:petugas,nip",
             "nama" => "required|min:3|max:50",
             "email" => "required|email|unique:users,email",
             "password" => "required|min:6",

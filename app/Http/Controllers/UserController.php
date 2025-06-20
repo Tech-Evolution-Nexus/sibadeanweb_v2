@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
@@ -92,11 +93,23 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy(User $user)
     {
-        $user->delete();
-        return redirect()->route("users.index")->with("success", "User berhasil dihapus");
-        
+        try {
+            $user->delete();
+            return redirect()->route("users.index")->with("success", "User berhasil dihapus");
+        } catch (QueryException $e) {
+            // Cek apakah errornya karena foreign key constraint
+            if ($e->getCode() == 23000) {
+                return redirect()->route("users.index")
+                    ->with("error", "Gagal menghapus user karena sudah melakukan pengajuan.");
+            }
+
+            // Untuk error lainnya
+            return redirect()->route("users.index")
+                ->with("error", "Terjadi kesalahan saat menghapus user.");
+        }
     }
 
     /**
