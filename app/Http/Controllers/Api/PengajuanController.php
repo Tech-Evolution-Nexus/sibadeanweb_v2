@@ -128,7 +128,7 @@ class PengajuanController extends Controller
         $html = str_replace("{nama}", $data->masyarakat->nama_lengkap ?? "", $html);
         $html = str_replace("{nik}", $data->masyarakat->nik ?? "", $html);
         $html = str_replace("{tempat_lahir}", $data->masyarakat->tempat_lahir ?? "", $html);
-        $html = str_replace("{tanggal_lahir}", $data->masyarakat->tanggal_lahir ?? "", $html);
+        $html = str_replace("{tanggal_lahir}", Helpers::formatDate($data->masyarakat->ibu()->tanggal_lahir) ?? "", $html);
         $html = str_replace("{jenis_kelamin}", $data->masyarakat->jenis_kelamin ?? "", $html);
         $html = str_replace("{pekerjaan}", $data->masyarakat->pekerjaan ?? "", $html);
         $html = str_replace("{agama}", $data->masyarakat->agama ?? "", $html);

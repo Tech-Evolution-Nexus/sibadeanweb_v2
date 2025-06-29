@@ -278,7 +278,7 @@ class PengajuanSuratController extends Controller
             $html = str_replace("{nama_ibu}", $data->masyarakat->ibu()->nama_lengkap ?? "", $html);
             $html = str_replace("{nik_ibu}", $data->masyarakat->ibu()->nik ?? "", $html);
             $html = str_replace("{tempat_lahir_ibu}", $data->masyarakat->ibu()->tempat_lahir ?? "", $html);
-            $html = str_replace("{tanggal_lahir_ibu}", $data->masyarakat->ibu()->tanggal_lahir ?? "", $html);
+            $html = str_replace("{tanggal_lahir_ibu}", Helpers::formatDate($data->masyarakat->ibu()->tanggal_lahir) ?? "", $html);
             $html = str_replace("{jenis_kelamin_ibu}", $data->masyarakat->ibu()->jenis_kelamin ?? "", $html);
             $html = str_replace("{pekerjaan_ibu}", $data->masyarakat->ibu()->pekerjaan ?? "", $html);
             $html = str_replace("{agama_ibu}", $data->masyarakat->ibu()->agama ?? "", $html);
