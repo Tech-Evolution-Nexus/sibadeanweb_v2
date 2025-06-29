@@ -22,8 +22,8 @@
                 <!-- Nama -->
                 <div>
                     <x-input-label for="name" :value="__('Nama Lengkap')" />
-                    <x-text-input :value="old('name', $data->masyarakat->nama_lengkap)" type="text" class="block mt-1 w-full"
-                        placeholder="Nama Lengkap" name="name" id="name" required />
+                    <x-text-input disabled :value="old('name', $data->masyarakat->nama_lengkap)" type="text"
+                        class="block mt-1 w-full" placeholder="Nama Lengkap" name="name" id="name" required />
                     <x-input-error :messages="$errors->get('name')" class="mt-2 text-red-500 text-xs" />
                 </div>
 
