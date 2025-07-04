@@ -41,10 +41,10 @@
                     }],
                     columns: [
                         { data: 'DT_RowIndex', name: 'DT_RowIndex' },
-                        { data: 'masyarakat.nama_lengkap', name: 'nama_lengkap' },
-                        { data: 'email', name: 'Email' },
-                        { data: 'role', name: 'Role' },
-                        { data: 'status', name: 'Status' },
+                        { data: 'masyarakat.nama_lengkap', name: 'masyarakat.nama_lengkap' },
+                        { data: 'email', name: 'email' },
+                        { data: 'role', name: 'role' },
+                        { data: 'status', name: 'status' },
                         // {
                         //     data: 'masa_jabatan',
                         //     name: 'Masa Jabatan',
@@ -52,7 +52,7 @@
                         //         return (row.masa_jabatan_mulai ?? "") + ' - ' + (row.masa_jabatan_selesai ??"");
                         //     }
                         // },
-                        { data: 'action', name: 'Aksi', orderable: false, searchable: false },
+                        { data: 'action', name: 'action', orderable: false, searchable: false },
                     ]
                 });
             });

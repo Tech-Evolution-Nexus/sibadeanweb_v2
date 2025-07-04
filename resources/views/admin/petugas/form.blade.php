@@ -25,7 +25,7 @@
                 <div>
                     <x-input-label for="nip" :value="__('Nip')" />
                     <x-text-input :value="old('nip', $data->nip)" type="text" class="block mt-1 w-full"
-                        placeholder="Nip" name="nip" id="nip" required />
+                        placeholder="Nip" name="nip" id="nip" />
                     <x-input-error :messages="$errors->get('nip')" class="mt-2 text-red-500 text-xs" />
                 </div>
                 <div>

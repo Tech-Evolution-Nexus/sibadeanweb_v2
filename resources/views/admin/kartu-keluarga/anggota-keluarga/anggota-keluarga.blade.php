@@ -46,19 +46,19 @@
                     },
                     {
                         data: 'nik',
-                        name: 'Nik'
+                        name: 'nik'
                     },
                     {
                         data: 'nama_lengkap',
-                        name: 'Nama Lengkap'
+                        name: 'nama_lengkap'
                     },
                     {
                         data: 'jenis_kelamin',
-                        name: 'Jenis Kelamin'
+                        name: 'jenis_kelamin'
                     },
                     {
                         data: 'status_keluarga',
-                        name: 'Status Keluarga'
+                        name: 'status_keluarga'
                     },
                     {
                         data: 'action',

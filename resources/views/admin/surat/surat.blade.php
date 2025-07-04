@@ -43,11 +43,11 @@
                     },
                     {
                         data: 'gambar',
-                        name: 'Gambar'
+                        name: 'gambar'
                     },
                     {
                         data: 'nama_surat',
-                        name: 'Nama Surat'
+                        name: 'nama_surat'
                     },
                     {
                         data: 'action',
