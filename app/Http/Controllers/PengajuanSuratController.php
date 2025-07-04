@@ -234,7 +234,7 @@ class PengajuanSuratController extends Controller
         $html = str_replace("{nama}", $data->masyarakat->nama_lengkap ?? "", $html);
         $html = str_replace("{nik}", $data->masyarakat->nik ?? "", $html);
         $html = str_replace("{tempat_lahir}", $data->masyarakat->tempat_lahir ?? "", $html);
-        $html = str_replace("{tanggal_lahir}", $data->masyarakat->tgl_lahir ?? "", $html);
+        $html = str_replace("{tanggal_lahir}", Helpers::formatDate($data->masyarakat->tanggal_lahir) ?? "", $html);
         $html = str_replace("{jenis_kelamin}", $data->masyarakat->jenis_kelamin ?? "", $html);
         $html = str_replace("{pekerjaan}", $data->masyarakat->pekerjaan ?? "", $html);
         $html = str_replace("{agama}", $data->masyarakat->agama ?? "", $html);
@@ -249,7 +249,7 @@ class PengajuanSuratController extends Controller
         $html = str_replace("{pengaju_nama}", $data->pengaju->nama_lengkap ?? "", $html);
         $html = str_replace("{pengaju_nik}", $data->pengaju->nik ?? "", $html);
         $html = str_replace("{pengaju_tempat_lahir}", $data->pengaju->tempat_lahir ?? "", $html);
-        $html = str_replace("{pengaju_tanggal_lahir}", $data->pengaju->tgl_lahir ?? "", $html);
+        $html = str_replace("{pengaju_tanggal_lahir}", Helpers::formatDate($data->pengaju->tanggal_lahir) ?? "", $html);
         $html = str_replace("{pengaju_jenis_kelamin}", $data->pengaju->jenis_kelamin ?? "", $html);
         $html = str_replace("{pengaju_pekerjaan}", $data->pengaju->pekerjaan ?? "", $html);
         $html = str_replace("{pengaju_agama}", $data->pengaju->agama ?? "", $html);
@@ -264,7 +264,7 @@ class PengajuanSuratController extends Controller
             $html = str_replace("{nama_bapak}", $data->masyarakat->bapak()->nama_lengkap ?? "", $html);
             $html = str_replace("{nik_bapak}", $data->masyarakat->bapak()->nik ?? "", $html);
             $html = str_replace("{tempat_lahir_bapak}", $data->masyarakat->bapak()->tempat_lahir ?? "", $html);
-            $html = str_replace("{tanggal_lahir_bapak}", $data->masyarakat->bapak()->tgl_lahir ?? "", $html);
+            $html = str_replace("{tanggal_lahir_bapak}", Helpers::formatDate($data->masyarakat->bapak()->tanggal_lahir) ?? "", $html);
             $html = str_replace("{jenis_kelamin_bapak}", $data->masyarakat->bapak()->jenis_kelamin ?? "", $html);
             $html = str_replace("{pekerjaan_bapak}", $data->masyarakat->bapak()->pekerjaan ?? "", $html);
             $html = str_replace("{agama_bapak}", $data->masyarakat->bapak()->agama ?? "", $html);
@@ -278,7 +278,7 @@ class PengajuanSuratController extends Controller
             $html = str_replace("{nama_ibu}", $data->masyarakat->ibu()->nama_lengkap ?? "", $html);
             $html = str_replace("{nik_ibu}", $data->masyarakat->ibu()->nik ?? "", $html);
             $html = str_replace("{tempat_lahir_ibu}", $data->masyarakat->ibu()->tempat_lahir ?? "", $html);
-            $html = str_replace("{tanggal_lahir_ibu}", $data->masyarakat->ibu()->tgl_lahir ?? "", $html);
+            $html = str_replace("{tanggal_lahir_ibu}", Helpers::formatDate($data->masyarakat->ibu()->tanggal_lahir) ?? "", $html);
             $html = str_replace("{jenis_kelamin_ibu}", $data->masyarakat->ibu()->jenis_kelamin ?? "", $html);
             $html = str_replace("{pekerjaan_ibu}", $data->masyarakat->ibu()->pekerjaan ?? "", $html);
             $html = str_replace("{agama_ibu}", $data->masyarakat->ibu()->agama ?? "", $html);

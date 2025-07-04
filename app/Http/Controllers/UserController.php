@@ -75,7 +75,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            "name" => "required|min:3|max:50",
+            // "name" => "required|min:3|max:50",
             "email" => "required|email|unique:users,email," . $user->id,
             "status" => "required",
             // "masa_jabatan_mulai" => "required|date",
@@ -99,16 +99,13 @@ class UserController extends Controller
         try {
             $user->delete();
             return redirect()->route("users.index")->with("success", "User berhasil dihapus");
-        } catch (QueryException $e) {
-            // Cek apakah errornya karena foreign key constraint
-            if ($e->getCode() == 23000) {
-                return redirect()->route("users.index")
-                    ->with("error", "Gagal menghapus user karena sudah melakukan pengajuan.");
+        } catch (QueryException $th) {
+            if ($th->getCode() === '23000') {
+                return redirect()->back()->with('error', 'Gagal menghapus karena data terkait masih digunakan.');
             }
-
-            // Untuk error lainnya
-            return redirect()->route("users.index")
-                ->with("error", "Terjadi kesalahan saat menghapus user.");
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan tak terduga.');
         }
     }
 
@@ -126,18 +123,15 @@ class UserController extends Controller
                 return $row->status == 1 ? 'Aktif' : 'Nonaktif';
             })
             ->addColumn('action', function ($row) {
-                return '<div class="row flex">
-                    <a href="' . route("users.edit", $row->id) . '" class="btn-edit">Edit</a>
-                    <form action="' . route("users.destroy", $row->id) . '" method="POST" onsubmit="return confirm(\'Yakin ingin menghapus user ini?\')" style="display:inline;">
-                        ' . csrf_field() . '
-                        ' . method_field("DELETE") . '
-                        <button type="submit" class="btn-delete">Hapus</button>
-                    </form>
-                    </div>';
+                $btn = '<div class="row flex">
+                    <a href="' . route("users.edit", $row->id) . '" class="btn-edit">
+                    <i class="fa fa-pencil"></i>
+                    </a>';
+                $message = "Apakah anda yakin menghapus data {$row->masyarakat->nama_lengkap}?";
+                $btn .= "<button class='btn-delete' x-data x-on:click=\"\$dispatch('open-modal', {name: 'delete'}), message= '$message', url= '" . route("users.destroy", $row->id) . "'\"><i class='fa fa-trash'></i></button>";
+                $btn .= '</div>';
+                return $btn;
             })
-            // ->addColumn('nama_lengkap', function ($row) {
-            //     return $row->masyarakat->nama_lengkap;
-            // })
             ->rawColumns(["action"])
             ->make(true);
     }
