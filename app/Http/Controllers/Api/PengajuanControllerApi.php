@@ -63,15 +63,36 @@ class PengajuanControllerApi extends Controller
         // 4. Tentukan status & cari petugas penerima
         if ($userRole === 'masyarakat' || $userRole === 'rw') {
             $status = $pengantarPath ? 'di_terima_rt' : 'pending';
-            $data2 = $pengantarPath
-                ? $this->getKartuKeluargaByRoleAndField('rw', $dataRw, 'rw')
-                : $this->getKartuKeluargaByRoleAndField('rt', $dataRt, 'rt');
+
+            // cari KK yang rt & rw sama, dan user-nya role = 'rt'
+            $data2 = KartuKeluargaModel::where('rt', $dataRt)
+                ->where('rw', $dataRw)
+                ->whereHas('masyarakat.user', function ($query) {
+                    $query->where('role', 'rt');
+                })
+                ->with(['masyarakat' => function ($query) {
+                    $query->whereHas('user', function ($q) {
+                        $q->where('role', 'rt');
+                    });
+                }, 'masyarakat.user'])
+                ->first();
         } elseif ($userRole === 'rt') {
             $status = 'di_terima_rt';
-            $data2 = $this->getKartuKeluargaByRoleAndField('rw', $dataRw, 'rw');
+
+            $data2 = KartuKeluargaModel::where('rw', $dataRw)
+                ->whereHas('masyarakat.user', function ($query) {
+                    $query->where('role', 'rw');
+                })
+                ->with('masyarakat.user')
+                ->first();
         } else {
             return response()->json(['message' => 'Role tidak dikenali.'], 403);
         }
+        // return response()->json(
+
+        //     $data2->masyarakat->first(),
+        //     200
+        // );
 
         // 5. Simpan data pengajuan surat
         $pengajuan = PengajuanSuratModel::create([
@@ -117,11 +138,11 @@ class PengajuanControllerApi extends Controller
         }
 
         // 9. Kirim notifikasi jika data2 tersedia
-        if ($data2 && $data2->user && $data2->user->fcm_token) {
+        if ($data2 && $data2->masyarakat->first()->user && $data2->masyarakat->first()->user->fcm_token) {
             NotificationHelper::sendFcm(
-                $data2->user->fcm_token,
-                'Pengajuan Baru',
-                'Ada pengajuan surat baru yang masuk.'
+                $data2->masyarakat->first()->user->fcm_token,
+                'Pengajuan Surat Baru',
+                'Ada pengajuan surat baru yang masuk. Silahkan cek di aplikasi.'
             );
         }
 
@@ -134,11 +155,20 @@ class PengajuanControllerApi extends Controller
 
     function getKartuKeluargaByRoleAndField($field, $value, $role)
     {
-        return KartuKeluargaModel::where($field, $value)
+        $kk = KartuKeluargaModel::where($field, $value)
             ->whereHas('masyarakat.user', function ($query) use ($role) {
                 $query->where('role', $role);
             })
-            ->with('masyarakat.user')
+            ->with(['masyarakat.user'])
             ->first();
+
+        if ($kk) {
+            // Filter masyarakat berdasarkan role
+            $kk->masyarakat = $kk->masyarakat->filter(function ($masyarakat) use ($role) {
+                return $masyarakat->user && $masyarakat->user->role === $role;
+            })->values()->take(1); // ambil hanya 1 orang
+        }
+
+        return $kk;
     }
 }
