@@ -95,6 +95,7 @@ class PengaturanController extends Controller
             $pengaturan->update($dataUpdate);
             return redirect()->back()->with("success", "Pengaturan berhasil diubah");
         } catch (\Throwable $th) {
+            dd($th);
             return redirect()->back()->with("error", "Pengaturan gagal diubah");
         }
     }
