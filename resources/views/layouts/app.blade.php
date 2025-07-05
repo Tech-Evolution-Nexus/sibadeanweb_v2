@@ -135,7 +135,11 @@
 
         })
 
-
+        $('.only-number').on('input', function () {
+            $(this).val(function (_, val) {
+                return val.replace(/[^0-9]/g, '');
+            });
+        });
         $(document).ready(function () {
             $('.select2').select2();
         });
