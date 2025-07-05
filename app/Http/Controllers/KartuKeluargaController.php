@@ -239,13 +239,13 @@ class KartuKeluargaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(KartuKeluargaModel $kartuKeluargaModel)
+    public function destroy($noKK)
     {
         try {
-            $idKartuKeluarga = $kartuKeluargaModel->no_kk;
+            $kartuKeluarga = KartuKeluargaModel::find($noKK);
 
             // Cari masyarakat yang terhubung ke user
-            $masyarakatTerhubungUser = MasyarakatModel::where('no_kk', $idKartuKeluarga)
+            $masyarakatTerhubungUser = MasyarakatModel::where('no_kk', $noKK)
                 ->whereHas('user')
                 ->get();
 
@@ -255,10 +255,10 @@ class KartuKeluargaController extends Controller
             }
 
             // Hapus semua masyarakat berdasarkan no_kk
-            MasyarakatModel::where('no_kk', $idKartuKeluarga)->delete();
+            MasyarakatModel::where('no_kk', $noKK)->delete();
 
             // Hapus kartu keluarga
-            $kartuKeluargaModel->delete();
+            $kartuKeluarga->delete();
 
             return redirect()->back()->with('success', 'Berhasil menghapus kartu keluarga dan anggota masyarakat terkait.');
 
