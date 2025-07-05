@@ -87,19 +87,19 @@
                     },
                     {
                         data: 'no_kk',
-                        name: 'No KK'
+                        name: 'no_kk'
                     },
                     {
                         data: 'kepala_keluarga',
-                        name: 'Kepala Keluarga'
+                        name: 'kepala_keluarga'
                     },
                     {
                         data: 'rt',
-                        name: 'RT'
+                        name: 'rt'
                     },
                     {
                         data: 'rw',
-                        name: 'RW'
+                        name: 'rw'
                     },
 
                     {

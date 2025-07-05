@@ -34,6 +34,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             "nik" => "required|numeric|digits:16",
             "password" => "required|min:6",
+
         ]);
 
         // Jika validasi gagal, kembalikan pesan error
@@ -61,6 +62,9 @@ class AuthController extends Controller
         if ($user->status !== 1) {
             return ResponseHelper::error('Akun belum diaktifkan. Silakan aktivasi terlebih dahulu.', 403);
         }
+        $user->update([
+            'fcm_token' => $request->fcm_token
+        ]);
 
         // Verifikasi password
         if (!Hash::check($request->password, $user->password)) {
@@ -379,7 +383,7 @@ class AuthController extends Controller
         $masyarakat = MasyarakatModel::where("id_user", $idUser)
             ->with(['user', 'kartuKeluarga'])
             ->first();
-            $masyarakat->kartuKeluarga->kk_gambar = route("private.image",['path'=>$masyarakat->kartuKeluarga->kk_gambar]) ;
+        $masyarakat->kartuKeluarga->kk_gambar = route("private.image", ['path' => $masyarakat->kartuKeluarga->kk_gambar]);
         return ResponseHelper::success($masyarakat);
     }
     public function cekuser(Request $request)

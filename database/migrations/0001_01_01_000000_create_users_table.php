@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('fcm_token')->unique()->nullable();
+            $table->string('fcm_token')->nullable();
             $table->boolean("status")->default(0);
             $table->string("avatar")->default("default.png");
             $table->string("no_hp")->nullable();

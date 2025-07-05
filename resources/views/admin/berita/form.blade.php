@@ -43,9 +43,9 @@
             </div>
 
             <div class="mb-2 ms-md-3">
-                <x-input-label for="slug" :value="__('Slug')" />
+                <x-input-label for="slug" :value="__('Nama URL')" />
                 <x-text-input name="slug" id="slug" type="text" class="block mt-1 w-full"
-                    :value="old('slug', $data->data->slug) " placeholder="slug" />
+                    :value="old('slug', $data->data->slug) " placeholder="Nama URL" />
                 <x-input-error :messages="$errors->get('slug')" class="mt-2 text-red-500 text-xs" />
             </div>
 

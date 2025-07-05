@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\NotificationHelper;
 use App\Http\Resources\PengajuanResource;
 use App\Models\HistoriPengajuan;
+use App\Models\KartuKeluargaModel;
 use App\Models\LampiranSuratModel;
 use App\Models\MasyarakatModel;
 use App\Models\PengajuanSuratModel;
@@ -101,10 +103,24 @@ class PengajuanMasyarakatController extends Controller
         try {
             $pengaturan = Helpers::pengaturan();
             $userAprove = auth()->user();
+            $userlogin = User::with("masyarakat.kartuKeluarga")->find($userAprove->id);
             $role = $userAprove->role;
             $statusPengajuan = request()->status;
+            $dataRw = $userlogin->masyarakat->kartuKeluarga->rw;
 
             $pengajuan = PengajuanSuratModel::find($idPengajuan);
+            $userpengajuan = MasyarakatModel::with("user")->where("nik", $pengajuan->nik)->first();
+
+            $data2 = KartuKeluargaModel::where('rw', $dataRw)
+                ->whereHas('masyarakat.user', function ($query) {
+                    $query->where('role', 'rw');
+                })
+                ->with('masyarakat.user')
+                ->first();
+            // return response()->json(
+            //     $userpengajuan->user->fcm_token,
+            //     200
+            // );
 
             $status = "";
             if ($role == "rw") {
@@ -113,14 +129,57 @@ class PengajuanMasyarakatController extends Controller
                     "disetujui" => "di_terima_rw",
                     "dibatalkan" => "dibatalkan"
                 };
-            } else if ($role == "rt") {
-                $status = match ($statusPengajuan) {
-                    "ditolak" => "di_tolak_rt",
-                    "disetujui" => "di_terima_rt",
+                $pesan = match ($statusPengajuan) {
+                    "ditolak" => "Surat ditolak oleh RW",
+                    "disetujui" => "Surat Disetujui oleh RW",
                     "dibatalkan" => "dibatalkan"
                 };
+                if ($status != "dibatalkan") {
+                    if ($userpengajuan->user->fcm_token) {
+                        NotificationHelper::sendFcm(
+                            $userpengajuan->user->fcm_token,
+                            'Surat Anda Sudah Diproses',
+                            $pesan
+                        );
+                    }
+                }
+            } else if ($role == "rt") {
                 if (!$pengaturan->hasRw) {
+                    $status = match ($statusPengajuan) {
+                        "ditolak" => "di_tolak_rt",
+                        "disetujui" => "di_terima_rt",
+                        "dibatalkan" => "dibatalkan"
+                    };
                     $status = "di_terima_rw";
+                } else {
+                    $status = match ($statusPengajuan) {
+                        "ditolak" => "di_tolak_rt",
+                        "disetujui" => "di_terima_rt",
+                        "dibatalkan" => "dibatalkan"
+                    };
+                    $pesan = match ($statusPengajuan) {
+                        "ditolak" => "Surat ditolak oleh RT",
+                        "disetujui" => "Surat Disetujui oleh RT",
+                        "dibatalkan" => "dibatalkan"
+                    };
+                    if ($status != "dibatalkan") {
+                        if ($userpengajuan->user->fcm_token) {
+                            NotificationHelper::sendFcm(
+                                $userpengajuan->user->fcm_token,
+                                'Surat Anda Sudah Diproses',
+                                $pesan
+                            );
+                        }
+                    }
+                    if ($status == "di_terima_rt") {
+                        if ($data2 && $data2->masyarakat->first()->user && $data2->masyarakat->first()->user->fcm_token) {
+                            NotificationHelper::sendFcm(
+                                $data2->masyarakat->first()->user->fcm_token,
+                                'Pengajuan Surat Baru',
+                                'Ada pengajuan surat baru yang masuk. Silahkan cek di aplikasi.'
+                            );
+                        }
+                    }
                 }
             } else {
                 $status = match ($statusPengajuan) {

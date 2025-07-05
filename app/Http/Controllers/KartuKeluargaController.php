@@ -66,6 +66,7 @@ class KartuKeluargaController extends Controller
      */
     public function store()
     {
+
         // Validasi data menggunakan request() dan validasi bahasa Indonesia
         $validated = request()->validate([
             "no_kk" => "required|unique:kartu_keluarga,no_kk",
@@ -82,7 +83,12 @@ class KartuKeluargaController extends Controller
             "kecamatan" => "required|max:100",
             "foto_kartu_keluarga" => "nullable|file|image|max:2024", // Validasi foto (optional)
         ]);
-
+        if ($validated['nik'] === $validated['no_kk']) {
+            return back()->withErrors([
+                'nik' => 'NIK dan No.KK tidak boleh sama nilainya',
+                'no_kk' => 'NIK dan No.KK tidak boleh sama nilainya',
+            ])->withInput();
+        }
         // Menyimpan data kartu keluarga
         $dataKK = [
             'no_kk' => $validated['no_kk'],
@@ -179,7 +185,12 @@ class KartuKeluargaController extends Controller
                 "foto_kartu_keluarga" => "nullable|file|image|max:2024", // Validasi foto (optional)
             ]
         );
-
+        if ($validated['nik'] === $validated['no_kk']) {
+            return back()->withErrors([
+                'nik' => 'NIK dan No.KK tidak boleh sama nilainya',
+                'no_kk' => 'NIK dan No.KK tidak boleh sama nilainya',
+            ])->withInput();
+        }
         try {
             // Cari data kartu keluarga berdasarkan ID
             $dataKK = KartuKeluargaModel::findOrFail($id);

@@ -46,11 +46,11 @@
                         },
                         {
                             data: 'question',
-                            name: 'Gambar'
+                            name: 'question'
                         },
                         {
                             data: 'answer',
-                            name: 'Judul'
+                            name: 'answer'
                         },
 
 

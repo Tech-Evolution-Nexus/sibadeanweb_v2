@@ -46,7 +46,7 @@
                             },
                             {
                                 data: 'nama_lampiran',
-                                name: 'Lampiran'
+                                name: 'nama_lampiran'
                             },
                             {
                                 data: 'action',

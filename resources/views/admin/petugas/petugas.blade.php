@@ -54,19 +54,19 @@
                         },
                         {
                             data: 'email',
-                            name: 'Email'
+                            name: 'email'
                         },
                         {
                             data: 'role',
-                            name: 'Role'
+                            name: 'role'
                         },
                         {
                             data: 'status',
-                            name: 'Status'
+                            name: 'status'
                         },
                         {
                             data: 'action',
-                            name: 'Aksi',
+                            name: 'action',
                             orderable: false,
                             searchable: false
                         },
