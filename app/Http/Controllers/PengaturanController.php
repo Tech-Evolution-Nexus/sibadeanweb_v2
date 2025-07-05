@@ -82,7 +82,7 @@ class PengaturanController extends Controller
                 $dataUpdate['logo_horizontal'] = $imageName;
             }
             $dataUpdate = array_merge($dataUpdate, [
-                "hasRw" => request()->hasRw,
+                "hasRw" => request()->hasRw ? 1 : 0,
                 "primary_color" => request()->primary_color,
                 "secondary_color" => request()->secondary_color,
                 "kelurahan" => request()->kelurahan,
@@ -95,7 +95,6 @@ class PengaturanController extends Controller
             $pengaturan->update($dataUpdate);
             return redirect()->back()->with("success", "Pengaturan berhasil diubah");
         } catch (\Throwable $th) {
-            dd($th);
             return redirect()->back()->with("error", "Pengaturan gagal diubah");
         }
     }
