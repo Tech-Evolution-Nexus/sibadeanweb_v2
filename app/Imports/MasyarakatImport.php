@@ -39,7 +39,7 @@ class MasyarakatImport implements ToModel, WithHeadingRow
                 'required',
                 'string',
                 'size:16',
-                Rule::unique('masyarakat', 'nik')
+                // Rule::unique('masyarakat', 'nik')
             ],
             'nama_lengkap' => 'required|string|max:50',
             'jenis_kelamin' => 'required|in:laki-laki,perempuan',
@@ -63,7 +63,7 @@ class MasyarakatImport implements ToModel, WithHeadingRow
             $errors = $validator->errors()->all();
             $errorList = "<ul class='list-decimal ms-4'><li>" . implode("</li><li>", $errors) . "</li></ul>";
 
-            throw new \Exception("Validasi gagal untuk NIK {$data['nik']}: {$errorList} ");
+            // throw new \Exception("Validasi gagal untuk NIK {$data['nik']}: {$errorList} ");
 
         }
 
@@ -82,7 +82,13 @@ class MasyarakatImport implements ToModel, WithHeadingRow
 
             $masyarakatData = $validator->validated();
             $masyarakatData["no_kk"] = $data["no_kk"];
-            return new MasyarakatModel($masyarakatData);
+            $masyarakatExist = MasyarakatModel::find($data["nik"]);
+            if ($masyarakatExist) {
+                return $masyarakatExist->update($masyarakatData);
+            } else {
+                return MasyarakatModel::create($masyarakatData);
+            }
+
         } catch (\Throwable $th) {
             throw $th;
         }
