@@ -139,9 +139,9 @@
                                     <div class="flex flex-col">
                                         <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
                                         <img @click="$dispatch('open-modal', {
-                                                    name: 'preview',
-                                                    lampiran: '{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}'
-                                                })" class="w-full object-contain aspect-video"
+                                                                                name: 'preview'
+                                                                            }),previewImage:'{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}"
+                                            class="w-full object-contain aspect-video"
                                             src="{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}" alt="">
                                     </div>
                                 @endforeach
@@ -169,7 +169,7 @@
                     :maxWidthCustom="'sm:max-w-4xl'">
                     <div class="p-4">
                         <h6 class="font-bold text-lg">Pratinjau Surat</h6>
-                        {!! $data->pengajuan->surat->format_surat !!}
+                        {{-- {!! $data->pengajuan->surat->format_surat !!} --}}
                         <img :src="lampiran" alt="">
                         <div class="flex md:justify-end flex-wrap-reverse gap-4 mt-10">
                             <button type="button" @click="$dispatch('close-modal', { name: 'update' })"

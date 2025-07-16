@@ -28,7 +28,8 @@
 
 <body class=" antialiased ">
     <x-loading />
-    <div class="min-h-screen flex" x-data="{ sidebarOpen: false,  message: '-',url:'-' ,previewPdf:'-'}">
+    <div class="min-h-screen flex"
+        x-data="{ sidebarOpen: false,  message: '-',url:'-' ,previewPdf:'-',previewImage: '-' }">
         @include('layouts.sidebar')
 
         <!-- Page Content -->
