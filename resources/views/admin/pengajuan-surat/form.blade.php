@@ -138,10 +138,9 @@
                                 @foreach ($data->pengajuan->lampiran as $lampiran)
                                     <div class="flex flex-col">
                                         <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
-                                        <img x-data x-on:click="
-                                                            previewImage = '{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}';
-                                                            $dispatch('open-modal', { name: 'preview', previewImage: previewImage });
-                                                        " class="w-full object-contain aspect-video"
+                                        <img x-data
+                                            x-on:click="previewImage = '{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}';message = '{{$lampiran->nama_lampiran}}';$dispatch('open-modal', { name: 'preview', previewImage: previewImage });"
+                                            class="w-full object-contain aspect-video"
                                             src="{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}" alt="">
                                     </div>
                                 @endforeach
@@ -167,7 +166,7 @@
                 <!-- Modal: Pratinjau Surat -->
                 <x-modal name="preview" :maxWidth="'custom'" :maxWidthCustom="'sm:max-w-4xl'">
                     <div class="p-4">
-                        <h6 class="font-bold text-lg">Pratinjau Surat</h6>
+                        <h6 class="font-bold text-lg" x-text="message"></h6>
                         {{-- {!! $data->pengajuan->surat->format_surat !!} --}}
                         <img :src="previewImage" alt="">
                         <div class="flex md:justify-end flex-wrap-reverse gap-4 mt-10">
