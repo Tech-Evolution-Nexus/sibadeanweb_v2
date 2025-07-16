@@ -138,10 +138,10 @@
                                 @foreach ($data->pengajuan->lampiran as $lampiran)
                                     <div class="flex flex-col">
                                         <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
-                                        <img @click="$dispatch('open-modal', {
-                                                                                    name: 'preview'
-                                                                                }),previewImage:'{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}"
-                                            class="w-full object-contain aspect-video"
+                                        <img x-data x-on:click="
+                                            lampiran = '{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}';
+                                            $dispatch('open-modal', { name: 'preview', lampiran: lampiran });
+                                        " class="w-full object-contain aspect-video"
                                             src="{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}" alt="">
                                     </div>
                                 @endforeach
