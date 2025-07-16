@@ -139,9 +139,9 @@
                                     <div class="flex flex-col">
                                         <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
                                         <img x-data x-on:click="
-                                                        previewImage = '{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}';
-                                                        $dispatch('open-modal', { name: 'preview', previewImage: previewImage });
-                                                    " class="w-full object-contain aspect-video"
+                                                            previewImage = '{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}';
+                                                            $dispatch('open-modal', { name: 'preview', previewImage: previewImage });
+                                                        " class="w-full object-contain aspect-video"
                                             src="{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}" alt="">
                                     </div>
                                 @endforeach
@@ -171,7 +171,7 @@
                         {{-- {!! $data->pengajuan->surat->format_surat !!} --}}
                         <img :src="previewImage" alt="">
                         <div class="flex md:justify-end flex-wrap-reverse gap-4 mt-10">
-                            <button type="button" @click="$dispatch('close-modal', { name: 'update' })"
+                            <button type="button" @click="$dispatch('close-modal', { name: 'preview' })"
                                 class="md:w-auto w-full px-4 py-2 bg-slate-200 text-black rounded-md">Tutup</button>
                         </div>
                     </div>
