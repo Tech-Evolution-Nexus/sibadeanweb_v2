@@ -143,11 +143,13 @@
                         <div class="md:col-span-2">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                                 @foreach ($data->pengajuan->lampiran as $lampiran)
-                                <div class="flex flex-col">
-                                    <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
-                                    <img class="w-full object-contain aspect-video"
-                                        src="{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}" alt="">
-                                </div>
+                                   <div class="flex flex-col">
+                                        <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
+                                        <img x-data
+                                            x-on:click="previewImage = '{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}';message = '{{$lampiran->nama_lampiran}}';$dispatch('open-modal', { name: 'preview', previewImage: previewImage });"
+                                            class="w-full object-contain aspect-video"
+                                            src="{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}" alt="">
+                                    </div>
                                 @endforeach
                             </div>
                         </div>
@@ -169,15 +171,14 @@
                 </div>
 
                 <!-- Modal: Pratinjau Surat -->
-                <x-modal name="update" :maxWidth="'custom'" :maxWidthCustom="'sm:max-w-4xl'">
+                <x-modal name="preview" :maxWidth="'custom'" :maxWidthCustom="'sm:max-w-4xl'">
                     <div class="p-4">
-                        <h6 class="font-bold text-lg">Pratinjau Surat</h6>
-                        {!! $data->pengajuan->surat->format_surat !!}
+                        <h6 class="font-bold text-lg" x-text="message"></h6>
+                        {{-- {!! $data->pengajuan->surat->format_surat !!} --}}
+                        <img :src="previewImage" alt="">
                         <div class="flex md:justify-end flex-wrap-reverse gap-4 mt-10">
-                            <button type="button" @click="$dispatch('close-modal', { name: 'update' })"
-                                class="md:w-auto w-full px-4 py-2 bg-slate-200 text-black rounded-md">Batal</button>
-                            <button type="submit" name="status" value="hapus"
-                                class="md:w-auto w-full px-4 py-2 bg-red-500 text-white rounded-md">Hapus</button>
+                            <button type="button" @click="$dispatch('close-modal', { name: 'preview' })"
+                                class="md:w-auto w-full px-4 py-2 bg-slate-200 text-black rounded-md">Tutup</button>
                         </div>
                     </div>
                 </x-modal>

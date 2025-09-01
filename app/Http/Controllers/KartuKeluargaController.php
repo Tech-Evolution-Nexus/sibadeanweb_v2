@@ -21,7 +21,7 @@ class KartuKeluargaController extends Controller
                 $qr->where("status_keluarga", "kk");
             })
             ->orderBy("created_at", "desc")->get();
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "kartu_keluarga" => $kartuKeluarga
         ];
 
@@ -38,11 +38,11 @@ class KartuKeluargaController extends Controller
     public function create()
     {
         $pengaturan = auth()->user()->pengaturan();
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "title" => "Tambah Kartu Keluarga",
             "action_form" => route("kartu-keluarga.store"),
             "method" => "POST",
-            "data" => (object)[
+            "data" => (object) [
                 "no_kk" => "",
                 "tanggal_kk" => "",
                 "nik" => "",
@@ -138,11 +138,11 @@ class KartuKeluargaController extends Controller
         $kartuKeluarga = KartuKeluargaModel::find($id);
         $masyarakat = $kartuKeluarga->kepalaKeluarga;
         $fotoKK = $kartuKeluarga->kk_gambar ? url("/c/private-image?path$kartuKeluarga->kk_gambar") : asset("assets/image/default-2.png");
-        $params["data"] = (object)[
+        $params["data"] = (object) [
             "title" => "Ubah Kartu Keluarga",
             "action_form" => route("kartu-keluarga.update", $id),
             "method" => "PUT",
-            "data" => (object)[
+            "data" => (object) [
                 "no_kk" => $kartuKeluarga->no_kk,
                 "tanggal_kk" => "",
                 "nik" => $masyarakat->nik,
@@ -239,10 +239,36 @@ class KartuKeluargaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(KartuKeluargaModel $kartuKeluargaModel)
+    public function destroy($noKK)
     {
-        //
+        try {
+            $kartuKeluarga = KartuKeluargaModel::find($noKK);
+
+            // Cari masyarakat yang terhubung ke user
+            $masyarakatTerhubungUser = MasyarakatModel::where('no_kk', $noKK)
+                ->whereHas('user')
+                ->get();
+
+            // Jika ada masyarakat yang punya relasi user, gagalkan penghapusan
+            if ($masyarakatTerhubungUser->isNotEmpty()) {
+                return redirect()->back()->with('error', 'Gagal menghapus karena ada anggota keluarga yang masih terhubung ke user.');
+            }
+
+            // Hapus semua masyarakat berdasarkan no_kk
+            MasyarakatModel::where('no_kk', $noKK)->delete();
+
+            // Hapus kartu keluarga
+            $kartuKeluarga->delete();
+
+            return redirect()->back()->with('success', 'Berhasil menghapus kartu keluarga dan anggota masyarakat terkait.');
+
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $th->getMessage());
+        }
     }
+
+
+
 
 
 
