@@ -75,6 +75,8 @@ class PengajuanSuratController extends Controller
             "action_form" => route("pengajuan-surat.update", $id),
             "pengajuan" => $pengajuan
         ];
+        // dd($params["data"]->pengajuan->masyarakat->ktp_gambar);
+        // dd($params["data"]->pengajuan->masyarakat->kartuKeluarga->kk_gambar);
 
         return view("admin.pengajuan-surat.form", $params);
     }

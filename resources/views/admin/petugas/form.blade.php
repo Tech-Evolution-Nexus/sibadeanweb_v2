@@ -66,9 +66,6 @@
                         <option value="">Pilih Role</option>
                         <option value="admin" {{ old('role', $data->user->role) == 'admin' ? 'selected' : '' }}>Admin
                         </option>
-                        <option value="petugas" {{ old('role', $data->user->role) == 'petugas' ? 'selected' : '' }}>
-                            Petugas
-                        </option>
                         <option value="lurah" {{ old('role', $data->user->role) == 'lurah' ? 'selected' : '' }}>lurah
                         </option>
                     </select>
