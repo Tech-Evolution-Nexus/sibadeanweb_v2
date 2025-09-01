@@ -34,8 +34,7 @@
                 <div class=" ms-md-3">
                     <x-input-label for="title" :value="__('Judul Acara')" />
                     <x-text-input :value="old('title', $data->data->title)" maxlength="70" minlength="3" type="text"
-                        class="only-number block mt-1 w-full" placeholder="Judul acara" name="title" id="title"
-                        required />
+                        class=" block mt-1 w-full" placeholder="Judul acara" name="title" id="title" required />
                     <x-input-error :messages="$errors->get('title')" class="mt-2 text-red-500 text-xs" />
                 </div>
 
