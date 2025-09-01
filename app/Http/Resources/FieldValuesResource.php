@@ -15,7 +15,7 @@ class FieldValuesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "nama_field" => $this->fields->nama_field,
+            "nama_field" => optional($this->field)->nama_field,
             "value" => $this->value
         ];
     }
