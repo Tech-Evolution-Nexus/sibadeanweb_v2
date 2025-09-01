@@ -50,26 +50,26 @@
 
             <div class="flex items-center justify-center overflow-x-auto space-x-4 ">
                 @foreach ($data->pengajuan->histori as $index => $histori)
-                    <!-- Titik pertama -->
-                    <div class="flex flex-col  items-center relative ">
-                        <!-- Circle -->
-                        <div class="w-5 h-5 bg-blue-600 rounded-full border-4 border-white z-10"></div>
-                        <!-- Box bawah -->
-                        <div class="mt-2 bg-blue-100 p-3 rounded shadow text-center w-40">
-                            <p class="text-sm font-semibold text-grey-600">
-                                {{Helpers::formatStatusPengajuan($histori->status_pengajuan) }}
-                            </p>
-                            <p class="text-xs text-grey-600 mt-1">{{ Helpers::formatDate($histori->created_at) }}</p>
-                        </div>
-                        @if (!$loop->last)
-                            <div class="h-1 bg-gray-200 rounded-sm   w-[163%] absolute top-2 left-[60%]">
-                            </div>
-                        @endif
+                <!-- Titik pertama -->
+                <div class="flex flex-col  items-center relative ">
+                    <!-- Circle -->
+                    <div class="w-5 h-5 bg-blue-600 rounded-full border-4 border-white z-10"></div>
+                    <!-- Box bawah -->
+                    <div class="mt-2 bg-blue-100 p-3 rounded shadow text-center w-40">
+                        <p class="text-sm font-semibold text-grey-600">
+                            {{Helpers::formatStatusPengajuan($histori->status_pengajuan) }}
+                        </p>
+                        <p class="text-xs text-grey-600 mt-1">{{ Helpers::formatDate($histori->created_at) }}</p>
                     </div>
-
                     @if (!$loop->last)
-                        <div class="h-1  flex-1 max-w-[100px]" style="min-width: 40px;"></div>
+                    <div class="h-1 bg-gray-200 rounded-sm   w-[163%] absolute top-2 left-[60%]">
+                    </div>
                     @endif
+                </div>
+
+                @if (!$loop->last)
+                <div class="h-1  flex-1 max-w-[100px]" style="min-width: 40px;"></div>
+                @endif
                 @endforeach
             </div>
         </div>
@@ -77,7 +77,7 @@
 
         <div class="card">
             @php
-                $canRespond = !in_array($data->pengajuan->status, ['selesai', 'di_tolak_rw', 'di_tolak_rt', 'di_tolak_lurah']);
+            $canRespond = !in_array($data->pengajuan->status, ['selesai', 'di_tolak_rw', 'di_tolak_rt', 'di_tolak_lurah']);
             @endphp
 
             <form action="{{ $data->action_form }}" method="POST" x-data="{ alasan: '', error: '' }">
@@ -86,57 +86,64 @@
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-gray-700 text-sm">
                         @php
-                            $customFields = $data->pengajuan->fieldValues;
-                            $formatFields = [];
-                            foreach ($customFields as $field) {
-                                $formatFields[strtoupper($field->fields->nama_field)] = $field->value;
-                            }
-                            $fields = [
-                                'Nama Surat' => $data->pengajuan->surat->nama_surat ?? "-",
-                                'Nama' => $data->pengajuan->masyarakat->nama_lengkap ?? "-",
-                                'No Surat' => $data->pengajuan->nomor_surat ?? "-",
-                                'Keterangan' => $data->pengajuan->keterangan ?? "-",
-                                ...$formatFields,
-                                'Jenis Kelamin' => $data->pengajuan->masyarakat->jenis_kelamin ?? "-",
-                                'NIK' => $data->pengajuan->masyarakat->nik ?? "-",
-                                'No KK' => $data->pengajuan->masyarakat->no_kk ?? "-",
-                                'Alamat' => $data->pengajuan->masyarakat->kartuKeluarga->alamat ?? "-",
-                                'No HP' => $data->pengajuan->masyarakat->user->no_telepon ?? "-",
-                                'Agama' => str_replace("_", " ", $data->pengajuan->masyarakat->agama) ?? "-",
-                                'Pekerjaan' => $data->pengajuan->masyarakat->pekerjaan ?? "-",
-                                'Tanggal Pengajuan' => Helpers::formatDate($data->pengajuan->created_at, true),
-                            ];
+                        $customFields = $data->pengajuan->fieldValues;
+                        $formatFields = [];
+                        foreach ($customFields as $field) {
+                        $formatFields[strtoupper($field->fields->nama_field)] = $field->value;
+                        }
+                        $fields = [
+                        'Nama Surat' => $data->pengajuan->surat->nama_surat ?? "-",
+                        'Nama' => $data->pengajuan->masyarakat->nama_lengkap ?? "-",
+                        'No Surat' => $data->pengajuan->nomor_surat ?? "-",
+                        'Keterangan' => $data->pengajuan->keterangan ?? "-",
+                        ...$formatFields,
+                        'Jenis Kelamin' => $data->pengajuan->masyarakat->jenis_kelamin ?? "-",
+                        'NIK' => $data->pengajuan->masyarakat->nik ?? "-",
+                        'No KK' => $data->pengajuan->masyarakat->no_kk ?? "-",
+                        'Alamat' => $data->pengajuan->masyarakat->kartuKeluarga->alamat ?? "-",
+                        'No HP' => $data->pengajuan->masyarakat->user->no_telepon ?? "-",
+                        'Agama' => str_replace("_", " ", $data->pengajuan->masyarakat->agama) ?? "-",
+                        'Pekerjaan' => $data->pengajuan->masyarakat->pekerjaan ?? "-",
+                        'Tanggal Pengajuan' => Helpers::formatDate($data->pengajuan->created_at, true),
+                        'Gambar Kartu Keluarga' => $data->pengajuan->masyarakat->kartuKeluarga->kk_gambar ?? "-",
+                        'Gambar Kartu Tanda Penduduk' => $data->pengajuan->masyarakat->ktp_gambar ?? "-",
+
+
+                        ];
                         @endphp
 
                         @foreach ($fields as $label => $value)
-                            @php
-                                $editable = in_array($label, ['Keterangan', 'No Surat']);
-                            @endphp
+                        @php
+                        $editable = in_array($label, ['Keterangan', 'No Surat']);
+                        @endphp
 
-                            <div
-                                class="flex flex-col {{ $editable && !in_array($data->pengajuan->status, ["selesai", "di_tolak_lurah"]) ? 'col-span-2' : '' }}">
-                                <label class="text-gray-500 mb-1">{{ $label }}</label>
-                                @if ($editable && !in_array($data->pengajuan->status, ["selesai", "di_tolak_lurah"]))
-                                    @if ($label === 'Keterangan')
-                                        <textarea name="keterangan"
-                                            class="border-gray-300 px-4 py-2 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full">{{ $value }}</textarea>
-                                        <small class="text-xs mt-1">Lakukan penyesuaian keterangan pengajuan sesuai standar
-                                            kelurahan</small>
-                                    @else
-                                        <x-text-input type="hidden" name="nomor_surat" value="{{ $value }}" class="w-full" />
-                                        <span class="font-medium text-gray-900">{{ $value }}</span>
+                        <div
+                            class="flex flex-col {{ $editable && !in_array($data->pengajuan->status, ["selesai", "di_tolak_lurah"]) ? 'col-span-2' : '' }}">
+                            <label class="text-gray-500 mb-1">{{ $label }}</label>
+                            @if (in_array($label, ['Gambar Kartu Keluarga', 'Gambar Kartu Tanda Penduduk']) && $value !== "-")
+                            <img class="w-full object-contain aspect-video rounded-md border"
+                                src="{{ route('private.image') }}?path={{ $value }}"
+                                alt="{{ $label }}">
+                            @elseif ($editable && !in_array($data->pengajuan->status, ['selesai', 'di_tolak_lurah']))
+                            @if ($label === 'Keterangan')
+                            <textarea name="keterangan"
+                                class="border-gray-300 px-4 py-2 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full">{{ $value }}</textarea>
+                            <small class="text-xs mt-1">Lakukan penyesuaian keterangan pengajuan sesuai standar kelurahan</small>
+                            @else
+                            <x-text-input type="hidden" name="nomor_surat" value="{{ $value }}" class="w-full" />
+                            <span class="font-medium text-gray-900">{{ $value }}</span>
+                            @endif
+                            @else
+                            <span class="font-medium text-gray-900">{{ $value }}</span>
+                            @endif
 
-                                    @endif
-                                @else
-                                    <span class="font-medium text-gray-900">{{ $value }}</span>
-                                @endif
-                            </div>
+                        </div>
                         @endforeach
 
                         <div class="md:col-span-2">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
                                 @foreach ($data->pengajuan->lampiran as $lampiran)
-                                    <div class="flex flex-col">
+                                   <div class="flex flex-col">
                                         <span class="text-gray-500">{{ $lampiran->nama_lampiran }}</span>
                                         <img x-data
                                             x-on:click="previewImage = '{{ route('private.image') }}?path={{ $lampiran->pivot->gambar }}';message = '{{$lampiran->nama_lampiran}}';$dispatch('open-modal', { name: 'preview', previewImage: previewImage });"
@@ -152,14 +159,14 @@
                 <!-- Actions -->
                 <div class="mt-6">
                     @if ($canRespond)
-                        <button type="button" @click="$dispatch('open-modal', { name: 'ditolak' })"
-                            class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-md">
-                            Tolak
-                        </button>
-                        <button type="submit" name="status" value="selesai"
-                            class="bg-[--primary] hover:bg-[--primary] text-white px-4 py-2 rounded-md">
-                            Setujui
-                        </button>
+                    <button type="button" @click="$dispatch('open-modal', { name: 'ditolak' })"
+                        class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-md">
+                        Tolak
+                    </button>
+                    <button type="submit" name="status" value="selesai"
+                        class="bg-[--primary] hover:bg-[--primary] text-white px-4 py-2 rounded-md">
+                        Setujui
+                    </button>
                     @endif
                 </div>
 
