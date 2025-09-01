@@ -201,57 +201,40 @@ class SuratController extends Controller
             "lampiranFields.*" => "nullable|integer|exists:lampiran,id", // Validasi ID lampiran yang valid
         ]);
 
-        DB::beginTransaction(); // Mulai transaksi
+        DB::beginTransaction();
 
         try {
-            $surat = SuratModel::findOrFail($id); // Mencari Surat berdasarkan ID
-            $surat->nama_surat = $validated['nama_surat']; // Update nama_surat
-            $surat->singkatan_nama_surat = $validated['singkatan_surat'];
-            // Cek jika ada gambar baru, hapus gambar lama dan simpan gambar baru
-            if (request()->hasFile('gambar')) {
-                if ($surat->gambar && file_exists(storage_path('app/private/' . $surat->gambar))) {
-                    unlink(storage_path('app/private/' . $surat->gambar)); // Hapus gambar lama
-                }
-                $file = request()->file('gambar');
-                $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
-                $file->storeAs('surat', $randomName, ['disk' => 'private']);
-                $surat->gambar = 'surat/' . $randomName; // Update nama gambar
+            $surat = SuratModel::findOrFail($id);
+
+            $surat->update([
+                'nama_surat' => $validated['nama_surat'],
+                'singkatan_nama_surat' => $validated['singkatan_surat'],
+                'gambar' => $this->handleUploadGambar($surat, request()->file('gambar')),
+            ]);
+
+            // ✅ Hapus field lama + field_values, lalu buat ulang
+            foreach ($surat->fields as $field) {
+                $field->fieldValues()->delete(); // hapus dulu anaknya
             }
+            $surat->fields()->delete();
 
-
-            $surat->save(); // Simpan perubahan surat
-
-            // 🔁 Hapus field lama lalu insert ulang
-            $surat->fields()->delete(); // Hapus semua field lama
-            if (isset($validated['pendukungFields'])) {
+            if (!empty($validated['pendukungFields'])) {
                 foreach ($validated['pendukungFields'] as $field) {
-                    if (!empty($field)) {
-                        Field::create([ // Simpan field baru yang tidak kosong
-                            'id_surat' => $surat->id,
-                            'nama_field' => $field,
-                        ]);
+                    if ($field) {
+                        $surat->fields()->create(['nama_field' => $field]);
                     }
                 }
             }
 
-            // Hapus lampiran lama dan simpan yang baru
-            $surat->lampiransurat()->delete(); // Hapus lampiran lama
-            if (isset($validated['lampiranFields'])) {
-                foreach ($validated['lampiranFields'] as $lampiranId) {
-                    if ($lampiranId) { // Pastikan ID lampiran valid
-                        LampiranSuratModel::create([
-                            'id_surat' => $surat->id,
-                            'id_lampiran' => $lampiranId,
-                        ]);
-                    }
-                }
-            }
+            // ✅ Sync lampiran (pivot table)
+            $surat->lampiransurats()->sync($validated['lampiranFields'] ?? []);
 
-            DB::commit(); // Commit transaksi jika semuanya berhasil
+            DB::commit();
             return redirect()->route('surat.index')->with('success', 'Surat berhasil diperbarui');
         } catch (\Throwable $th) {
-            DB::rollBack(); // Rollback transaksi jika ada error
-            Log::error('Error in update surat: ' . $th->getMessage(), ['exception' => $th]);
+            DB::rollBack();
+            dd($th);
+            Log::error($th);
             return redirect()->back()->with('error', 'Surat gagal diperbarui');
         }
     }
@@ -311,5 +294,19 @@ class SuratController extends Controller
             })
             ->rawColumns(['gambar', 'action'])
             ->make(true);
+    }
+    private function handleUploadGambar($surat, $file)
+    {
+        if (!$file) {
+            return $surat->gambar;
+        }
+
+        if ($surat->gambar && file_exists(storage_path('app/private/' . $surat->gambar))) {
+            unlink(storage_path('app/private/' . $surat->gambar));
+        }
+
+        $randomName = uniqid() . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('surat', $randomName, ['disk' => 'private']);
+        return 'surat/' . $randomName;
     }
 }

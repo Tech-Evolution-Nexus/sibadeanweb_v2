@@ -16,6 +16,10 @@ class SuratModel extends Model
     {
         return $this->hasMany(LampiranSuratModel::class, "id_surat");
     }
+    public function lampiransurats()
+    {
+        return $this->belongsToMany(LampiranModel::class, 'lampiran_surat', 'id_surat', 'id_lampiran');
+    }
 
     // Define a relationship where each Surat can have many Fields
     public function fields()

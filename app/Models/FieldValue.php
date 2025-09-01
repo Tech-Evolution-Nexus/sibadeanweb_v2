@@ -9,7 +9,7 @@ class FieldValue extends Model
     protected $table = "field_values";
     protected $fillable = ["id_field", "id_pengajuan", "value"];
 
-    public function fields()
+     public function field()
     {
         return $this->belongsTo(Field::class, 'id_field');
     }
