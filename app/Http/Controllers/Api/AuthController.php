@@ -233,7 +233,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nik' => 'required|exists:masyarakat,nik',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'no_hp' => 'required|min:11|max:13',
             'password' => 'required|min:6',
         ]);

@@ -148,7 +148,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Actions -->
                 <div class="mt-6">
                     @if ($canRespond)
