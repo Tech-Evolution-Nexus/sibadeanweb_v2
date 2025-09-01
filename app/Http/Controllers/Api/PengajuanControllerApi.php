@@ -157,7 +157,7 @@ class PengajuanControllerApi extends Controller
                 'data' => $pengajuan
             ], 200);
         } catch (\Exception $e) {
-            Log::error($e->getMessage());
+            Log::error($e);
 
             return response()->json([
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage(),

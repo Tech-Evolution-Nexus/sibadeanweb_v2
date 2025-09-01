@@ -89,7 +89,7 @@
                         $customFields = $data->pengajuan->fieldValues;
                         $formatFields = [];
                         foreach ($customFields as $field) {
-                        $formatFields[strtoupper($field->fields->nama_field)] = $field->value;
+                        $formatFields[strtoupper($field->field->nama_field)] = $field->value;
                         }
                         $fields = [
                         'Nama Surat' => $data->pengajuan->surat->nama_surat ?? "-",
