@@ -199,10 +199,12 @@ class PengajuanController extends Controller
 
 
 
-        foreach ($data->fieldValues as $field) {
-            $value = $field->value;
-            $namaField = "{" . $field->fields->nama_field . "}";
-            // $namaField = "{field_" . strtolower(str_replace(" ", "_", trim($field->nama_field)) . "}");
+        foreach ($data->fields as $field) {
+            $value = $this->model->fieldValues
+                ->where("id_field", "=", $field->id)
+                ->where("id_pengajuan", "=", $data->id_pengajuan)
+                ->first();
+            $namaField = "{field_" . strtolower(str_replace(" ", "_", trim($field->nama_field)) . "}");
 
             $html = str_replace($namaField, $value->value ?? "-", $html);
         }
