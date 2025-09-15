@@ -60,10 +60,10 @@ class PengajuanController extends Controller
     public function getRiwayatDetail($idPengajuan)
     {
         $pengajuanRaw = PengajuanSuratModel::where("id", $idPengajuan)
-            ->with(["masyarakat", "surat", "lampiran", "fieldValues"])
+            ->with(["masyarakat", "surat", "lampiran", "fieldValues", "masyarakat.kartuKeluarga"])
             ->orderBy("id", "desc")
             ->first();
-        $pengajuan = new PengajuanResource($pengajuanRaw);
+        $pengajuan = PengajuanResource::collection($pengajuanRaw);
         return ResponseHelper::success(
             $pengajuan,
         );
