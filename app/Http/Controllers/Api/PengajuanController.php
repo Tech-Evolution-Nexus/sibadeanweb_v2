@@ -63,7 +63,7 @@ class PengajuanController extends Controller
             ->with(["masyarakat", "surat", "lampiran", "fieldValues", "masyarakat.kartuKeluarga"])
             ->orderBy("id", "desc")
             ->first();
-        $pengajuan = PengajuanResource::collection($pengajuanRaw);
+        $pengajuan = new PengajuanResource($pengajuanRaw);
         return ResponseHelper::success(
             $pengajuan,
         );
