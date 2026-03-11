@@ -4,12 +4,14 @@ node {
     // Build stage
    // Build stage
 stage("Build") {
-    docker.image('composer:2').inside('-u root') {
-        sh 'composer install'
-
-        }
+    docker.image('php:8.2-cli').inside('-u root') {
+        sh 'apt update'
+        sh 'apt install -y git unzip libpng-dev'
+        sh 'docker-php-ext-install gd'
+        sh 'curl -sS https://getcomposer.org/installer | php'
+        sh 'php composer.phar install'
     }
-
+}
     // Testing stage
     stage("Testing") {
         docker.image('ubuntu').inside('-u root') {
