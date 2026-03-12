@@ -40,7 +40,7 @@ node {
 
                 # Jalankan rsync
                 rsync -rav --delete ./ \
-                    newbieflank@$PROD_HOST:/home/sagita/prod.kelasdevops.xyz/ \
+                    sagita@$PROD_HOST:/home/sagita/prod.kelasdevops.xyz/ \
                     --exclude='public/build' \
                     --exclude='node_modules' \
                     --exclude='vendor' \
