@@ -3,7 +3,7 @@ node {
     stage("Build"){
         docker.image('composer:2.6').inside('-u root') {
             sh 'rm -f composer.lock'
-            sh 'composer install --ignore-platform-req=ext-gd'
+            sh 'composer install'
         }
     }
     stage("Testing"){
@@ -14,7 +14,7 @@ node {
     stage("Deploy"){
     sshagent(['ssh-prod']) {
         sh '''
-            ssh -o StrictHostKeyChecking=no -p 22 sagita@ 172.20.124.29"
+            ssh -o StrictHostKeyChecking=no -p 22 sagita@ 172.20.124.29 "
                 echo 'Deploy berhasil!'
             "
         '''
