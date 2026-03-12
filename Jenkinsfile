@@ -27,7 +27,6 @@ node {
     checkout scm
 
     stage("Build") {
-        // Menggunakan image composer resmi untuk install dependencies
         docker.image('composer:2.7').inside('-u root') {
             sh 'composer install --ignore-platform-req=ext-gd'
         }
@@ -38,14 +37,23 @@ node {
             sh 'echo "Menjalankan unit testing... [OK]"'
         }
     }
-    docker.image('agung3wi/alpine-rsync:1.1').inside('-u root') {
-         sshagent (credentials: ['ssh-prod']) {
-             sh 'mkdir -p ~/.ssh'
-             sh 'ssh-keyscan -H "$PROD_HOST" > ~/.ssh/known_hosts'
-             sh "rsync -rav --delete ./laravel/
-            kholzt@$PROD_HOST:/home/kholzt/prod.kelasdevops.xyz/ --exclude=.env -
-            -exclude=storage --exclude=.git"
-         }
-     }
-  
+
+    stage("Deploy to Production") {
+        docker.image('agung3wi/alpine-rsync:1.1').inside('-u root') {
+            sshagent (credentials: ['ssh-prod']) {
+                // Mendefinisikan IP langsung agar tidak kosong
+                def PROD_IP = "172.17.240.38"
+                
+                sh 'mkdir -p ~/.ssh'
+                sh "ssh-keyscan -H ${PROD_IP} >> ~/.ssh/known_hosts"
+                
+                // Gunakan tanda \ di akhir baris jika ingin memutus kalimat perintah
+                sh """
+                    rsync -rav --delete ./ \
+                    kholzt@${PROD_IP}:/home/kholzt/prod.kelasdevops.xyz/ \
+                    --exclude=.env --exclude=storage --exclude=.git --exclude=node_modules
+                """
+            }
+        }
+    }
 }
