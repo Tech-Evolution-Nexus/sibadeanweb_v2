@@ -3,7 +3,7 @@ node {
     stage("Build"){
         docker.image('composer:2.6').inside('-u root') {
             // sh 'rm -f composer.lock'
-            sh 'composer install'
+            sh 'composer update'
         }
     }
     stage("Testing"){
