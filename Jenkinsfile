@@ -33,14 +33,14 @@ node {
             sshagent(credentials: ['ssh-prod']) {
                 sh '''
                 mkdir -p ~/.ssh
-                ssh-keyscan -H $PROD_HOST >> ~/.ssh/known_hosts
+                ssh-keyscan -H 172.20.124.29 >> ~/.ssh/known_hosts
 
                 # Hapus cache lama supaya rsync tidak gagal
-                ssh sagita@$PROD_HOST "rm -f /home/sagita/prod.kelasdevops.xyz/bootstrap/cache/packages.php /home/sagita/prod.kelasdevops.xyz/bootstrap/cache/services.php"
+                ssh sagita@172.20.124.29 "rm -f /home/sagita/prod.kelasdevops.xyz/bootstrap/cache/packages.php /home/sagita/prod.kelasdevops.xyz/bootstrap/cache/services.php"
 
                 # Jalankan rsync
                 rsync -rav --delete ./ \
-                    sagita@$PROD_HOST:/home/sagita/prod.kelasdevops.xyz/ \
+                    sagita@172.20.124.29:/home/sagita/prod.kelasdevops.xyz/ \
                     --exclude='public/build' \
                     --exclude='node_modules' \
                     --exclude='vendor' \
