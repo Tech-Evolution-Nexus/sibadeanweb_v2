@@ -11,27 +11,30 @@ node {
     }
 
     stage('Build') {
-        docker.image('php:8.2-cli').inside('--entrypoint="" -u root') {
-            sh '''
-            set -e
+    docker.image('php:8.2-cli').inside('--entrypoint="" -u root') {
+        sh '''
+        set -e
 
-            apt-get update
-            apt-get install -y git unzip libzip-dev curl
+        apt-get update
+        apt-get install -y git unzip libzip-dev curl
 
-            docker-php-ext-install zip
+        docker-php-ext-install zip
 
-            # install composer
-            curl -sS https://getcomposer.org/installer | php
-            mv composer.phar /usr/local/bin/composer
+        # install composer
+        curl -sS https://getcomposer.org/installer | php
+        mv composer.phar /usr/local/bin/composer
 
-            # fix composer cache
-            mkdir -p $COMPOSER_CACHE_DIR
+        # FIX environment (WAJIB di dalam container)
+        export COMPOSER_CACHE_DIR=/tmp/composer-cache
+        export COMPOSER_HOME=/tmp
 
-            # install dependency
-            composer install --no-interaction --prefer-dist --ignore-platform-req=ext-gd
-            '''
-        }
+        mkdir -p /tmp/composer-cache
+
+        # install dependency
+        composer install --no-interaction --prefer-dist --ignore-platform-req=ext-gd
+        '''
     }
+}
 
     stage('Testing') {
         docker.image('ubuntu:22.04').inside('--entrypoint="" -u root') {
