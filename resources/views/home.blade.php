@@ -1,7 +1,7 @@
 @extends("layouts.frontend.front")
 
 @section("content")
-test
+minggu6
 <section class=" py-16 relative">
     <img src="{{ asset("assets/image/bg-hero.png") }}"
         class="w-full bg-gray-50 h-full opacity-25 absolute inset-0 object-cover z-[-1]" alt="">
